@@ -21,6 +21,7 @@ FRED_KEY      = os.environ.get('FRED_API_KEY', '')
 GMAIL_USER    = os.environ.get('GMAIL_USER', '')
 GMAIL_PASS    = os.environ.get('GMAIL_APP_PASSWORD', '')
 NOTIFY_EMAIL  = os.environ.get('NOTIFY_EMAIL', '')
+GROQ_KEY      = os.environ.get('GROQ_API_KEY', '')
 START_DATE    = '2010-01-01'
 DATA_FILE     = os.path.join(os.path.dirname(__file__), '..', 'data', 'latest.json')
 
@@ -574,7 +575,7 @@ def check_alerts(current_weight, prev_data, etf_data):
     return alerts
 
 # ── EMAIL ────────────────────────────────────────────────────────
-def send_email(alerts, current_week_data, forecast, etf_data, pages_url):
+def send_email(alerts, current_week_data, forecast, etf_data, pages_url, oracle_comment=None):
     if not GMAIL_USER or not GMAIL_PASS or not NOTIFY_EMAIL:
         print("  Email non configurata — skip")
         return
@@ -583,6 +584,7 @@ def send_email(alerts, current_week_data, forecast, etf_data, pages_url):
     dom_pct  = current_week_data['scenarios'][dom_code]
     dom_name = next(s['name'] for s in SCENARIOS if s['code'] == dom_code)
 
+    oracle_html = f'<h3 style="color:#FFD700;letter-spacing:2px">🔮 IL COMMENTO DELL'ORACOLO</h3><p style="color:#C8D8E8;font-size:13px;line-height:1.8;border-left:3px solid #FFD700;padding-left:12px">{oracle_comment}</p>' if oracle_comment else ''
     severity_color = {'HIGH': '#FF3355', 'MEDIUM': '#FFB800', 'LOW': '#00FF88'}
 
     alert_html = ''
@@ -610,6 +612,8 @@ def send_email(alerts, current_week_data, forecast, etf_data, pages_url):
 
     <h3 style="color:#7FFF00;letter-spacing:2px">REGIME ATTUALE</h3>
     <p style="font-size:20px"><strong style="color:#00D4FF">{dom_name}</strong> — {dom_pct}%</p>
+
+    {oracle_html}
 
     {alert_html}
 
@@ -700,6 +704,10 @@ def main():
     # Alerts
     alerts = check_alerts(current, prev_data, etf_data)
 
+    # Groq Oracle Comment
+    print("\n[5/5] Groq Oracle...")
+    oracle_comment = generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks)
+
     # Assembla JSON output
     pages_url = os.environ.get('PAGES_URL', 'https://giorgiogoldoni.github.io/raptor-macro-mover')
     output = {
@@ -714,6 +722,7 @@ def main():
         'etf_list': ETF_LIST,
         'etf_divergences': divergences,
         'active_shocks': active_shocks,
+        'oracle_comment': oracle_comment,
         'alerts': alerts,
     }
 
@@ -724,7 +733,7 @@ def main():
 
     # Email (solo se ci sono alert o sempre?)
     # Inviamo sempre — il subject indica il livello
-    send_email(alerts, current, forecast, etf_data, pages_url)
+    send_email(alerts, current, forecast, etf_data, pages_url, oracle_comment)
 
     print("\n✓ RAPTOR update completato.")
     if alerts:
@@ -734,3 +743,70 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# ── GROQ ORACLE COMMENT ──────────────────────────────────────────
+def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
+    """Genera il commento dell'Oracolo via Groq (llama3)."""
+    if not GROQ_KEY:
+        print("  GROQ_API_KEY non configurata — skip")
+        return None
+
+    dom_code = max(current['scenarios'], key=current['scenarios'].get)
+    dom_pct  = current['scenarios'][dom_code]
+    dom_name = next(s['name'] for s in SCENARIOS if s['code'] == dom_code)
+    ind      = current.get('indicators', {})
+
+    top3 = sorted(current['scenarios'].items(), key=lambda x: x[1], reverse=True)[:3]
+    top3_str = ' | '.join(f"{c}: {p}%" for c, p in top3)
+
+    f4w = forecast.get('4w', {})
+    top_f4w = sorted(f4w.items(), key=lambda x: x[1], reverse=True)[:3]
+    forecast_str = ' | '.join(f"{c}: {p}%" for c, p in top_f4w)
+
+    # ETF performance chiave
+    etf_highlights = []
+    for t in ['SPY', 'GLD', 'TLT', 'VXX', 'USO', 'HYG']:
+        if t in etf_data and etf_data[t].get('ret_1w') is not None:
+            etf_highlights.append(f"{t}: {etf_data[t]['ret_1w']:+.1f}% 1w")
+    etf_str = ' | '.join(etf_highlights)
+
+    shocks_str = ', '.join(active_shocks) if active_shocks else 'nessuno'
+    alerts_str = ' | '.join(a['msg'] for a in alerts) if alerts else 'nessuno'
+
+    prompt = f"""Sei RAPTOR, un oracolo macro-finanziario. Analizza i dati e scrivi un commento diretto, concreto e autorevole di massimo 5 frasi. Parla in prima persona come un oracolo. Indica chiaramente cosa sta succedendo, perché è importante e come conviene comportarsi con gli investimenti (overweight/underweight asset class specifiche). Sii diretto, non generico.
+
+DATI ATTUALI:
+- Regime dominante: {dom_name} ({dom_pct}%)
+- Mix scenari: {top3_str}
+- CPI YoY: {ind.get('cpi_yoy', '—')}% | Fed Funds: {ind.get('fed_funds', '—')}% | Yield Curve: {ind.get('yield_curve', '—')}%
+- HY Spread: {ind.get('hy_spread', '—')}bps | Real Yield: {ind.get('real_yield', '—')}% | Disoccupazione: {ind.get('unemployment', '—')}%
+- M2 YoY: {ind.get('m2_yoy', '—')}% | BTP-Bund: {ind.get('btp_spread', '—')}bps
+- ETF chiave questa settimana: {etf_str}
+- Shock attivi: {shocks_str}
+- Alert: {alerts_str}
+- Previsione 4 settimane (Markov): {forecast_str}
+
+Scrivi il commento dell'Oracolo in italiano, tono diretto e autorevole:"""
+
+    try:
+        r = requests.post(
+            'https://api.groq.com/openai/v1/chat/completions',
+            headers={
+                'Authorization': f'Bearer {GROQ_KEY}',
+                'Content-Type': 'application/json',
+            },
+            json={
+                'model': 'llama3-70b-8192',
+                'messages': [{'role': 'user', 'content': prompt}],
+                'max_tokens': 400,
+                'temperature': 0.7,
+            },
+            timeout=30
+        )
+        result = r.json()
+        comment = result['choices'][0]['message']['content'].strip()
+        print(f"  ✓ Commento Oracolo generato ({len(comment)} chars)")
+        return comment
+    except Exception as e:
+        print(f"  ✗ Groq error: {e}")
+        return None

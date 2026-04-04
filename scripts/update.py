@@ -400,10 +400,14 @@ def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
         r = requests.post(
             'https://api.groq.com/openai/v1/chat/completions',
             headers={'Authorization': f'Bearer {GROQ_KEY}', 'Content-Type': 'application/json'},
-            json={'model':'llama3-70b-8192','messages':[{'role':'user','content':prompt}],'max_tokens':400,'temperature':0.7},
+            json={'model':'llama-3.3-70b-versatile','messages':[{'role':'user','content':prompt}],'max_tokens':400,'temperature':0.7},
             timeout=30
         )
-        comment = r.json()['choices'][0]['message']['content'].strip()
+        resp_json = r.json()
+        if 'choices' not in resp_json:
+            print(f"  err Groq response: {resp_json}")
+            return None
+        comment = resp_json['choices'][0]['message']['content'].strip()
         print(f"  ok Groq: {len(comment)} chars")
         return comment
     except Exception as e:

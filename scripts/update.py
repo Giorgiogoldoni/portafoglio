@@ -584,7 +584,8 @@ def send_email(alerts, current_week_data, forecast, etf_data, pages_url, oracle_
     dom_pct  = current_week_data['scenarios'][dom_code]
     dom_name = next(s['name'] for s in SCENARIOS if s['code'] == dom_code)
 
-    oracle_html = f'<h3 style="color:#FFD700;letter-spacing:2px">🔮 IL COMMENTO DELL'ORACOLO</h3><p style="color:#C8D8E8;font-size:13px;line-height:1.8;border-left:3px solid #FFD700;padding-left:12px">{oracle_comment}</p>' if oracle_comment else ''
+    oracle_html = ("<h3 style=\"color:#FFD700;letter-spacing:2px\">&#128302; IL COMMENTO DELL'ORACOLO</h3>"
+                  f"<p style=\"color:#C8D8E8;font-size:13px;line-height:1.8;border-left:3px solid #FFD700;padding-left:12px\">{oracle_comment}</p>") if oracle_comment else ""
     severity_color = {'HIGH': '#FF3355', 'MEDIUM': '#FFB800', 'LOW': '#00FF88'}
 
     alert_html = ''

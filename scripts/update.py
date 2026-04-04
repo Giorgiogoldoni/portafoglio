@@ -745,6 +745,108 @@ def main():
 if __name__ == '__main__':
     main()
 
+# ── MAIN ─────────────────────────────────────────────────────────
+def main():
+    print("=" * 60)
+    print("RAPTOR MACRO MOVER — Update Script")
+    print(f"Data: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print("=" * 60)
+
+    # Carica dati precedenti (per confronto alert)
+    prev_data = None
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE) as f:
+                prev_data = json.load(f)
+            print(f"  Dati precedenti: {prev_data.get('generated','?')}")
+        except:
+            pass
+
+    # 1. Fetch FRED
+    print("\n[1/4] FRED API...")
+    raw = {}
+    for s in FRED_SERIES:
+        print(f"  Scarico {s['id']} ({s['name']})...")
+        raw[s['name']] = fetch_fred(s['id'], s['freq'])
+        time.sleep(0.3)
+
+    # 2. Transforms
+    print("\n[2/4] Trasformazioni...")
+    compute_transforms(raw)
+
+    # 3. Build weekly dataset + classify
+    print("\n[3/4] Dataset settimanale + classificazione...")
+    weekly = build_weekly_dataset(raw)
+    scenario_weights = []
+    for row in weekly:
+        sc = classify_week(row)
+        scenario_weights.append({
+            'date': row['date'],
+            'indicators': row,
+            'scenarios': sc,
+        })
+    print(f"  ✓ {len(scenario_weights)} settimane classificate")
+
+    # 4. ETF
+    print("\n[4/4] ETF Yahoo Finance...")
+    etf_data = fetch_etf_data()
+
+    # Dati correnti
+    current = scenario_weights[-1]
+    current_dom = max(current['scenarios'], key=current['scenarios'].get)
+
+    # Forecast Markov
+    forecast = compute_forecast(scenario_weights)
+
+    # ETF divergenze (Q7)
+    divergences = compute_etf_divergence(current_dom, etf_data)
+
+    # Active shocks
+    active_shocks = get_active_shocks(current['date'])
+
+    # Alerts
+    alerts = check_alerts(current, prev_data, etf_data)
+
+    # Groq Oracle Comment
+    print("\n[5/5] Groq Oracle...")
+    oracle_comment = generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks)
+
+    # Assembla JSON output
+    pages_url = os.environ.get('PAGES_URL', 'https://giorgiogoldoni.github.io/raptor-macro-mover')
+    output = {
+        'generated': datetime.utcnow().isoformat() + 'Z',
+        'version': '2.0',
+        'current_week': current['date'],
+        'macro_indicators': current['indicators'],
+        'scenario_weights': scenario_weights,
+        'scenarios_meta': SCENARIOS,
+        'forecast': forecast,
+        'etf_data': etf_data,
+        'etf_list': ETF_LIST,
+        'etf_divergences': divergences,
+        'active_shocks': active_shocks,
+        'oracle_comment': oracle_comment,
+        'alerts': alerts,
+    }
+
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    with open(DATA_FILE, 'w') as f:
+        json.dump(output, f, separators=(',', ':'))
+    print(f"\n  ✓ Salvato: {DATA_FILE}")
+
+    # Email (solo se ci sono alert o sempre?)
+    # Inviamo sempre — il subject indica il livello
+    send_email(alerts, current, forecast, etf_data, pages_url, oracle_comment)
+
+    print("\n✓ RAPTOR update completato.")
+    if alerts:
+        print(f"  Alert generati: {len(alerts)}")
+        for a in alerts:
+            print(f"  [{a['severity']}] {a['msg']}")
+
+if __name__ == '__main__':
+    main()
+
 # ── GROQ ORACLE COMMENT ──────────────────────────────────────────
 def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
     """Genera il commento dell'Oracolo via Groq (llama3)."""

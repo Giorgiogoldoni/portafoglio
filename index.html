@@ -188,6 +188,12 @@
     </div>
   </div>
 
+  <!-- ORACLE COMMENT -->
+  <div id="oracleComment" style="display:none;background:rgba(255,215,0,.06);border:1px solid #FFD700;border-left:3px solid #FFD700;padding:16px 20px;margin-bottom:16px">
+    <div style="font-size:9px;color:#FFD700;letter-spacing:2px;margin-bottom:10px">🔮 IL COMMENTO DELL'ORACOLO</div>
+    <div id="oracleCommentText" style="font-size:12px;color:#C8D8E8;line-height:1.9"></div>
+  </div>
+
   <!-- ALERT BANNER -->
   <div class="alert-banner" id="alertBanner">
     <div style="font-size:9px;color:var(--danger);letter-spacing:2px;margin-bottom:6px">⚠ ALERT RAPTOR</div>
@@ -334,6 +340,7 @@ async function loadData() {
     renderETF();
     updateView();
     renderAlerts();
+    renderOracleComment();
 
     setStatus('active', 'ONLINE');
     document.getElementById('btnExport').disabled = false;
@@ -358,6 +365,13 @@ function setStatus(state, text) {
 }
 
 // ── ALERTS ─────────────────────────────────────────────────────
+function renderOracleComment() {
+  const comment = STATE.data.oracle_comment;
+  if (!comment) return;
+  document.getElementById('oracleComment').style.display = 'block';
+  document.getElementById('oracleCommentText').textContent = comment;
+}
+
 function renderAlerts() {
   const alerts = STATE.data.alerts || [];
   if (!alerts.length) return;

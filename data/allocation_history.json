@@ -1,0 +1,30 @@
+[
+  {
+    "date": "2026-04-10",
+    "regime": "GOLDILOCKS",
+    "regime_scenarios": {},
+    "eq_growth": 0,
+    "eq_value": 0,
+    "eq_em": 0,
+    "bond_ct": 0,
+    "bond_inf": 0,
+    "bond_hy": 0,
+    "oro": 0,
+    "energia": 0,
+    "mat_ind": 0,
+    "ret_eq_growth": 0.0,
+    "ret_eq_value": 0.0,
+    "ret_eq_em": 0.0,
+    "ret_bond_ct": 0.0,
+    "ret_bond_inf": 0.0,
+    "ret_bond_hy": 0.0,
+    "ret_oro": 0.0,
+    "ret_energia": 0.0,
+    "ret_mat_ind": 0.0,
+    "macro_equity": 0,
+    "macro_bond": 0,
+    "macro_materie": 0,
+    "ret_att_4w": 0.0,
+    "generated_at": "2026-04-10T08:17:21.104932+00:00"
+  }
+]

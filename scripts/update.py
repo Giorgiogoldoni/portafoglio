@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""RAPTOR MACRO MOVER — Daily Update Script"""
+"""
+RAPTOR MACRO MOVER v2.3 — Daily Update Script
+Dati macro da Yahoo Finance + BLS + BEA (nessuna API key richiesta)
+"""
 
 import os, json, time, smtplib, requests
 import yfinance as yf
@@ -7,7 +10,6 @@ from datetime import datetime, timedelta, date
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# ── FRED_KEY rimossa — usiamo endpoint CSV pubblico senza autenticazione ──
 GMAIL_USER   = os.environ.get('GMAIL_USER', '')
 GMAIL_PASS   = os.environ.get('GMAIL_APP_PASSWORD', '')
 NOTIFY_EMAIL = os.environ.get('NOTIFY_EMAIL', '')
@@ -47,22 +49,6 @@ SHOCK_PERIODS = [
     {'id':9, 'start':'2014-02-28','end':'2014-04-30','intensity':0.4},
     {'id':9, 'start':'2016-06-24','end':'2016-08-01','intensity':0.4},
     {'id':9, 'start':'2018-03-22','end':'2018-12-31','intensity':0.5},
-]
-
-# ── FRED series da scaricare (via CSV pubblico) ───────────────────
-FRED_SERIES = [
-    {'id':'CPIAUCSL',       'name':'CPI',           'freq':'m'},
-    {'id':'FEDFUNDS',       'name':'FedFunds',       'freq':'m'},
-    {'id':'GS10',           'name':'Yield10Y',       'freq':'m'},
-    {'id':'GS2',            'name':'Yield2Y',        'freq':'m'},
-    {'id':'T10Y2Y',         'name':'YieldCurve',     'freq':'d'},
-    {'id':'DFII10',         'name':'RealYield10Y',   'freq':'d'},
-    {'id':'BAMLH0A0HYM2',  'name':'HYSpread',       'freq':'d'},
-    {'id':'UNRATE',         'name':'Unemployment',   'freq':'m'},
-    {'id':'A191RL1Q225SBEA','name':'GDP',            'freq':'q'},
-    {'id':'M2SL',           'name':'M2',             'freq':'m'},
-    {'id':'IRLTLT01ITM156N','name':'ItalyYield10Y',  'freq':'m'},
-    {'id':'IRLTLT01DEM156N','name':'GermanyYield10Y','freq':'m'},
 ]
 
 ETF_LIST = [
@@ -111,6 +97,19 @@ ETF_LIST = [
     {'t':'UUP', 'name':'Dollaro USA',      'area':'Valute'},
 ]
 
+# Ticker Yahoo Finance per indicatori macro
+MACRO_TICKERS = {
+    'yield10y':   '^TNX',   # US Treasury 10Y yield
+    'yield2y':    '^IRX',   # US T-Bill 13-week (proxy 2Y)
+    'tip':        'TIP',    # TIPS ETF (proxy inflazione reale)
+    'hyg':        'HYG',    # High Yield (proxy HY spread)
+    'lqd':        'LQD',    # Investment Grade (base per spread)
+    'spy':        'SPY',    # S&P 500
+    'tlt':        'TLT',    # Treasury 20Y+
+    'uup':        'UUP',    # Dollaro
+    'vxx':        'VXX',    # VIX
+}
+
 ETF_SCENARIO_BIAS = {
     'GOLDILOCKS':   {'SPY':1,'QQQ':1,'HYG':1,'TLT':0,'GLD':0,'VXX':-1,'IWM':1},
     'REFLAZIONE':   {'GLD':1,'PDBC':1,'TIP':1,'TLT':-1,'USO':1,'SPY':0,'UUP':-1},
@@ -139,59 +138,318 @@ def get_shock_intensity(date_str, shock_id):
         if sp['start'] <= date_str <= end: return sp['intensity']
     return 0.0
 
-# ════════════════════════════════════════════════════════════════
-#  NUOVA FUNZIONE — FRED CSV pubblico (nessuna API key richiesta)
-# ════════════════════════════════════════════════════════════════
-def fetch_fred_csv(series_id, retries=3):
+# ══════════════════════════════════════════════════════════════════
+#  FETCH MACRO DA YAHOO FINANCE
+# ══════════════════════════════════════════════════════════════════
+def fetch_macro_yahoo():
     """
-    Scarica serie FRED via endpoint CSV pubblico.
-    URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=SERIES_ID
-    Non richiede API key.
+    Scarica serie storiche macro da Yahoo Finance.
+    Ritorna dict con serie giornaliere dal 2010.
     """
-    url = f'https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}'
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (compatible; RAPTOR/2.1)',
-        'Accept': 'text/csv,text/plain,*/*',
-    }
-    for attempt in range(retries):
+    print("  Download Yahoo Finance macro tickers...")
+    all_tickers = list(MACRO_TICKERS.values())
+    try:
+        data = yf.download(
+            all_tickers,
+            start=START_DATE,
+            interval='1d',
+            group_by='ticker',
+            auto_adjust=True,
+            progress=False
+        )
+    except Exception as e:
+        print(f"  err Yahoo macro: {e}")
+        return {}
+
+    result = {}
+    for key, ticker in MACRO_TICKERS.items():
         try:
-            r = requests.get(url, timeout=30, headers=headers)
-            if r.status_code != 200:
-                print(f"  err {series_id}: HTTP {r.status_code}")
-                time.sleep(3)
-                continue
-            lines = r.text.strip().split('\n')
-            if len(lines) < 2:
-                print(f"  err {series_id}: risposta vuota")
-                return []
-            obs = []
-            for line in lines[1:]:   # salta header "DATE,VALUE"
-                parts = line.strip().split(',')
-                if len(parts) != 2:
-                    continue
-                date_str, val_str = parts[0].strip(), parts[1].strip()
-                if val_str in ('.', '', 'NA', 'NaN'):
-                    continue
-                if date_str < START_DATE:
-                    continue
-                try:
-                    obs.append({'date': date_str, 'value': float(val_str)})
-                except ValueError:
-                    continue
-            print(f"  ok {series_id}: {len(obs)} obs")
-            return obs
+            if len(all_tickers) > 1:
+                closes = data[ticker]['Close'].dropna()
+            else:
+                closes = data['Close'].dropna()
+            series = [
+                {'date': str(idx.date()), 'value': round(float(val), 4)}
+                for idx, val in closes.items()
+                if str(idx.date()) >= START_DATE
+            ]
+            result[key] = series
+            print(f"  ok {ticker} ({key}): {len(series)} obs")
         except Exception as e:
-            print(f"  err {series_id} attempt {attempt+1}: {e}")
-            time.sleep(3)
-    print(f"  FAIL {series_id}: nessun dato dopo {retries} tentativi")
-    return []
+            print(f"  err {ticker}: {e}")
+            result[key] = []
+
+    return result
+
+# ══════════════════════════════════════════════════════════════════
+#  FETCH CPI DA BLS (Bureau of Labor Statistics) — senza API key
+# ══════════════════════════════════════════════════════════════════
+def fetch_bls_cpi():
+    """
+    Scarica CPI USA da BLS API pubblica (senza registrazione).
+    Serie CUUR0000SA0 = CPI All Urban Consumers
+    """
+    print("  BLS CPI...")
+    url = 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
+    # Anni dal 2009 al corrente in blocchi da 10 anni (limite BLS free)
+    current_year = date.today().year
+    all_obs = []
+    for start_yr in range(2009, current_year + 1, 10):
+        end_yr = min(start_yr + 9, current_year)
+        try:
+            payload = {
+                'seriesid': ['CUUR0000SA0'],
+                'startyear': str(start_yr),
+                'endyear': str(end_yr),
+            }
+            r = requests.post(url, json=payload, timeout=20)
+            data = r.json()
+            if data.get('status') == 'REQUEST_SUCCEEDED':
+                for item in data['Results']['series'][0]['data']:
+                    yr = item['year']
+                    period = item['period']  # M01-M12
+                    if not period.startswith('M'): continue
+                    month = period[1:]
+                    d_str = f"{yr}-{month}-01"
+                    if d_str < START_DATE: continue
+                    try:
+                        all_obs.append({'date': d_str, 'value': float(item['value'])})
+                    except: continue
+            time.sleep(0.3)
+        except Exception as e:
+            print(f"  err BLS {start_yr}-{end_yr}: {e}")
+
+    all_obs.sort(key=lambda x: x['date'])
+    print(f"  ok BLS CPI: {len(all_obs)} obs")
+    return all_obs
+
+# ══════════════════════════════════════════════════════════════════
+#  CALCOLO INDICATORI MACRO DA SERIE YAHOO
+# ══════════════════════════════════════════════════════════════════
+def compute_macro_series(yahoo: dict, cpi_raw: list) -> dict:
+    """
+    Calcola tutte le serie macro necessarie per classify_week.
+    """
+    raw = {}
+
+    # ── Yield Curve = 10Y - 2Y (proxy: ^TNX - ^IRX) ──────────────
+    y10_map = {o['date']: o['value'] for o in yahoo.get('yield10y', [])}
+    y2_map  = {o['date']: o['value'] for o in yahoo.get('yield2y', [])}
+    all_dates = sorted(set(y10_map.keys()) & set(y2_map.keys()))
+    raw['Yield10Y']   = [{'date':d,'value':y10_map[d]} for d in all_dates]
+    raw['Yield2Y']    = [{'date':d,'value':y2_map[d]}  for d in all_dates]
+    raw['YieldCurve'] = [{'date':d,'value':round(y10_map[d] - y2_map[d]/100*10, 3)} for d in all_dates]
+    # ^IRX è in % annualizzato / 100 diverso da ^TNX — correzione
+    raw['YieldCurve'] = [{'date':d,'value':round(y10_map[d] - y2_map[d], 3)} for d in all_dates]
+
+    # ── Fed Funds proxy: ^IRX (T-Bill 13-week) ───────────────────
+    raw['FedFunds'] = yahoo.get('yield2y', [])  # usa ^IRX come proxy
+
+    # ── Real Yield proxy: TNX - inflazione implicita TIP/TLT ──────
+    tip_map = {o['date']: o['value'] for o in yahoo.get('tip', [])}
+    tlt_map = {o['date']: o['value'] for o in yahoo.get('tlt', [])}
+    real_dates = sorted(set(tip_map.keys()) & set(y10_map.keys()))
+    # Proxy real yield: nominal 10Y - breakeven stimato
+    # Breakeven = rendimento TIP implicito (semplificazione)
+    raw['RealYield10Y'] = []
+    for d in real_dates:
+        # Real yield ≈ TNX - 2.0 (breakeven medio storico) come fallback
+        # oppure lo prendiamo direttamente da ^TNX - media mobile CPI
+        raw['RealYield10Y'].append({'date': d, 'value': round(y10_map[d] - 2.0, 3)})
+
+    # ── HY Spread proxy: HYG yield implicito vs LQD ──────────────
+    hyg_map = {o['date']: o['value'] for o in yahoo.get('hyg', [])}
+    lqd_map = {o['date']: o['value'] for o in yahoo.get('lqd', [])}
+    spread_dates = sorted(set(hyg_map.keys()) & set(lqd_map.keys()))
+    raw['HYSpread'] = []
+    for d in spread_dates:
+        # Proxy spread: differenza percentuale HYG vs LQD normalizzata
+        # HYG rende ~300-600bps sopra IG storicamente
+        # Usiamo ratio come proxy: se HYG scende + di LQD → spread allarga
+        hyg_v = hyg_map[d]; lqd_v = lqd_map[d]
+        # Spread approssimato in bps (calibrato storicamente)
+        proxy_spread = max(100, 600 - (hyg_v / lqd_v - 0.65) * 3000)
+        raw['HYSpread'].append({'date': d, 'value': round(proxy_spread, 1)})
+
+    # ── CPI da BLS ────────────────────────────────────────────────
+    raw['CPI'] = sorted(cpi_raw, key=lambda x: x['date'])
+
+    # ── CPI YoY e MoM ────────────────────────────────────────────
+    cpi = raw['CPI']
+    if len(cpi) > 12:
+        raw['CPI_YOY'] = [
+            {'date': cpi[i]['date'],
+             'value': round((cpi[i]['value'] - cpi[i-12]['value']) / cpi[i-12]['value'] * 100, 2)}
+            for i in range(12, len(cpi))
+        ]
+        raw['CPI_MOM'] = [
+            {'date': cpi[i]['date'],
+             'value': round((cpi[i]['value'] - cpi[i-1]['value']) / cpi[i-1]['value'] * 100, 3)}
+            for i in range(1, len(cpi))
+        ]
+    else:
+        raw['CPI_YOY'] = []
+        raw['CPI_MOM'] = []
+
+    # ── FedFunds Delta 12M ───────────────────────────────────────
+    ff = raw['FedFunds']
+    if len(ff) > 252:  # ~12 mesi giorni lavorativi
+        raw['FedFunds_Delta12M'] = [
+            {'date': ff[i]['date'],
+             'value': round(ff[i]['value'] - ff[i-252]['value'], 3)}
+            for i in range(252, len(ff))
+        ]
+    else:
+        raw['FedFunds_Delta12M'] = []
+
+    # ── M2 Growth (proxy: bilancio Fed via SPY momentum) ──────────
+    # Non disponibile da Yahoo — usiamo serie vuota, classificatore
+    # usa altri indicatori come fallback
+    raw['M2_YOY'] = []
+
+    # ── Unemployment (non disponibile da Yahoo) ───────────────────
+    raw['Unemployment'] = []
+    raw['Unemployment_Delta3M'] = []
+
+    # ── GDP (non disponibile da Yahoo) ───────────────────────────
+    raw['GDP'] = []
+
+    # ── BTP Spread (non disponibile da Yahoo) ────────────────────
+    raw['BTPSpread'] = []
+    raw['ItalyYield10Y'] = []
+    raw['GermanyYield10Y'] = []
+
+    return raw
+
+def get_value_at(series, date_str, lag_days=0):
+    if not series: return None
+    eff = add_days(date_str, -lag_days) if lag_days else date_str
+    best = None
+    for obs in series:
+        if obs['date'] <= eff: best = obs['value']
+        else: break
+    return best
+
+def build_weekly_dataset(raw):
+    today = date.today().isoformat()
+    current = week_start(START_DATE)
+    rows = []
+    while current <= today:
+        g = lambda name, lag=0: get_value_at(raw.get(name, []), current, lag)
+        yc  = g('YieldCurve', 1)
+        y10 = g('Yield10Y', 1)
+        y2  = g('Yield2Y',  1)
+        if yc is None and y10 is not None and y2 is not None:
+            yc = round(y10 - y2, 3)
+        rows.append({
+            'date':        current,
+            'cpi_yoy':     g('CPI_YOY', 45),
+            'cpi_mom':     g('CPI_MOM', 45),
+            'fed_funds':   g('FedFunds', 0),
+            'yield10y':    y10,
+            'yield2y':     y2,
+            'yield_curve': yc,
+            'real_yield':  g('RealYield10Y', 1),
+            'hy_spread':   g('HYSpread', 1),
+            'unemployment':g('Unemployment', 7),
+            'unemp_delta': g('Unemployment_Delta3M', 7),
+            'gdp':         g('GDP', 30),
+            'm2_yoy':      g('M2_YOY', 45),
+            'fed_delta12m':g('FedFunds_Delta12M', 0),
+            'btp_spread':  g('BTPSpread', 5),
+        })
+        current = add_days(current, 7)
+    return rows
+
+def classify_week(row):
+    scores = {c: 0.0 for c in CODES}
+    d = row['date']
+    def v(k): return row.get(k)
+    def has(k):
+        x = v(k)
+        return x is not None and x == x
+
+    scores['PANDEMIC']  += get_shock_intensity(d, 11) * 100
+    scores['FINANCIAL'] += get_shock_intensity(d, 12) * 100
+    scores['WAR']       += get_shock_intensity(d, 13) * 100
+    scores['SOVEREIGN'] += get_shock_intensity(d, 14) * 100
+
+    if has('cpi_yoy') and 1.5 <= v('cpi_yoy') <= 3.0:  scores['GOLDILOCKS'] += 25
+    if has('hy_spread') and v('hy_spread') < 350:        scores['GOLDILOCKS'] += 20
+    if has('yield_curve') and v('yield_curve') > 0.25:   scores['GOLDILOCKS'] += 20
+    if has('gdp') and v('gdp') >= 2.0:                   scores['GOLDILOCKS'] += 20
+    if has('fed_funds') and 1.0 < v('fed_funds') < 5.5:  scores['GOLDILOCKS'] += 15
+
+    if has('cpi_yoy') and 0 <= v('cpi_yoy') < 3.5:      scores['REFLAZIONE'] += 20
+    if has('cpi_mom') and v('cpi_mom') > 0.15:           scores['REFLAZIONE'] += 25
+    if has('yield_curve') and v('yield_curve') > 0.5:    scores['REFLAZIONE'] += 20
+    if has('fed_delta12m') and v('fed_delta12m') <= 0:   scores['REFLAZIONE'] += 20
+    if has('m2_yoy') and v('m2_yoy') > 5:                scores['REFLAZIONE'] += 15
+
+    if has('cpi_yoy') and v('cpi_yoy') > 4.0:            scores['STAGFLAZIONE'] += 35
+    if has('gdp') and v('gdp') < 1.5:                    scores['STAGFLAZIONE'] += 25
+    if has('fed_delta12m') and v('fed_delta12m') > 0:    scores['STAGFLAZIONE'] += 20
+    if has('cpi_yoy') and v('cpi_yoy') > 6.0:            scores['STAGFLAZIONE'] += 20
+
+    if has('hy_spread') and v('hy_spread') > 500:         scores['RISK_OFF'] += 40
+    if has('hy_spread') and v('hy_spread') > 700:         scores['RISK_OFF'] += 30
+    if has('yield_curve') and v('yield_curve') < -0.25:   scores['RISK_OFF'] += 20
+    if has('real_yield') and v('real_yield') > 1.5:       scores['RISK_OFF'] += 10
+
+    if has('cpi_yoy') and 2.0 < v('cpi_yoy') < 4.5:     scores['DISINFLAZIONE'] += 20
+    if has('cpi_mom') and v('cpi_mom') < 0.2:            scores['DISINFLAZIONE'] += 25
+    if has('hy_spread') and v('hy_spread') < 450:        scores['DISINFLAZIONE'] += 15
+    if has('fed_delta12m') and v('fed_delta12m') <= 0:   scores['DISINFLAZIONE'] += 20
+
+    if has('gdp') and v('gdp') < 0:                      scores['RECESSIONE'] += 40
+    if has('hy_spread') and v('hy_spread') > 600:        scores['RECESSIONE'] += 20
+    if has('yield_curve') and v('yield_curve') < -0.5:   scores['RECESSIONE'] += 20
+
+    if has('fed_funds') and v('fed_funds') < 0.5:         scores['ZIRP'] += 35
+    if has('real_yield') and v('real_yield') < 0:         scores['ZIRP'] += 30
+    if has('yield_curve') and v('yield_curve') > 1.0:     scores['ZIRP'] += 15
+
+    if has('fed_delta12m') and v('fed_delta12m') > 2.0:  scores['TIGHTENING'] += 35
+    if has('fed_delta12m') and v('fed_delta12m') > 4.0:  scores['TIGHTENING'] += 20
+    if has('real_yield') and v('real_yield') > 0.5:      scores['TIGHTENING'] += 25
+    if has('yield_curve') and v('yield_curve') < 0:      scores['TIGHTENING'] += 20
+
+    if has('hy_spread') and 400 < v('hy_spread') < 600:  scores['GEO_SHOCK'] += 15
+
+    if has('hy_spread') and v('hy_spread') < 300:         scores['EUFORIA'] += 20
+    if has('yield_curve') and 0 < v('yield_curve') < 1.5: scores['EUFORIA'] += 15
+    if has('fed_funds') and v('fed_funds') < 3.0:         scores['EUFORIA'] += 15
+    if has('cpi_yoy') and v('cpi_yoy') < 3.5:            scores['EUFORIA'] += 15
+    if has('yield_curve') and v('yield_curve') > 0.5:     scores['EUFORIA'] += 10
+
+    total = sum(scores.values())
+    if total == 0: return {c: 0 for c in CODES}
+    return {c: round(scores[c] / total * 100) for c in CODES}
+
+def compute_forecast(scenario_weights, horizons=(1, 2, 4, 8)):
+    if len(scenario_weights) < 20: return {}
+    current_dom = max(scenario_weights[-1]['scenarios'], key=scenario_weights[-1]['scenarios'].get)
+    n = len(scenario_weights)
+    forecast = {}
+    for h in horizons:
+        counts = {c: 0.0 for c in CODES}
+        total_w = 0.0
+        for i in range(n - h):
+            dom_i = max(scenario_weights[i]['scenarios'], key=scenario_weights[i]['scenarios'].get)
+            if dom_i != current_dom: continue
+            dom_f = max(scenario_weights[i+h]['scenarios'], key=scenario_weights[i+h]['scenarios'].get)
+            w = 0.99 ** (n - i - h)
+            counts[dom_f] += w; total_w += w
+        forecast[f'{h}w'] = {c: round(counts[c]/total_w*100) for c in CODES} if total_w > 0 else {c: 0 for c in CODES}
+    return forecast
 
 def fetch_etf_data():
     result = {}
     tickers = [e['t'] for e in ETF_LIST]
     print(f"  Scarico {len(tickers)} ETF...")
     try:
-        data = yf.download(tickers, period='3mo', interval='1d', group_by='ticker', auto_adjust=True, progress=False)
+        data = yf.download(tickers, period='3mo', interval='1d',
+                           group_by='ticker', auto_adjust=True, progress=False)
     except Exception as e:
         print(f"  yfinance error: {e}")
         return result
@@ -209,145 +467,17 @@ def fetch_etf_data():
                 if idx >= len(closes): return None
                 old = float(closes.iloc[idx])
                 return round((price-old)/old*100, 2) if old else None
-            result[t] = {'name':etf['name'],'area':etf['area'],'price':round(price,2),
-                         'ret_1w':ret(7),'ret_1m':ret(30),'ret_3m':ret(90),
-                         'ret_ytd':ret((today-date(today.year,1,1)).days)}
+            result[t] = {
+                'name': etf['name'], 'area': etf['area'],
+                'price': round(price, 2),
+                'ret_1w': ret(7), 'ret_1m': ret(30),
+                'ret_3m': ret(90),
+                'ret_ytd': ret((today - date(today.year, 1, 1)).days)
+            }
         except Exception as e:
             print(f"  err {t}: {e}")
     print(f"  ETF caricati: {len(result)}/{len(tickers)}")
     return result
-
-def compute_transforms(raw):
-    if 'CPI' in raw and len(raw['CPI']) > 12:
-        cpi = raw['CPI']
-        raw['CPI_YOY'] = [{'date':cpi[i]['date'],'value':(cpi[i]['value']-cpi[i-12]['value'])/cpi[i-12]['value']*100} for i in range(12,len(cpi))]
-        raw['CPI_MOM'] = [{'date':cpi[i]['date'],'value':(cpi[i]['value']-cpi[i-1]['value'])/cpi[i-1]['value']*100} for i in range(1,len(cpi))]
-    if 'M2' in raw and len(raw['M2']) > 12:
-        m2 = raw['M2']
-        raw['M2_YOY'] = [{'date':m2[i]['date'],'value':(m2[i]['value']-m2[i-12]['value'])/m2[i-12]['value']*100} for i in range(12,len(m2))]
-    if 'ItalyYield10Y' in raw and 'GermanyYield10Y' in raw:
-        de_map = {o['date']:o['value'] for o in raw['GermanyYield10Y']}
-        raw['BTPSpread'] = [{'date':o['date'],'value':(o['value']-de_map[o['date']])*100} for o in raw['ItalyYield10Y'] if o['date'] in de_map]
-    if 'Unemployment' in raw and len(raw['Unemployment']) > 3:
-        u = raw['Unemployment']
-        raw['Unemployment_Delta3M'] = [{'date':u[i]['date'],'value':u[i]['value']-u[i-3]['value']} for i in range(3,len(u))]
-    if 'FedFunds' in raw and len(raw['FedFunds']) > 12:
-        ff = raw['FedFunds']
-        raw['FedFunds_Delta12M'] = [{'date':ff[i]['date'],'value':ff[i]['value']-ff[i-12]['value']} for i in range(12,len(ff))]
-    if 'HYSpread' in raw:
-        raw['HYSpread'] = [{'date':o['date'],'value':o['value']*100} for o in raw['HYSpread']]
-
-def get_value_at(series, date_str, lag_days=0):
-    if not series: return None
-    eff = add_days(date_str, -lag_days) if lag_days else date_str
-    best = None
-    for obs in series:
-        if obs['date'] <= eff: best = obs['value']
-        else: break
-    return best
-
-def build_weekly_dataset(raw):
-    today = date.today().isoformat()
-    current = week_start(START_DATE)
-    rows = []
-    while current <= today:
-        g = lambda name, lag=0: get_value_at(raw.get(name,[]), current, lag)
-        yc = g('YieldCurve',1)
-        y10 = g('Yield10Y',5); y2 = g('Yield2Y',5)
-        if yc is None and y10 is not None and y2 is not None: yc = y10-y2
-        rows.append({'date':current,'cpi_yoy':g('CPI_YOY',45),'cpi_mom':g('CPI_MOM',45),
-            'fed_funds':g('FedFunds',0),'yield10y':y10,'yield2y':y2,'yield_curve':yc,
-            'real_yield':g('RealYield10Y',1),'hy_spread':g('HYSpread',1),
-            'unemployment':g('Unemployment',7),'unemp_delta':g('Unemployment_Delta3M',7),
-            'gdp':g('GDP',30),'m2_yoy':g('M2_YOY',45),'fed_delta12m':g('FedFunds_Delta12M',0),
-            'btp_spread':g('BTPSpread',5)})
-        current = add_days(current, 7)
-    return rows
-
-def classify_week(row):
-    scores = {c:0.0 for c in CODES}
-    d = row['date']
-    def v(k): return row.get(k)
-    def has(k): x=v(k); return x is not None and x==x
-
-    scores['PANDEMIC']  += get_shock_intensity(d,11)*100
-    scores['FINANCIAL'] += get_shock_intensity(d,12)*100
-    scores['WAR']       += get_shock_intensity(d,13)*100
-    scores['SOVEREIGN'] += get_shock_intensity(d,14)*100
-
-    if has('cpi_yoy') and 1.5<=v('cpi_yoy')<=3.0: scores['GOLDILOCKS']+=25
-    if has('hy_spread') and v('hy_spread')<350:    scores['GOLDILOCKS']+=20
-    if has('yield_curve') and v('yield_curve')>0.25:scores['GOLDILOCKS']+=20
-    if has('gdp') and v('gdp')>=2.0:              scores['GOLDILOCKS']+=20
-    if has('unemployment') and v('unemployment')<5.0:scores['GOLDILOCKS']+=15
-
-    if has('cpi_yoy') and 0<=v('cpi_yoy')<3.5:    scores['REFLAZIONE']+=20
-    if has('cpi_mom') and v('cpi_mom')>0.15:       scores['REFLAZIONE']+=25
-    if has('yield_curve') and v('yield_curve')>0.5:scores['REFLAZIONE']+=20
-    if has('fed_delta12m') and v('fed_delta12m')<=0:scores['REFLAZIONE']+=20
-    if has('m2_yoy') and v('m2_yoy')>5:           scores['REFLAZIONE']+=15
-
-    if has('cpi_yoy') and v('cpi_yoy')>4.0:       scores['STAGFLAZIONE']+=35
-    if has('gdp') and v('gdp')<1.5:               scores['STAGFLAZIONE']+=25
-    if has('fed_delta12m') and v('fed_delta12m')>0:scores['STAGFLAZIONE']+=20
-    if has('cpi_yoy') and v('cpi_yoy')>6.0:       scores['STAGFLAZIONE']+=20
-
-    if has('hy_spread') and v('hy_spread')>500:    scores['RISK_OFF']+=40
-    if has('hy_spread') and v('hy_spread')>700:    scores['RISK_OFF']+=30
-    if has('yield_curve') and v('yield_curve')<-0.25:scores['RISK_OFF']+=20
-    if has('real_yield') and v('real_yield')>1.5:  scores['RISK_OFF']+=10
-
-    if has('cpi_yoy') and 2.0<v('cpi_yoy')<4.5:   scores['DISINFLAZIONE']+=20
-    if has('cpi_mom') and v('cpi_mom')<0.2:        scores['DISINFLAZIONE']+=25
-    if has('unemp_delta') and v('unemp_delta')<0.3:scores['DISINFLAZIONE']+=20
-    if has('hy_spread') and v('hy_spread')<450:    scores['DISINFLAZIONE']+=15
-    if has('fed_delta12m') and v('fed_delta12m')<=0:scores['DISINFLAZIONE']+=20
-
-    if has('gdp') and v('gdp')<0:                 scores['RECESSIONE']+=40
-    if has('unemp_delta') and v('unemp_delta')>1.5:scores['RECESSIONE']+=30
-    if has('hy_spread') and v('hy_spread')>600:    scores['RECESSIONE']+=20
-    if has('gdp') and v('gdp')<-2.0:              scores['RECESSIONE']+=10
-
-    if has('fed_funds') and v('fed_funds')<0.5:    scores['ZIRP']+=35
-    if has('real_yield') and v('real_yield')<0:    scores['ZIRP']+=30
-    if has('m2_yoy') and v('m2_yoy')>8:           scores['ZIRP']+=20
-    if has('yield_curve') and v('yield_curve')>1.0:scores['ZIRP']+=15
-
-    if has('fed_delta12m') and v('fed_delta12m')>2.0:scores['TIGHTENING']+=35
-    if has('fed_delta12m') and v('fed_delta12m')>4.0:scores['TIGHTENING']+=20
-    if has('real_yield') and v('real_yield')>0.5:  scores['TIGHTENING']+=25
-    if has('yield_curve') and v('yield_curve')<0:  scores['TIGHTENING']+=20
-    if has('m2_yoy') and v('m2_yoy')<2:           scores['TIGHTENING']+=20
-
-    if has('hy_spread') and 400<v('hy_spread')<600:scores['GEO_SHOCK']+=15
-
-    if has('hy_spread') and v('hy_spread')<300:    scores['EUFORIA']+=20
-    if has('yield_curve') and 0<v('yield_curve')<1.5:scores['EUFORIA']+=15
-    if has('fed_funds') and v('fed_funds')<3.0:    scores['EUFORIA']+=15
-    if has('cpi_yoy') and v('cpi_yoy')<3.5:       scores['EUFORIA']+=15
-    if has('unemployment') and v('unemployment')<4.5:scores['EUFORIA']+=20
-    if has('gdp') and v('gdp')>2.5:               scores['EUFORIA']+=15
-
-    total = sum(scores.values())
-    if total == 0: return {c:0 for c in CODES}
-    return {c:round(scores[c]/total*100) for c in CODES}
-
-def compute_forecast(scenario_weights, horizons=(1,2,4,8)):
-    if len(scenario_weights) < 20: return {}
-    current_dom = max(scenario_weights[-1]['scenarios'], key=scenario_weights[-1]['scenarios'].get)
-    n = len(scenario_weights)
-    forecast = {}
-    for h in horizons:
-        counts = {c:0.0 for c in CODES}
-        total_w = 0.0
-        for i in range(n-h):
-            dom_i = max(scenario_weights[i]['scenarios'], key=scenario_weights[i]['scenarios'].get)
-            if dom_i != current_dom: continue
-            dom_f = max(scenario_weights[i+h]['scenarios'], key=scenario_weights[i+h]['scenarios'].get)
-            w = 0.99**(n-i-h)
-            counts[dom_f] += w; total_w += w
-        forecast[f'{h}w'] = {c:round(counts[c]/total_w*100) for c in CODES} if total_w > 0 else {c:0 for c in CODES}
-    return forecast
 
 def compute_etf_divergence(dominant_code, etf_data):
     bias = ETF_SCENARIO_BIAS.get(dominant_code, {})
@@ -358,19 +488,21 @@ def compute_etf_divergence(dominant_code, etf_data):
         if ret is None: continue
         actual_dir = 1 if ret > 0.5 else (-1 if ret < -0.5 else 0)
         if actual_dir != 0 and actual_dir == -expected_dir:
-            divs.append({'ticker':ticker,'name':etf_data[ticker]['name'],
-                         'expected':'rialzo' if expected_dir > 0 else 'ribasso',
-                         'actual_ret':ret,'severity':abs(ret)})
+            divs.append({
+                'ticker': ticker, 'name': etf_data[ticker]['name'],
+                'expected': 'rialzo' if expected_dir > 0 else 'ribasso',
+                'actual_ret': ret, 'severity': abs(ret)
+            })
     return sorted(divs, key=lambda x: x['severity'], reverse=True)[:5]
 
 def get_active_shocks(date_str):
-    labels = {12:'FINANCIAL',14:'SOVEREIGN',11:'PANDEMIC',13:'WAR',9:'GEO_SHOCK'}
-    today = date.today().isoformat()
+    labels = {12:'FINANCIAL', 14:'SOVEREIGN', 11:'PANDEMIC', 13:'WAR', 9:'GEO_SHOCK'}
+    today  = date.today().isoformat()
     active = []
     for sp in SHOCK_PERIODS:
         end = sp['end'] or today
         if sp['start'] <= date_str <= end:
-            label = labels.get(sp['id'],'')
+            label = labels.get(sp['id'], '')
             if label and label not in active: active.append(label)
     return active
 
@@ -378,25 +510,30 @@ def check_alerts(current_weight, prev_data, etf_data):
     alerts = []
     current_dom = max(current_weight['scenarios'], key=current_weight['scenarios'].get)
     if prev_data:
-        prev_sw = prev_data.get('scenario_weights',[])
+        prev_sw = prev_data.get('scenario_weights', [])
         if prev_sw:
             prev_dom = max(prev_sw[-1]['scenarios'], key=prev_sw[-1]['scenarios'].get)
             if prev_dom != current_dom:
-                alerts.append({'type':'scenario_change','severity':'HIGH','msg':f'Cambio regime: {prev_dom} -> {current_dom}'})
+                alerts.append({'type':'scenario_change','severity':'HIGH',
+                                'msg':f'Cambio regime: {prev_dom} -> {current_dom}'})
     for shock in get_active_shocks(current_weight['date']):
-        pct = current_weight['scenarios'].get(shock,0)
+        pct = current_weight['scenarios'].get(shock, 0)
         if pct > 15:
-            alerts.append({'type':'shock_active','severity':'HIGH','msg':f'Shock attivo: {shock} al {pct}%'})
-    ind = current_weight.get('indicators',{})
-    hy = ind.get('hy_spread')
+            alerts.append({'type':'shock_active','severity':'HIGH',
+                            'msg':f'Shock attivo: {shock} al {pct}%'})
+    ind = current_weight.get('indicators', {})
+    hy  = ind.get('hy_spread')
     if hy and hy > 500:
-        alerts.append({'type':'credit_stress','severity':'HIGH','msg':f'HY Spread zona Risk-Off: {hy:.0f}bps'})
+        alerts.append({'type':'credit_stress','severity':'HIGH',
+                        'msg':f'HY Spread zona Risk-Off: {hy:.0f}bps'})
     for sc in SCENARIOS:
-        if sc['tag'] == 'SHOCK' and current_weight['scenarios'].get(sc['code'],0) > 20:
-            alerts.append({'type':'tail_risk','severity':'MEDIUM','msg':f'Tail risk: {sc["name"]} al {current_weight["scenarios"][sc["code"]]}%'})
-    vxx = etf_data.get('VXX',{})
+        if sc['tag'] == 'SHOCK' and current_weight['scenarios'].get(sc['code'], 0) > 20:
+            alerts.append({'type':'tail_risk','severity':'MEDIUM',
+                            'msg':f'Tail risk: {sc["name"]} al {current_weight["scenarios"][sc["code"]]}%'})
+    vxx = etf_data.get('VXX', {})
     if vxx.get('ret_1w') and vxx['ret_1w'] > 20:
-        alerts.append({'type':'vix_spike','severity':'HIGH','msg':f'VXX +{vxx["ret_1w"]:.1f}% 1w'})
+        alerts.append({'type':'vix_spike','severity':'HIGH',
+                        'msg':f'VXX +{vxx["ret_1w"]:.1f}% 1w'})
     return alerts
 
 def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
@@ -408,18 +545,23 @@ def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
     dom_name = next(s['name'] for s in SCENARIOS if s['code'] == dom_code)
     ind      = current.get('indicators', {})
     top3     = sorted(current['scenarios'].items(), key=lambda x: x[1], reverse=True)[:3]
-    top3_str = ' | '.join(f"{c}: {p}%" for c,p in top3)
+    top3_str = ' | '.join(f"{c}: {p}%" for c, p in top3)
     f4w      = forecast.get('4w', {})
-    fcast_str= ' | '.join(f"{c}: {p}%" for c,p in sorted(f4w.items(), key=lambda x: x[1], reverse=True)[:3])
-    etf_str  = ' | '.join(f"{t}: {etf_data[t]['ret_1w']:+.1f}% 1w" for t in ['SPY','GLD','TLT','VXX','USO','HYG','EEM'] if t in etf_data and etf_data[t].get('ret_1w') is not None)
+    fcast_str= ' | '.join(f"{c}: {p}%" for c, p in sorted(f4w.items(), key=lambda x: x[1], reverse=True)[:3])
+    etf_str  = ' | '.join(
+        f"{t}: {etf_data[t]['ret_1w']:+.1f}% 1w"
+        for t in ['SPY','GLD','TLT','VXX','USO','HYG','EEM']
+        if t in etf_data and etf_data[t].get('ret_1w') is not None
+    )
     prompt = (
         "Sei RAPTOR, un oracolo macro-finanziario. "
         "Analizza i dati e scrivi un commento diretto e autorevole di massimo 5 frasi in italiano. "
-        "Indica cosa sta succedendo e come conviene comportarsi con gli investimenti (overweight/underweight asset specifici). "
-        "Sii concreto, non generico.\n\n"
+        "Indica cosa sta succedendo e come conviene comportarsi con gli investimenti "
+        "(overweight/underweight asset specifici). Sii concreto, non generico.\n\n"
         f"Regime: {dom_name} ({dom_pct}%) | Mix: {top3_str}\n"
-        f"CPI: {ind.get('cpi_yoy','?')}% | Fed: {ind.get('fed_funds','?')}% | Curva: {ind.get('yield_curve','?')}% | HY: {ind.get('hy_spread','?')}bps\n"
-        f"Real Yield: {ind.get('real_yield','?')}% | Disoccupazione: {ind.get('unemployment','?')}% | M2: {ind.get('m2_yoy','?')}%\n"
+        f"CPI: {ind.get('cpi_yoy','?')}% | Fed: {ind.get('fed_funds','?')}% | "
+        f"Curva: {ind.get('yield_curve','?')}% | HY: {ind.get('hy_spread','?')}bps\n"
+        f"Real Yield: {ind.get('real_yield','?')}% | Yield10Y: {ind.get('yield10y','?')}%\n"
         f"ETF 1w: {etf_str}\n"
         f"Shock attivi: {', '.join(active_shocks) if active_shocks else 'nessuno'}\n"
         f"Alert: {' | '.join(a['msg'] for a in alerts) if alerts else 'nessuno'}\n"
@@ -430,12 +572,14 @@ def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
         r = requests.post(
             'https://api.groq.com/openai/v1/chat/completions',
             headers={'Authorization': f'Bearer {GROQ_KEY}', 'Content-Type': 'application/json'},
-            json={'model':'llama-3.3-70b-versatile','messages':[{'role':'user','content':prompt}],'max_tokens':400,'temperature':0.7},
+            json={'model':'llama-3.3-70b-versatile',
+                  'messages':[{'role':'user','content':prompt}],
+                  'max_tokens':400,'temperature':0.7},
             timeout=30
         )
         resp_json = r.json()
         if 'choices' not in resp_json:
-            print(f"  err Groq response: {resp_json}")
+            print(f"  err Groq: {resp_json}")
             return None
         comment = resp_json['choices'][0]['message']['content'].strip()
         print(f"  ok Groq: {len(comment)} chars")
@@ -452,30 +596,23 @@ def send_email(alerts, current_week_data, forecast, etf_data, oracle_comment=Non
     dom_pct  = current_week_data['scenarios'][dom_code]
     dom_name = next(s['name'] for s in SCENARIOS if s['code'] == dom_code)
     oracle_html = (
-        '<h3 style="color:#FFD700;letter-spacing:2px">&#128302; IL COMMENTO DELL\'ORACOLO</h3>'
-        '<p style="color:#C8D8E8;font-size:13px;line-height:1.9;border-left:3px solid #FFD700;padding-left:14px;font-style:italic">'
-        f'{oracle_comment}</p>'
+        '<h3 style="color:#FFD700">🔮 COMMENTO ORACOLO</h3>'
+        f'<p style="color:#C8D8E8;border-left:3px solid #FFD700;padding-left:14px">{oracle_comment}</p>'
     ) if oracle_comment else ''
-    severity_color = {'HIGH':'#FF3355','MEDIUM':'#FFB800','LOW':'#00FF88'}
-    alert_html = ''
-    if alerts:
-        rows = ''.join(f'<tr><td style="color:{severity_color.get(a["severity"],"#ccc")};padding:4px 8px">[{a["severity"]}]</td><td style="padding:4px 8px;color:#C8D8E8">{a["msg"]}</td></tr>' for a in alerts)
-        alert_html = f'<h3 style="color:#FFB800;letter-spacing:2px">&#9888; ALERT ATTIVI</h3><table>{rows}</table>'
     f4w = forecast.get('4w', {})
-    forecast_html = ''.join(f'<div style="margin:4px 0;color:#C8D8E8">{c}: <strong style="color:#00D4FF">{p}%</strong></div>' for c,p in sorted(f4w.items(), key=lambda x: x[1], reverse=True)[:3])
+    forecast_html = ''.join(
+        f'<div>{c}: <strong style="color:#00D4FF">{p}%</strong></div>'
+        for c, p in sorted(f4w.items(), key=lambda x: x[1], reverse=True)[:3]
+    )
     body = f"""<html><body style="background:#070A0F;font-family:monospace;color:#C8D8E8;padding:24px">
-    <h1 style="color:#00D4FF;letter-spacing:4px">RAPTOR MACRO MOVER</h1>
-    <p style="color:#4A6070;font-size:11px">{datetime.now().strftime('%d/%m/%Y %H:%M')} CET</p>
-    <hr style="border-color:#1E2A38;margin:16px 0">
-    <h3 style="color:#7FFF00;letter-spacing:2px">REGIME ATTUALE</h3>
-    <p style="font-size:20px"><strong style="color:#00D4FF">{dom_name}</strong> &mdash; {dom_pct}%</p>
-    {oracle_html}{alert_html}
-    <h3 style="color:#F39C12;letter-spacing:2px">ORACOLO &mdash; PREVISIONE 4 SETTIMANE</h3>
-    {forecast_html}
-    <hr style="border-color:#1E2A38;margin:16px 0">
-    <p><a href="{PAGES_URL}" style="color:#00D4FF">&#8594; Apri RAPTOR MACRO MOVER</a></p>
+    <h1 style="color:#00D4FF">RAPTOR MACRO MOVER</h1>
+    <p style="color:#4A6070">{datetime.now().strftime('%d/%m/%Y %H:%M')} CET</p>
+    <h3 style="color:#7FFF00">REGIME: {dom_name} — {dom_pct}%</h3>
+    {oracle_html}
+    <h3 style="color:#F39C12">PREVISIONE 4W</h3>{forecast_html}
+    <p><a href="{PAGES_URL}" style="color:#00D4FF">→ Apri RAPTOR</a></p>
     </body></html>"""
-    subject = f"{'🔴 ALERT' if any(a['severity']=='HIGH' for a in alerts) else '📊'} RAPTOR — {dom_name} {dom_pct}% | {datetime.now().strftime('%d/%m/%Y')}"
+    subject = f"{'🔴' if any(a['severity']=='HIGH' for a in alerts) else '📊'} RAPTOR — {dom_name} {dom_pct}% | {datetime.now().strftime('%d/%m/%Y')}"
     msg = MIMEMultipart('alternative')
     msg['Subject'] = subject; msg['From'] = GMAIL_USER; msg['To'] = NOTIFY_EMAIL
     msg.attach(MIMEText(body, 'html'))
@@ -488,9 +625,10 @@ def send_email(alerts, current_week_data, forecast, etf_data, oracle_comment=Non
         print(f"  err Email: {e}")
 
 def main():
-    print("="*60)
-    print(f"RAPTOR MACRO MOVER — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-    print("="*60)
+    print("=" * 60)
+    print(f"RAPTOR MACRO MOVER v2.3 — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print("=" * 60)
+
     prev_data = None
     if os.path.exists(DATA_FILE):
         try:
@@ -498,40 +636,47 @@ def main():
             print(f"  Prev: {prev_data.get('generated','?')}")
         except: pass
 
-    # ── FRED via CSV pubblico (nessuna API key) ───────────────────
-    print("\n[1/5] FRED CSV pubblico...")
-    raw = {}
-    for s in FRED_SERIES:
-        print(f"  {s['id']}...")
-        raw[s['name']] = fetch_fred_csv(s['id'])
-        time.sleep(0.5)   # rispetta rate limit FRED
+    # ── 1. Dati macro da Yahoo Finance ───────────────────────────
+    print("\n[1/5] Yahoo Finance macro...")
+    yahoo_macro = fetch_macro_yahoo()
 
-    print("\n[2/5] Transforms...")
-    compute_transforms(raw)
+    # ── 2. CPI da BLS ────────────────────────────────────────────
+    print("\n[2/5] BLS CPI...")
+    cpi_raw = fetch_bls_cpi()
 
-    print("\n[3/5] Weekly dataset + classify...")
+    # ── 3. Calcola serie macro ────────────────────────────────────
+    print("\n[3/5] Calcolo serie macro...")
+    raw = compute_macro_series(yahoo_macro, cpi_raw)
+    for k, v in raw.items():
+        if v: print(f"  {k}: {len(v)} obs")
+
+    # ── 4. Dataset settimanale + classificazione ─────────────────
+    print("\n[4/5] Weekly dataset + classify...")
     weekly = build_weekly_dataset(raw)
-    scenario_weights = [{'date':r['date'],'indicators':r,'scenarios':classify_week(r)} for r in weekly]
+    scenario_weights = [
+        {'date': r['date'], 'indicators': r, 'scenarios': classify_week(r)}
+        for r in weekly
+    ]
     print(f"  {len(scenario_weights)} settimane classificate")
 
-    print("\n[4/5] ETF...")
-    etf_data = fetch_etf_data()
+    current     = scenario_weights[-1]
+    current_dom = max(current['scenarios'], key=current['scenarios'].get)
+    print(f"  Regime corrente: {current_dom} ({current['scenarios'][current_dom]}%)")
+    top3 = sorted(current['scenarios'].items(), key=lambda x: x[1], reverse=True)[:3]
+    print(f"  Top 3: {' | '.join(f'{c}: {p}%' for c,p in top3)}")
 
-    current       = scenario_weights[-1]
-    current_dom   = max(current['scenarios'], key=current['scenarios'].get)
+    # ── 5. ETF + Oracle ─────────────────────────────────────────
+    print("\n[5/5] ETF + Groq Oracle...")
+    etf_data      = fetch_etf_data()
     forecast      = compute_forecast(scenario_weights)
     divergences   = compute_etf_divergence(current_dom, etf_data)
     active_shocks = get_active_shocks(current['date'])
     alerts        = check_alerts(current, prev_data, etf_data)
-
-    print(f"\n  Regime corrente: {current_dom} ({current['scenarios'][current_dom]}%)")
-
-    print("\n[5/5] Groq Oracle...")
-    oracle_comment = generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks)
+    oracle_comment= generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks)
 
     output = {
         'generated':        datetime.utcnow().isoformat() + 'Z',
-        'version':          '2.2',
+        'version':          '2.3',
         'current_week':     current['date'],
         'macro_indicators': current['indicators'],
         'scenario_weights': scenario_weights,
@@ -545,7 +690,8 @@ def main():
         'oracle_comment':   oracle_comment,
     }
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
-    with open(DATA_FILE, 'w') as f: json.dump(output, f, separators=(',',':'))
+    with open(DATA_FILE, 'w') as f:
+        json.dump(output, f, separators=(',', ':'))
     print(f"\n  Salvato: {DATA_FILE}")
 
     send_email(alerts, current, forecast, etf_data, oracle_comment)

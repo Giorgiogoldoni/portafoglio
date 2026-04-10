@@ -2,8 +2,8 @@ name: 🔮 RAPTOR Macro Mover — Aggiorna scenari e allocazione
 
 on:
   schedule:
-    - cron: '0 11 * * 1-5'    # 13:00 IT (11:00 UTC) — giorni feriali
-  workflow_dispatch:            # avvio manuale dal pannello GitHub
+    - cron: '0 11 * * 1-5'
+  workflow_dispatch:
 
 jobs:
   update-macro-data:
@@ -12,11 +12,9 @@ jobs:
       contents: write
 
     steps:
-      # ── 1. Checkout ──────────────────────────────────────────
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ── 2. Python ────────────────────────────────────────────
       - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -25,21 +23,20 @@ jobs:
       - name: Installa dipendenze
         run: |
           pip install --upgrade pip
-          pip install requests pandas numpy
+          pip install requests pandas numpy groq
 
-      # ── 3. Script principale (genera latest.json) ─────────────
       - name: Aggiorna latest.json
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python fetch_macro_data.py
 
-      # ── 4. Aggiorna storico allocazioni ───────────────────────
       - name: Aggiorna allocation_history.json
         run: python update_allocation.py
 
-      # ── 5. Commit e push ──────────────────────────────────────
       - name: Commit dati aggiornati
         run: |
           git config user.name  "raptor-bot"
           git config user.email "raptor-bot@github.com"
-          git add data/latest.json data/allocation_history.json
+          git add data/
           git diff --staged --quiet || git commit -m "🔮 Macro Mover update — $(date -u '+%d/%m/%Y %H:%M UTC')"
           git push

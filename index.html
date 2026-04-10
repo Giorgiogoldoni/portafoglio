@@ -3,449 +3,390 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔮 RAPTOR Macro Mover</title>
+<title>RAPTOR MACRO MOVER</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;800&display=swap');
 
-:root {
-  --bg:#f4f6f9; --card:#ffffff; --border:#dde3ec; --border2:#e8edf4;
-  --sb:#0d1526; --accent:#1a6fcf; --accent2:#e07b00; --accent3:#16a34a;
-  --text:#1a2332; --muted:#6b7c93; --muted2:#94a3b8;
-  --red:#dc2626; --yellow:#d97706; --green:#16a34a; --purple:#7c3aed;
-  --shadow:0 1px 4px rgba(0,0,0,.07); --shadow2:0 4px 16px rgba(0,0,0,.1);
-  --radius:10px; --font:'DM Sans',system-ui,sans-serif; --mono:'DM Mono',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
-a{color:var(--accent);text-decoration:none;}
+  :root {
+    --bg: #070A0F; --bg2: #0D1117; --bg3: #111820;
+    --border: #1E2A38; --accent: #00D4FF; --accent2: #FF6B35;
+    --accent3: #7FFF00; --text: #C8D8E8; --text-dim: #4A6070;
+    --text-bright: #E8F4FF; --danger: #FF3355; --warning: #FFB800;
+    --success: #00FF88; --gold: #FFD700;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Space Mono',monospace; font-size:12px; min-height:100vh; }
+  body::before { content:''; position:fixed; inset:0;
+    background-image: linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);
+    background-size:40px 40px; pointer-events:none; z-index:0; }
+  .container { position:relative; z-index:1; max-width:1440px; margin:0 auto; padding:20px; }
 
-/* ── LAYOUT ── */
-.wrap{max-width:1380px;margin:0 auto;padding:20px 24px;}
+  /* HEADER */
+  .header { display:flex; align-items:center; justify-content:space-between; padding:20px 0;
+    border-bottom:1px solid var(--border); margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+  .logo-main { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--accent); letter-spacing:4px; }
+  .logo-sub  { font-size:10px; color:var(--text-dim); letter-spacing:3px; margin-top:2px; }
+  .header-right { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .status-indicator { display:flex; align-items:center; gap:8px; font-size:10px; color:var(--text-dim); letter-spacing:1px; }
+  .dot { width:8px; height:8px; border-radius:50%; background:var(--text-dim); }
+  .dot.active  { background:var(--success); animation:blink 2s infinite; }
+  .dot.loading { background:var(--warning); animation:blink .5s infinite; }
+  .dot.error   { background:var(--danger); }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-/* ── HEADER ── */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 0 16px;border-bottom:1px solid var(--border);margin-bottom:20px;gap:12px;flex-wrap:wrap;}
-.hdr-left{display:flex;align-items:center;gap:14px;}
-.hdr-icon{width:40px;height:40px;background:linear-gradient(135deg,#0d1526,#1a3050);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;}
-.hdr-title h1{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.3px;}
-.hdr-title p{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
-.hdr-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.status-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--muted);}
-.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.dot.active{background:var(--green);box-shadow:0 0 5px var(--green);animation:pulse 2s infinite;}
-.dot.loading{background:var(--yellow);animation:pulse .5s infinite;}
-.dot.error{background:var(--red);}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  /* CONTROLS */
+  .controls-bar { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;
+    background:var(--bg2); border:1px solid var(--border); padding:12px 16px; }
+  .ctrl-group  { display:flex; align-items:center; gap:8px; }
+  .ctrl-label  { font-size:9px; color:var(--text-dim); letter-spacing:2px; white-space:nowrap; }
 
-/* ── ORACLE COMMENT ── */
-.oracle-strip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #f59e0b;border-left:3px solid #d97706;border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;display:none;}
-.oracle-strip.show{display:block;}
-.oracle-strip-label{font-size:9px;font-weight:700;color:var(--yellow);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
-.oracle-strip-text{font-size:12px;color:var(--text);line-height:1.8;}
+  input[type="date"], select {
+    background:var(--bg); border:1px solid var(--border); color:var(--text);
+    font-family:'Space Mono',monospace; font-size:11px; padding:6px 10px; outline:none; cursor:pointer; }
+  input[type="date"]:focus, select:focus { border-color:var(--accent); }
 
-/* ── ALERT ── */
-.alert-strip{background:#fff5f5;border:1px solid #fca5a5;border-left:3px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:none;}
-.alert-strip.show{display:block;}
-.alert-strip-label{font-size:9px;font-weight:700;color:var(--red);letter-spacing:2px;margin-bottom:6px;}
+  .btn { background:transparent; border:1px solid var(--accent); color:var(--accent);
+    font-family:'Space Mono',monospace; font-size:10px; padding:8px 18px; cursor:pointer;
+    letter-spacing:2px; text-transform:uppercase; transition:all .2s; white-space:nowrap; }
+  .btn:hover    { background:var(--accent); color:var(--bg); }
+  .btn:disabled { opacity:.3; cursor:not-allowed; }
+  .btn.green    { border-color:var(--success); color:var(--success); }
+  .btn.green:hover { background:var(--success); color:var(--bg); }
+  .btn.orange   { border-color:var(--accent2); color:var(--accent2); }
+  .btn.orange:hover { background:var(--accent2); color:var(--bg); }
 
-/* ── CONTROLS ── */
-.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:11px 16px;margin-bottom:18px;box-shadow:var(--shadow);}
-.ctrl-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;}
-input[type="date"],select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:11px;padding:5px 9px;border-radius:6px;outline:none;cursor:pointer;}
-input[type="date"]:focus,select:focus{border-color:var(--accent);}
-.btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:11px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
-.btn:hover{border-color:var(--accent);color:var(--accent);background:#f0f6ff;}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
-.btn.primary:hover{filter:brightness(1.1);}
-.btn.green-btn{background:#f0fdf4;border-color:var(--green);color:var(--green);}
-.btn.green-btn:hover{background:var(--green);color:#fff;}
-.btn:disabled{opacity:.4;cursor:not-allowed;}
-.spacer{flex:1;}
+  /* ── BOTTONE SEGNALI OPERATIVI ── */
+  .alloc-btn {
+    display:flex; align-items:center; gap:14px;
+    background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,107,53,.06));
+    border:1px solid var(--gold); padding:14px 20px; cursor:pointer;
+    transition:all .2s; margin-bottom:20px; text-decoration:none;
+    font-family:'Space Mono',monospace;
+  }
+  .alloc-btn:hover { background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,107,53,.1)); border-color:var(--accent2); }
+  .alloc-btn-icon { font-size:22px; flex-shrink:0; }
+  .alloc-btn-text strong { display:block; font-size:11px; font-weight:700; color:var(--gold); letter-spacing:2px; text-transform:uppercase; }
+  .alloc-btn-text span   { font-size:9px; color:var(--text-dim); margin-top:3px; display:block; }
+  .alloc-btn-arrow { margin-left:auto; font-size:16px; color:var(--gold); }
 
-/* ── PILLS ROW ── */
-.pills-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.pill{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:11px;color:var(--muted);box-shadow:var(--shadow);}
-.pill strong{display:block;font-size:15px;color:var(--text);font-weight:700;line-height:1.2;}
+  /* ALERT BANNER */
+  .alert-banner { background:rgba(255,51,85,.1); border:1px solid var(--danger); border-left:3px solid var(--danger);
+    padding:10px 16px; margin-bottom:16px; display:none; }
+  .alert-banner.show { display:block; }
+  .alert-row { font-size:11px; color:var(--text); line-height:1.8; }
+  .alert-high   { color:var(--danger); }
+  .alert-medium { color:var(--warning); }
 
-/* ── SECTION TITLE ── */
-.sec-title{font-size:8.5px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  /* PANEL */
+  .panel { background:var(--bg2); border:1px solid var(--border); padding:16px; }
+  .panel-title { font-family:'Syne',sans-serif; font-size:10px; font-weight:600; color:var(--accent);
+    letter-spacing:3px; text-transform:uppercase; margin-bottom:14px;
+    padding-bottom:8px; border-bottom:1px solid var(--border); }
 
-/* ── CARD ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);}
-.card-title{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border2);}
+  /* ═══════════════════════════════════
+     SEZIONE 18 MESI — NUOVA
+  ═══════════════════════════════════ */
+  .m18-panel { background:var(--bg2); border:1px solid var(--border); padding:16px; margin-bottom:16px; }
+  .m18-panel-title {
+    font-family:'Syne',sans-serif; font-size:10px; font-weight:600; color:var(--accent2);
+    letter-spacing:3px; text-transform:uppercase; margin-bottom:6px;
+    padding-bottom:8px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .m18-subtitle { font-size:9px; color:var(--text-dim); letter-spacing:1px; margin-bottom:12px; }
+  .m18-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(16px,1fr)); gap:3px; }
+  .m18-col { position:relative; cursor:pointer; transition:transform .1s; }
+  .m18-col:hover { transform:scaleY(1.05); z-index:5; }
+  .m18-bar { height:80px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .m18-seg { width:100%; }
+  .m18-date { font-size:6px; color:var(--text-dim); text-align:center; margin-top:3px; writing-mode:vertical-lr; transform:rotate(180deg); height:28px; overflow:hidden; }
+  .m18-tooltip {
+    position:absolute; bottom:115px; left:50%; transform:translateX(-50%);
+    background:#0D1117; border:1px solid var(--accent2); color:var(--text-bright);
+    font-size:9px; padding:8px 12px; white-space:nowrap; pointer-events:none;
+    opacity:0; transition:opacity .15s; z-index:20; min-width:160px;
+    font-family:'Space Mono',monospace;
+  }
+  .m18-tooltip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:var(--accent2); }
+  .m18-col:hover .m18-tooltip { opacity:1; }
+  .m18-legend { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  .m18-leg-item { display:flex; align-items:center; gap:5px; font-size:8px; color:var(--text-dim); }
+  .m18-leg-dot  { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 
-/* ── MAIN GRID ── */
-.main-grid{display:grid;grid-template-columns:340px 1fr;gap:14px;margin-bottom:14px;}
-@media(max-width:960px){.main-grid{grid-template-columns:1fr;}}
+  /* MAIN GRID */
+  .main-grid { display:grid; grid-template-columns:360px 1fr; gap:16px; margin-bottom:16px; }
+  @media(max-width:1000px){ .main-grid { grid-template-columns:1fr; } }
 
-/* ── SCENARIO VECTOR ── */
-.sc-row{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:7px;background:var(--bg);border:1px solid var(--border2);margin-bottom:4px;position:relative;overflow:hidden;}
-.sc-bg{position:absolute;left:0;top:0;height:100%;opacity:.08;transition:width .6s ease;border-radius:7px;}
-.sc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;position:relative;z-index:1;}
-.sc-name{flex:1;font-size:11px;color:var(--text);position:relative;z-index:1;font-weight:500;}
-.sc-tag{font-size:9px;color:var(--muted);position:relative;z-index:1;}
-.sc-pct{font-size:12px;font-weight:700;position:relative;z-index:1;min-width:36px;text-align:right;}
+  /* SCENARIO VECTOR */
+  .scenario-list { display:flex; flex-direction:column; gap:5px; }
+  .scenario-row { display:flex; align-items:center; gap:8px; padding:5px 8px;
+    background:var(--bg); border:1px solid var(--border); position:relative; overflow:hidden; }
+  .scenario-bg { position:absolute; left:0; top:0; height:100%; opacity:.12; transition:width .6s ease; }
+  .s-dot  { width:6px; height:6px; border-radius:50%; flex-shrink:0; position:relative; z-index:1; }
+  .s-name { flex:1; font-size:10px; color:var(--text); position:relative; z-index:1; letter-spacing:.5px; }
+  .s-tag  { font-size:9px; color:var(--text-dim); position:relative; z-index:1; letter-spacing:1px; }
+  .s-pct  { font-size:11px; font-weight:700; position:relative; z-index:1; min-width:36px; text-align:right; }
 
-/* ── INDICATORS ── */
-.ind-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.ind-box{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;}
-.ind-label{font-size:8.5px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-bottom:3px;text-transform:uppercase;}
-.ind-value{font-size:16px;font-weight:700;color:var(--text);line-height:1.1;}
-.ind-sub{font-size:8px;color:var(--muted2);margin-top:2px;}
-.ind-delta{font-size:9.5px;margin-top:3px;font-weight:500;}
-.d-up{color:var(--green);} .d-dn{color:var(--red);} .d-fl{color:var(--muted);}
+  /* INDICATORS */
+  .indicators-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .ind-box   { background:var(--bg); border:1px solid var(--border); padding:10px 12px; }
+  .ind-label { font-size:9px; color:var(--text-dim); letter-spacing:1px; margin-bottom:4px; }
+  .ind-value { font-size:16px; font-weight:700; color:var(--text-bright); letter-spacing:1px; }
+  .ind-sub   { font-size:9px; color:var(--text-dim); margin-top:2px; }
+  .ind-delta { font-size:10px; margin-top:3px; }
+  .delta-up   { color:var(--success); }
+  .delta-down { color:var(--danger); }
+  .delta-flat { color:var(--text-dim); }
 
-/* ── SHOCK BADGES ── */
-.shock{display:inline-flex;align-items:center;padding:3px 9px;font-size:9px;font-weight:600;border-radius:20px;border:1px solid;margin:2px 3px 2px 0;letter-spacing:.5px;}
-.shock-on{border-color:var(--red);color:var(--red);background:#fff5f5;animation:pulse 1.5s infinite;}
-.shock-off{border-color:var(--border);color:var(--muted2);background:var(--bg);}
+  /* SHOCK BADGES */
+  .shock-badge { display:inline-block; padding:2px 8px; font-size:9px;
+    letter-spacing:1px; border:1px solid; margin-right:4px; margin-bottom:4px; }
+  .shock-active   { border-color:var(--danger); color:var(--danger); animation:blink 1s infinite; }
+  .shock-inactive { border-color:var(--border); color:var(--text-dim); }
 
-/* ── ORACLE ── */
-.oracle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-@media(max-width:800px){.oracle-grid{grid-template-columns:repeat(2,1fr);}}
-.oracle-col{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;}
-.oracle-col.best{border-color:var(--accent2);border-width:2px;background:#fffbf5;}
-.oracle-h{font-size:9px;font-weight:700;color:var(--accent2);letter-spacing:1.5px;margin-bottom:9px;text-transform:uppercase;}
-.oracle-row{display:flex;align-items:center;gap:5px;margin-bottom:4px;padding:3px 5px;border-radius:5px;position:relative;overflow:hidden;}
-.oracle-bar{position:absolute;left:0;top:0;height:100%;opacity:.1;border-radius:5px;}
-.oracle-name{flex:1;font-size:9px;color:var(--text);position:relative;z-index:1;}
-.oracle-pct{font-size:10px;font-weight:700;position:relative;z-index:1;min-width:28px;text-align:right;}
+  /* ORACLE PANEL */
+  .oracle-panel { margin-bottom:16px; }
+  .oracle-grid  { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  @media(max-width:900px){ .oracle-grid { grid-template-columns:repeat(2,1fr); } }
 
-/* ── TIMELINE ── */
-.timeline-wrap{overflow-x:auto;padding-bottom:6px;}
-.tl-canvas-wrap{min-width:700px;}
-canvas{display:block;width:100%;}
-.tl-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
-.tl-leg-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted);}
-.tl-leg-dot{width:8px;height:8px;border-radius:50%;}
+  .oracle-col { background:var(--bg); border:1px solid var(--border); padding:12px; }
+  .oracle-horizon { font-size:10px; color:var(--accent2); letter-spacing:2px; margin-bottom:10px; font-weight:700; }
+  .oracle-sc-row  { display:flex; align-items:center; gap:6px; margin-bottom:5px; position:relative; }
+  .oracle-bar-bg  { position:absolute; left:0; top:0; height:100%; opacity:.12; border-radius:2px; }
+  .oracle-name    { flex:1; font-size:9px; color:var(--text); letter-spacing:.3px; position:relative; z-index:1; }
+  .oracle-pct     { font-size:10px; font-weight:700; position:relative; z-index:1; min-width:30px; text-align:right; }
+  .oracle-winner  { border-color:var(--accent2) !important; }
 
-/* ── 18 MESI ── */
-.m18-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:4px;margin-top:8px;}
-.m18-col{border-radius:5px;overflow:hidden;cursor:pointer;transition:transform .1s;position:relative;}
-.m18-col:hover{transform:scaleY(1.03);}
-.m18-bar{height:70px;display:flex;flex-direction:column;justify-content:flex-end;}
-.m18-seg{width:100%;transition:height .4s ease;}
-.m18-label{font-size:7px;color:var(--muted2);text-align:center;padding:2px 0;white-space:nowrap;overflow:hidden;}
-.m18-tooltip{position:absolute;bottom:76px;left:50%;transform:translateX(-50%);background:var(--sb);color:#fff;font-size:9px;padding:6px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:10;min-width:130px;}
-.m18-col:hover .m18-tooltip{opacity:1;}
+  /* TIMELINE */
+  .timeline-panel { background:var(--bg2); border:1px solid var(--border); padding:16px; margin-bottom:16px; }
+  .timeline-scroll { overflow-x:auto; padding-bottom:8px; }
+  .timeline-canvas-wrap { min-width:800px; }
+  canvas#timelineCanvas { display:block; width:100%; }
 
-/* ── 7 DOMANDE ── */
-.q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin-bottom:14px;}
-.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;}
-.q-num{position:absolute;top:10px;right:12px;font-size:26px;font-weight:700;color:var(--border2);line-height:1;font-variant-numeric:tabular-nums;}
-.q-title{font-size:9px;font-weight:700;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
-.q-ans{font-size:11px;color:var(--text);line-height:1.75;min-height:55px;}
-.q-ans.empty{color:var(--muted2);font-style:italic;}
-.q-meta{margin-top:8px;padding-top:6px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;font-size:9px;color:var(--muted);}
+  /* ETF PANEL */
+  .etf-panel { margin-bottom:16px; }
+  .etf-area-label { font-size:9px; color:var(--text-dim); letter-spacing:2px;
+    padding:4px 0; margin-top:10px; border-bottom:1px solid var(--border); margin-bottom:6px; }
+  .etf-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:4px; }
+  .etf-box  { background:var(--bg); border:1px solid var(--border); padding:8px 10px; }
+  .etf-ticker { font-size:11px; font-weight:700; color:var(--text-bright); }
+  .etf-name   { font-size:8px; color:var(--text-dim); margin-top:1px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .etf-price  { font-size:13px; color:var(--text-bright); margin-top:4px; font-weight:700; }
+  .etf-ret    { font-size:9px; margin-top:2px; }
+  .etf-pos    { color:var(--success); }
+  .etf-neg    { color:var(--danger); }
+  .etf-flat   { color:var(--text-dim); }
 
-/* ── TRANSITION TABLE ── */
-.trans-table{width:100%;border-collapse:collapse;font-size:11px;}
-.trans-table th{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;text-align:left;padding:5px 8px;border-bottom:1px solid var(--border);}
-.trans-table td{padding:6px 8px;border-bottom:1px solid var(--border2);color:var(--text);}
-.pct-bar{display:inline-block;height:5px;background:var(--accent);margin-right:6px;vertical-align:middle;opacity:.5;border-radius:3px;}
+  /* 7 DOMANDE */
+  .questions-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:12px; margin-bottom:16px; }
+  .q-card   { background:var(--bg2); border:1px solid var(--border); padding:16px; position:relative; }
+  .q-number { position:absolute; top:12px; right:14px; font-family:'Syne',sans-serif;
+    font-size:28px; font-weight:800; color:var(--border); line-height:1; }
+  .q-title  { font-size:10px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+  .q-answer { font-size:11px; color:var(--text); line-height:1.7; min-height:60px; }
+  .q-answer.empty { color:var(--text-dim); font-style:italic; }
+  .q-metric { margin-top:10px; padding-top:8px; border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; font-size:10px; color:var(--text-dim); }
 
-/* ── ETF MONITOR ── */
-.etf-area-label{font-size:8px;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 0 4px;margin-top:10px;border-bottom:1px solid var(--border2);margin-bottom:5px;}
-.etf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:5px;}
-.etf-box{background:var(--bg);border:1px solid var(--border2);border-radius:7px;padding:9px 11px;}
-.etf-ticker{font-size:11px;font-weight:700;color:var(--text);font-family:var(--mono);}
-.etf-name{font-size:8px;color:var(--muted2);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.etf-price{font-size:13px;font-weight:700;color:var(--text);margin-top:4px;}
-.etf-ret{font-size:9px;margin-top:2px;}
-.r-up{color:var(--green);} .r-dn{color:var(--red);} .r-fl{color:var(--muted2);}
+  /* TRANSITION TABLE */
+  .trans-table { width:100%; border-collapse:collapse; font-size:10px; }
+  .trans-table th { font-size:9px; color:var(--text-dim); letter-spacing:1px;
+    text-align:left; padding:4px 8px; border-bottom:1px solid var(--border); }
+  .trans-table td { padding:5px 8px; border-bottom:1px solid var(--border); color:var(--text); }
+  .pct-bar { display:inline-block; height:6px; background:var(--accent); margin-right:6px;
+    vertical-align:middle; opacity:.6; }
 
-/* ── ALLOCAZIONE ── */
-#allocSection{display:none;}
-#allocSection.open{display:block;}
-.alloc-toggle{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--accent);border-radius:var(--radius);padding:12px 18px;cursor:pointer;transition:all .15s;margin-bottom:14px;user-select:none;}
-.alloc-toggle:hover{background:#f0f6ff;}
-.alloc-toggle-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.alloc-toggle-text strong{display:block;font-size:13px;font-weight:700;color:var(--accent);}
-.alloc-toggle-text span{font-size:10px;color:var(--muted);}
-.alloc-toggle-arrow{margin-left:auto;font-size:14px;color:var(--accent);transition:transform .2s;}
-.alloc-toggle.open .alloc-toggle-arrow{transform:rotate(180deg);}
+  /* DIVERGENCE */
+  .div-row { display:flex; align-items:center; gap:8px; padding:4px 0;
+    border-bottom:1px solid var(--border); font-size:10px; }
+  .div-ticker  { color:var(--accent); font-weight:700; min-width:45px; }
+  .div-name    { flex:1; color:var(--text-dim); }
+  .div-signal  { color:var(--warning); }
 
-.alloc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:14px;}
-.alloc-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);}
-.alloc-box-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
-.alloc-class{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
-.alloc-subclass{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;}
-.alloc-bar-wrap{background:var(--border2);border-radius:10px;height:7px;margin-bottom:8px;overflow:hidden;}
-.alloc-bar{height:100%;border-radius:10px;transition:width .6s ease;}
-.alloc-pct{font-size:22px;font-weight:700;line-height:1;}
-.alloc-tickers{font-size:9px;color:var(--muted);font-family:var(--mono);margin-bottom:6px;}
-.alloc-ret{font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px;}
-.alloc-ret-range{font-size:9px;color:var(--muted);}
+  /* ORACLE COMMENT */
+  #oracleComment { display:none;background:rgba(255,215,0,.06);border:1px solid #FFD700;border-left:3px solid #FFD700;padding:16px 20px;margin-bottom:16px; }
 
-.alloc-total{background:linear-gradient(135deg,#0d1526,#1a3050);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
-.alloc-total-item{text-align:center;}
-.alloc-total-item .lbl{font-size:8px;color:#5a7a9a;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
-.alloc-total-item .val{font-size:18px;font-weight:700;color:#fff;}
-.alloc-total-item .sub{font-size:9px;color:#3a7acc;}
+  /* EXPORT */
+  .export-bar { background:var(--bg2); border:1px solid var(--border);
+    padding:12px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .export-info { flex:1; font-size:10px; color:var(--text-dim); letter-spacing:1px; }
 
-/* ── STORICO ALLOCAZIONI ── */
-.hist-table-wrap{overflow-x:auto;max-height:320px;overflow-y:auto;}
-.hist-table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap;}
-.hist-table th{font-size:8.5px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;}
-.hist-table td{padding:5px 10px;border-bottom:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:10px;}
-.hist-table tr:hover td{background:#f8f9ff;}
-.regime-badge{display:inline-flex;align-items:center;padding:1px 7px;border-radius:10px;font-size:9px;font-weight:700;}
-
-/* ── LOADER ── */
-.loader{text-align:center;padding:60px;color:var(--muted);font-size:13px;letter-spacing:1px;}
-.loader-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── FOOTER BAR ── */
-.footer-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;box-shadow:var(--shadow);}
-.footer-info{flex:1;font-size:10px;color:var(--muted);}
+  /* LOADER */
+  .loader { text-align:center; padding:60px; color:var(--text-dim); font-size:14px; letter-spacing:3px; }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="container">
 
   <!-- HEADER -->
-  <div class="hdr">
-    <div class="hdr-left">
-      <div class="hdr-icon">🔮</div>
-      <div class="hdr-title">
-        <h1>RAPTOR Macro Mover</h1>
-        <p>Scenario Classifier · Oracle Forecast · ETF Monitor</p>
-      </div>
+  <div class="header">
+    <div>
+      <div class="logo-main">RAPTOR MACRO MOVER</div>
+      <div class="logo-sub">SCENARIO CLASSIFIER · ORACLE FORECAST · ETF MONITOR</div>
     </div>
-    <div class="hdr-right">
-      <div class="status-pill"><div class="dot" id="statusDot"></div><span id="statusText">Caricamento...</span></div>
-      <div style="font-size:10px;color:var(--muted)" id="lastUpdate"></div>
-      <a href="https://giorgiogoldoni.github.io/trader/" class="btn">← Hub</a>
+    <div class="header-right">
+      <div class="status-indicator">
+        <div class="dot" id="statusDot"></div>
+        <span id="statusText">LOADING...</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim)" id="lastUpdate">—</div>
+      <a href="https://giorgiogoldoni.github.io/trader/" class="btn">← HUB</a>
     </div>
   </div>
 
   <!-- ORACLE COMMENT -->
-  <div class="oracle-strip" id="oracleStrip">
-    <div class="oracle-strip-label">🔮 Il Commento dell'Oracolo</div>
-    <div class="oracle-strip-text" id="oracleText"></div>
+  <div id="oracleComment">
+    <div style="font-size:9px;color:#FFD700;letter-spacing:2px;margin-bottom:10px">🔮 IL COMMENTO DELL'ORACOLO</div>
+    <div id="oracleCommentText" style="font-size:12px;color:#C8D8E8;line-height:1.9"></div>
   </div>
 
-  <!-- ALERT -->
-  <div class="alert-strip" id="alertStrip">
-    <div class="alert-strip-label">⚠ Alert RAPTOR</div>
+  <!-- ALERT BANNER -->
+  <div class="alert-banner" id="alertBanner">
+    <div style="font-size:9px;color:var(--danger);letter-spacing:2px;margin-bottom:6px">⚠ ALERT RAPTOR</div>
     <div id="alertList"></div>
   </div>
 
   <!-- CONTROLS -->
-  <div class="controls">
-    <span class="ctrl-label">Settimana</span>
-    <input type="date" id="weekPicker" onchange="updateView()">
-    <span class="ctrl-label" style="margin-left:8px">Vista</span>
-    <select id="viewMode" onchange="updateView()">
-      <option value="current">Settimana corrente</option>
-      <option value="historical">Navigazione storica</option>
-    </select>
-    <div class="spacer"></div>
-    <button class="btn green-btn" onclick="exportCSV()" id="btnCSV" disabled>↓ CSV</button>
-    <button class="btn primary" onclick="exportJSON()" id="btnExport" disabled>↓ JSON</button>
+  <div class="controls-bar">
+    <div class="ctrl-group">
+      <span class="ctrl-label">SETTIMANA</span>
+      <input type="date" id="weekPicker" onchange="updateView()">
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">VISTA</span>
+      <select id="viewMode" onchange="updateView()">
+        <option value="current">SETTIMANA CORRENTE</option>
+        <option value="historical">NAVIGAZIONE STORICA</option>
+      </select>
+    </div>
+    <div style="flex:1"></div>
+    <button class="btn green" onclick="exportJSON()" id="btnExport" disabled>↓ JSON</button>
+    <button class="btn" onclick="exportCSV()" id="btnCSV" disabled>↓ CSV</button>
   </div>
 
-  <!-- LOADER -->
-  <div class="loader" id="loaderMsg">
-    <div class="loader-spinner"></div>
-    Caricamento dati RAPTOR...
-  </div>
+  <!-- LOADING STATE -->
+  <div class="loader" id="loaderMsg">Caricamento dati RAPTOR...</div>
 
-  <!-- MAIN CONTENT -->
+  <!-- CONTENUTO PRINCIPALE -->
   <div id="mainContent" style="display:none">
 
-    <!-- PILLS -->
-    <div class="pills-row">
-      <div class="pill"><strong id="pill-regime">—</strong>Regime</div>
-      <div class="pill"><strong id="pill-weeks">—</strong>Settimane dataset</div>
-      <div class="pill"><strong id="pill-oracle">—</strong>Oracle 4w</div>
-      <div class="pill"><strong id="pill-shock">—</strong>Shock attivi</div>
-      <div class="pill"><strong id="pill-alloc-ret">—</strong>Rendimento atteso</div>
+    <!-- ══════════════════════════════════════════
+         SCENARI ULTIMI 18 MESI — SEZIONE NUOVA
+    ══════════════════════════════════════════ -->
+    <div class="m18-panel">
+      <div class="m18-panel-title">
+        <span>📅 SCENARI ULTIMI 18 MESI</span>
+        <span style="font-size:9px;color:var(--text-dim);font-weight:400">~78 settimane · hover per dettagli · click per navigare</span>
+      </div>
+      <div class="m18-grid" id="m18Grid"></div>
+      <div class="m18-legend" id="m18Legend"></div>
     </div>
 
-    <!-- ══════════════════════════════════════════ -->
-    <!--  SCENARI ULTIMI 18 MESI                    -->
-    <!-- ══════════════════════════════════════════ -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title" style="color:var(--accent2)">📅 Scenari ultimi 18 mesi — evoluzione settimanale</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:10px">Passa il mouse su ogni colonna per i dettagli · Clicca per navigare · Barra = distribuzione probabilistica scenari</div>
-      <div class="m18-grid" id="m18Grid"></div>
-      <div class="tl-legend" id="m18Legend" style="margin-top:12px"></div>
-    </div>
+    <!-- ══════════════════════════════════════════
+         BOTTONE SEGNALI OPERATIVI
+    ══════════════════════════════════════════ -->
+    <a class="alloc-btn" href="allocation.html" target="_blank">
+      <div class="alloc-btn-icon">📐</div>
+      <div class="alloc-btn-text">
+        <strong>Segnali Operativi — Allocazione consigliata</strong>
+        <span>9 sotto-classi · Rendimento prospettico blended · Storico con export Excel → apre pagina dedicata</span>
+      </div>
+      <div class="alloc-btn-arrow">→</div>
+    </a>
 
     <!-- MAIN GRID: Scenari + Indicatori -->
     <div class="main-grid">
-      <div class="card">
-        <div class="card-title">Vettore scenari</div>
-        <div id="scenarioList"></div>
+      <div class="panel">
+        <div class="panel-title">VETTORE SCENARI</div>
+        <div class="scenario-list" id="scenarioList"></div>
       </div>
-      <div class="card">
-        <div class="card-title">Indicatori macro</div>
-        <div class="ind-grid" id="indicatorsGrid"></div>
-        <div style="margin-top:12px">
-          <div class="card-title" style="margin-bottom:6px">Shock attivi</div>
+      <div class="panel">
+        <div class="panel-title">INDICATORI MACRO</div>
+        <div class="indicators-grid" id="indicatorsGrid"></div>
+        <div style="margin-top:14px">
+          <div class="panel-title" style="margin-bottom:8px">SHOCK ATTIVI</div>
           <div id="shockBadges"></div>
         </div>
       </div>
     </div>
 
     <!-- ORACLE FORECAST -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">L'Oracolo — Previsioni Markov Chain</div>
+    <div class="panel oracle-panel">
+      <div class="panel-title">L'ORACOLO — SCENARI PROBABILI (MARKOV CHAIN)</div>
       <div class="oracle-grid" id="oracleGrid"></div>
     </div>
 
-    <!-- TIMELINE COMPLETA -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">Timeline scenari 2010 → oggi</div>
-      <div class="timeline-wrap">
-        <div class="tl-canvas-wrap">
-          <canvas id="timelineCanvas" height="100"></canvas>
+    <!-- TIMELINE -->
+    <div class="timeline-panel">
+      <div class="panel-title">TIMELINE SCENARI 2010→OGGI</div>
+      <div class="timeline-scroll">
+        <div class="timeline-canvas-wrap">
+          <canvas id="timelineCanvas" height="120"></canvas>
         </div>
       </div>
-      <div class="tl-legend" id="legendBox"></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px" id="legendBox"></div>
     </div>
 
     <!-- 7 DOMANDE -->
-    <div class="sec-title">Le 7 domande dell'Oracolo</div>
-    <div class="q-grid" id="questionsGrid">
-      <div class="q-card"><div class="q-num">1</div><div class="q-title">Dove siamo?</div><div class="q-ans empty" id="q1">—</div><div class="q-meta"><span id="q1-meta">—</span><span id="q1-conf">—</span></div></div>
-      <div class="q-card"><div class="q-num">2</div><div class="q-title">Dove andremo?</div><div class="q-ans empty" id="q2">—</div><div class="q-meta"><span id="q2-meta">—</span><span id="q2-conf">—</span></div></div>
-      <div class="q-card"><div class="q-num">3</div><div class="q-title">Vicini a una transizione?</div><div class="q-ans empty" id="q3">—</div><div class="q-meta"><span id="q3-meta">—</span><span id="q3-conf">—</span></div></div>
-      <div class="q-card"><div class="q-num">4</div><div class="q-title">Se cambia, cosa succede?</div><div class="q-ans empty" id="q4">—</div><div class="q-meta"><span id="q4-meta">—</span><span id="q4-conf">—</span></div></div>
-      <div class="q-card"><div class="q-num">5</div><div class="q-title">Quanto è raro?</div><div class="q-ans empty" id="q5">—</div><div class="q-meta"><span id="q5-meta">—</span><span id="q5-conf">—</span></div></div>
-      <div class="q-card"><div class="q-num">6</div><div class="q-title">Tail risk dominante?</div><div class="q-ans empty" id="q6">—</div><div class="q-meta"><span id="q6-meta">—</span><span id="q6-conf">—</span></div></div>
-      <div class="q-card" style="grid-column:1/-1"><div class="q-num">7</div><div class="q-title">Cosa non sta prezzando il mercato?</div><div class="q-ans empty" id="q7">—</div><div class="q-meta"><span id="q7-meta">—</span><span id="q7-conf">—</span></div></div>
+    <div class="panel-title" style="margin-bottom:14px">LE 7 DOMANDE DELL'ORACOLO</div>
+    <div class="questions-grid" id="questionsGrid">
+      <div class="q-card"><div class="q-number">1</div><div class="q-title">DOVE SIAMO?</div>
+        <div class="q-answer empty" id="q1">—</div><div class="q-metric"><span id="q1-meta">—</span><span id="q1-conf">—</span></div></div>
+      <div class="q-card"><div class="q-number">2</div><div class="q-title">DOVE ANDREMO?</div>
+        <div class="q-answer empty" id="q2">—</div><div class="q-metric"><span id="q2-meta">—</span><span id="q2-conf">—</span></div></div>
+      <div class="q-card"><div class="q-number">3</div><div class="q-title">VICINI A UNA TRANSIZIONE?</div>
+        <div class="q-answer empty" id="q3">—</div><div class="q-metric"><span id="q3-meta">—</span><span id="q3-conf">—</span></div></div>
+      <div class="q-card"><div class="q-number">4</div><div class="q-title">SE CAMBIA, COSA SUCCEDE?</div>
+        <div class="q-answer empty" id="q4">—</div><div class="q-metric"><span id="q4-meta">—</span><span id="q4-conf">—</span></div></div>
+      <div class="q-card"><div class="q-number">5</div><div class="q-title">QUANTO È RARO?</div>
+        <div class="q-answer empty" id="q5">—</div><div class="q-metric"><span id="q5-meta">—</span><span id="q5-conf">—</span></div></div>
+      <div class="q-card"><div class="q-number">6</div><div class="q-title">TAIL RISK DOMINANTE?</div>
+        <div class="q-answer empty" id="q6">—</div><div class="q-metric"><span id="q6-meta">—</span><span id="q6-conf">—</span></div></div>
+      <div class="q-card" style="grid-column:1/-1"><div class="q-number">7</div>
+        <div class="q-title">COSA NON STA PREZZANDO IL MERCATO?</div>
+        <div class="q-answer empty" id="q7">—</div><div class="q-metric"><span id="q7-meta">—</span><span id="q7-conf">—</span></div></div>
     </div>
 
     <!-- MATRICE TRANSIZIONI -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">Matrice transizioni storiche — 4 settimane</div>
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-title">MATRICE TRANSIZIONI STORICHE — 4 SETTIMANE</div>
       <div id="transitionTable"></div>
     </div>
 
     <!-- ETF MONITOR -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">ETF Monitor — Performance</div>
+    <div class="panel etf-panel">
+      <div class="panel-title">ETF MONITOR — PERFORMANCE</div>
       <div id="etfGrid"></div>
     </div>
 
-    <!-- ══════════════════════════════════════════ -->
-    <!--  ALLOCAZIONE — BOTTONE TOGGLE             -->
-    <!-- ══════════════════════════════════════════ -->
-    <div class="alloc-toggle" id="allocToggle" onclick="toggleAlloc()">
-      <div class="alloc-toggle-icon">📐</div>
-      <div class="alloc-toggle-text">
-        <strong>Segnali Operativi — Allocazione consigliata</strong>
-        <span>9 sotto-classi · Rendimento prospettico · Storico con export Excel</span>
-      </div>
-      <span class="alloc-toggle-arrow">▼</span>
-    </div>
-
-    <div id="allocSection">
-
-      <!-- RIEPILOGO TOTALE -->
-      <div class="alloc-total" id="allocTotal"></div>
-
-      <!-- GRIGLIA ALLOCAZIONE -->
-      <div class="sec-title">Allocazione per sotto-classe · Regime corrente</div>
-      <div class="alloc-grid" id="allocGrid"></div>
-
-      <!-- STORICO -->
-      <div class="card" style="margin-bottom:14px">
-        <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
-          <span>Storico allocazioni — aggiornamento giornaliero</span>
-          <button class="btn green-btn" onclick="exportAllocExcel()">↓ Excel</button>
-        </div>
-        <div class="hist-table-wrap">
-          <table class="hist-table" id="histTable">
-            <thead>
-              <tr>
-                <th>DATA</th><th>REGIME</th>
-                <th>EQ.GROWTH</th><th>EQ.VALUE</th><th>EQ.EM</th>
-                <th>BOND CT</th><th>BOND INF</th><th>BOND HY</th>
-                <th>ORO</th><th>ENERGIA</th><th>MAT.IND</th>
-                <th>RET.ATT.</th>
-              </tr>
-            </thead>
-            <tbody id="histBody"></tbody>
-          </table>
-        </div>
-        <div style="font-size:9px;color:var(--muted2);margin-top:8px" id="histNote">
-          Lo storico si accumula giornalmente tramite il workflow GitHub Actions.
-        </div>
-      </div>
-
-    </div><!-- /allocSection -->
-
-    <!-- FOOTER BAR -->
-    <div class="footer-bar">
-      <div class="footer-info" id="footerInfo">—</div>
-      <button class="btn" onclick="exportCSV()" id="btnCSV2" disabled>↓ CSV</button>
-      <button class="btn primary" onclick="exportJSON()" id="btnExport2" disabled>↓ JSON</button>
+    <!-- EXPORT -->
+    <div class="export-bar" style="margin-top:16px">
+      <div class="export-info" id="exportInfo">—</div>
+      <button class="btn green" onclick="exportJSON()" id="btnExport2" disabled>↓ ESPORTA JSON</button>
+      <button class="btn" onclick="exportCSV()" id="btnCSV2" disabled>↓ ESPORTA CSV</button>
     </div>
 
   </div><!-- /mainContent -->
-</div><!-- /wrap -->
+</div><!-- /container -->
 
 <script>
-// ════════════════════════════════════════════════════════════
-//  RAPTOR MACRO MOVER  — v3.0  (Light Theme)
-// ════════════════════════════════════════════════════════════
+// ============================================================
+// RAPTOR MACRO MOVER — Frontend v2.1 (originale + 18 mesi)
+// ============================================================
 
-const STATE = { data: null, currentWeek: null, allocHistory: [] };
+const STATE = { data: null, currentWeek: null };
 
 const SHOCK_LABELS = {
-  12: ['GFC 2008',      '2007-08-01', '2009-03-09'],
-  14: ['SOVEREIGN 2011','2010-05-01', '2012-07-26'],
-  11: ['COVID 2020',    '2020-02-20', '2020-12-31'],
-  13: ['UKRAINE 2022',  '2022-02-24', '2022-12-31'],
-   9: ['TARIFFS 2026',  '2026-04-02', null],
+  12: ['GFC 2008',       '2007-08-01', '2009-03-09'],
+  14: ['SOVEREIGN 2011', '2010-05-01', '2012-07-26'],
+  11: ['COVID 2020',     '2020-02-20', '2020-12-31'],
+  13: ['UKRAINE 2022',   '2022-02-24', '2022-12-31'],
+   9: ['TARIFFS 2026',   '2026-04-02', null],
 };
 
-// ── ALLOCAZIONE BASE per regime (Opzione C: blended su vettore scenari)
-const ALLOC_BASE = {
-  BULL:     { eq_growth:35, eq_value:15, eq_em:10, bond_ct:5,  bond_inf:5,  bond_hy:10, oro:8,  energia:7,  mat_ind:5  },
-  RISK_ON:  { eq_growth:30, eq_value:15, eq_em:15, bond_ct:5,  bond_inf:5,  bond_hy:12, oro:8,  energia:5,  mat_ind:5  },
-  NEUTRO:   { eq_growth:20, eq_value:15, eq_em:10, bond_ct:15, bond_inf:10, bond_hy:8,  oro:12, energia:5,  mat_ind:5  },
-  STAGF:    { eq_growth:8,  eq_value:12, eq_em:5,  bond_ct:10, bond_inf:25, bond_hy:5,  oro:20, energia:10, mat_ind:5  },
-  RISK_OFF: { eq_growth:5,  eq_value:8,  eq_em:0,  bond_ct:30, bond_inf:20, bond_hy:2,  oro:22, energia:8,  mat_ind:5  },
-  BEAR:     { eq_growth:5,  eq_value:8,  eq_em:0,  bond_ct:28, bond_inf:18, bond_hy:2,  oro:25, energia:8,  mat_ind:6  },
-  SHOCK:    { eq_growth:3,  eq_value:5,  eq_em:0,  bond_ct:35, bond_inf:20, bond_hy:0,  oro:27, energia:5,  mat_ind:5  },
-};
-
-// Rendimenti attesi base % a 4 settimane per regime
-const RET_BASE = {
-  BULL:     { eq_growth:2.2, eq_value:1.5, eq_em:1.8, bond_ct:0.1, bond_inf:0.3, bond_hy:0.7, oro:0.5, energia:1.2, mat_ind:1.0 },
-  RISK_ON:  { eq_growth:1.8, eq_value:1.2, eq_em:2.0, bond_ct:0.1, bond_inf:0.2, bond_hy:0.9, oro:0.3, energia:0.8, mat_ind:0.8 },
-  NEUTRO:   { eq_growth:0.8, eq_value:0.6, eq_em:0.5, bond_ct:0.2, bond_inf:0.3, bond_hy:0.3, oro:0.4, energia:0.3, mat_ind:0.2 },
-  STAGF:    { eq_growth:-0.5,eq_value:0.2, eq_em:-0.8,bond_ct:0.1, bond_inf:1.2, bond_hy:-0.2,oro:1.5, energia:2.0, mat_ind:1.5 },
-  RISK_OFF: { eq_growth:-1.8,eq_value:-0.8,eq_em:-2.5,bond_ct:0.4, bond_inf:0.9, bond_hy:-1.0,oro:2.0, energia:0.5, mat_ind:-0.5},
-  BEAR:     { eq_growth:-2.5,eq_value:-1.5,eq_em:-3.0,bond_ct:0.5, bond_inf:1.0, bond_hy:-1.5,oro:2.5, energia:-0.3,mat_ind:-1.0},
-  SHOCK:    { eq_growth:-4.0,eq_value:-2.5,eq_em:-4.5,bond_ct:0.8, bond_inf:1.5, bond_hy:-2.5,oro:3.5, energia:-1.0,mat_ind:-2.0},
-};
-
-// Sotto-classi definizione
-const SUBCLASSES = [
-  { key:'eq_growth', label:'Equity Growth', class:'EQUITY',  color:'#1a6fcf', tickers:['SWRD.MI','CSPX.MI','EQQQ.MI'] },
-  { key:'eq_value',  label:'Equity Value',  class:'EQUITY',  color:'#2563eb', tickers:['IWVL.MI','XDEV.MI'] },
-  { key:'eq_em',     label:'Equity EM',     class:'EQUITY',  color:'#0ea5e9', tickers:['EIMI.MI','IEMA.MI'] },
-  { key:'bond_ct',   label:'Bond Corti',    class:'BOND',    color:'#7c3aed', tickers:['XEON.MI','IS3N.MI','IB01.SW'] },
-  { key:'bond_inf',  label:'Bond Inflation',class:'BOND',    color:'#9333ea', tickers:['XTIP.MI','TIP1A.MI'] },
-  { key:'bond_hy',   label:'Bond HY',       class:'BOND',    color:'#a855f7', tickers:['IHYG.MI','EHYA.MI'] },
-  { key:'oro',       label:'Oro',           class:'MATERIE', color:'#d97706', tickers:['PHAG.MI','PHAU.MI','SGBS.MI'] },
-  { key:'energia',   label:'Energia',       class:'MATERIE', color:'#ea580c', tickers:['WTI.MI','BRENT.MI','CRUD.MI'] },
-  { key:'mat_ind',   label:'Mat. Industriali',class:'MATERIE',color:'#b45309',tickers:['COPA.MI','NICK.MI','ALUM.MI'] },
-];
-
-const REGIME_COLORS = {
-  BULL:'#16a34a', RISK_ON:'#0ea5e9', NEUTRO:'#d97706',
-  STAGF:'#ea580c', RISK_OFF:'#7c3aed', BEAR:'#dc2626', SHOCK:'#9f1239',
-};
-
-// ── LOAD DATA ────────────────────────────────────────────────
+// ── LOAD DATA ──────────────────────────────────────────────────
 async function loadData() {
-  setStatus('loading','Caricamento...');
+  setStatus('loading', 'CARICAMENTO...');
   try {
     const r = await fetch('data/latest.json?t=' + Date.now());
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -465,23 +406,20 @@ async function loadData() {
     updateView();
     renderAlerts();
     renderOracleComment();
-    loadAllocHistory();
 
-    setStatus('active','Online');
+    setStatus('active', 'ONLINE');
     ['btnExport','btnCSV','btnExport2','btnCSV2'].forEach(id => {
       const el = document.getElementById(id); if(el) el.disabled = false;
     });
 
     const sw = STATE.data.scenario_weights;
-    document.getElementById('footerInfo').textContent =
+    document.getElementById('exportInfo').textContent =
       `Dataset: ${sw.length} settimane · Dal ${sw[0].date} al ${sw[sw.length-1].date} · Generato: ${gen.toLocaleString('it-IT')}`;
 
   } catch(e) {
-    setStatus('error','Errore');
-    document.getElementById('loaderMsg').innerHTML =
-      `<div class="loader-spinner" style="border-top-color:#dc2626"></div>
-       Errore caricamento: ${e.message}<br>
-       <small style="color:var(--muted2)">Il dataset viene aggiornato automaticamente alle 12:00 dal workflow GitHub Actions.</small>`;
+    setStatus('error', 'ERRORE');
+    document.getElementById('loaderMsg').textContent =
+      `Errore caricamento: ${e.message}. Il dataset verrà generato automaticamente alle 13:00 dal workflow GitHub Actions.`;
   }
 }
 
@@ -490,36 +428,35 @@ function setStatus(state, text) {
   document.getElementById('statusText').textContent = text;
 }
 
-// ── ORACLE COMMENT ───────────────────────────────────────────
+// ── ORACLE COMMENT ─────────────────────────────────────────────
 function renderOracleComment() {
-  const c = STATE.data.oracle_comment;
-  if (!c) return;
-  document.getElementById('oracleStrip').classList.add('show');
-  document.getElementById('oracleText').textContent = c;
+  const comment = STATE.data.oracle_comment;
+  if (!comment) return;
+  document.getElementById('oracleComment').style.display = 'block';
+  document.getElementById('oracleCommentText').textContent = comment;
 }
 
-// ── ALERTS ───────────────────────────────────────────────────
+// ── ALERTS ─────────────────────────────────────────────────────
 function renderAlerts() {
   const alerts = STATE.data.alerts || [];
   if (!alerts.length) return;
-  document.getElementById('alertStrip').classList.add('show');
+  const banner = document.getElementById('alertBanner');
+  banner.classList.add('show');
   document.getElementById('alertList').innerHTML = alerts.map(a =>
-    `<div style="font-size:11px;color:var(--text);line-height:1.8">
-      <span style="color:${a.severity==='HIGH'?'var(--red)':'var(--yellow)';font-weight:700}">[${a.severity}]</span> ${a.msg}
-    </div>`
+    `<div class="alert-row"><span class="alert-${a.severity.toLowerCase()}">[${a.severity}]</span> ${a.msg}</div>`
   ).join('');
 }
 
-// ── WEEK PICKER ──────────────────────────────────────────────
+// ── WEEK PICKER ────────────────────────────────────────────────
 function initWeekPicker() {
   const sw = STATE.data.scenario_weights;
-  const p = document.getElementById('weekPicker');
+  const p  = document.getElementById('weekPicker');
   p.min = sw[0].date; p.max = sw[sw.length-1].date;
   STATE.currentWeek = sw[sw.length-1].date;
   p.value = STATE.currentWeek;
 }
 
-// ── UPDATE VIEW ──────────────────────────────────────────────
+// ── UPDATE VIEW ────────────────────────────────────────────────
 function updateView() {
   if (!STATE.data) return;
   const mode = document.getElementById('viewMode').value;
@@ -540,51 +477,98 @@ function updateView() {
   renderOracle(entry.date === sw[sw.length-1].date);
   answerSevenQuestions(entry);
   renderTransitionMatrix(entry.scenarios);
-  renderAllocation(entry.scenarios);
 }
 
-// ── SCENARIO VECTOR ──────────────────────────────────────────
-function renderScenarioVector(scenarios) {
-  const meta   = STATE.data.scenarios_meta || [];
-  const sorted = [...meta].sort((a,b) => (scenarios[b.code]||0)-(scenarios[a.code]||0));
-  const container = document.getElementById('scenarioList');
-  container.innerHTML = '';
-  sorted.forEach(sc => {
-    const pct = scenarios[sc.code]||0;
-    if (!pct) return;
-    container.innerHTML += `
-      <div class="sc-row">
-        <div class="sc-bg" style="width:${pct}%;background:${sc.color}"></div>
-        <div class="sc-dot" style="background:${sc.color}"></div>
-        <div class="sc-name">${sc.name}</div>
-        <div class="sc-tag" style="font-size:8px">${sc.tag||''}</div>
-        <div class="sc-pct" style="color:${sc.color}">${pct}%</div>
+// ── SCENARI ULTIMI 18 MESI ────────────────────────────────────
+function renderLast18Months() {
+  const sw   = STATE.data.scenario_weights;
+  const meta = STATE.data.scenarios_meta || [];
+  const slice = sw.slice(-78); // ~18 mesi
+  const grid  = document.getElementById('m18Grid');
+  const leg   = document.getElementById('m18Legend');
+  grid.innerHTML = '';
+
+  slice.forEach((week, i) => {
+    const sorted = [...meta].sort((a,b) => (week.scenarios[b.code]||0) - (week.scenarios[a.code]||0));
+    const dom    = sorted[0];
+
+    const segsHtml = sorted.map(sc => {
+      const pct = week.scenarios[sc.code] || 0;
+      if (!pct) return '';
+      return `<div class="m18-seg" style="height:${pct}%;background:${sc.color};opacity:.85"></div>`;
+    }).join('');
+
+    const tipLines = sorted
+      .filter(s => (week.scenarios[s.code] || 0) > 2)
+      .map(s => `${s.name}: ${week.scenarios[s.code]}%`)
+      .join('\n');
+
+    const showDate = i % 4 === 0; // ogni 4 settimane ~1 mese
+    const label    = week.date.slice(2, 7);
+
+    grid.innerHTML += `
+      <div class="m18-col" onclick="jumpToWeek('${week.date}')">
+        <div class="m18-tooltip">${week.date}\n${tipLines}</div>
+        <div class="m18-bar">${segsHtml}</div>
+        <div class="m18-date">${showDate ? label : ''}</div>
       </div>`;
   });
 
-  const dominant = sorted[0];
-  const col = dominant ? (REGIME_COLORS[dominant.code] || '#64748b') : '#64748b';
-  document.getElementById('pill-regime').textContent = dominant?.name || '—';
-  document.getElementById('pill-regime').style.color = col;
-  document.getElementById('pill-weeks').textContent = STATE.data.scenario_weights.length;
+  leg.innerHTML = meta.map(sc =>
+    `<div class="m18-leg-item"><div class="m18-leg-dot" style="background:${sc.color}"></div>${sc.name}</div>`
+  ).join('');
 }
 
-// ── INDICATORS ───────────────────────────────────────────────
+function jumpToWeek(date) {
+  document.getElementById('viewMode').value = 'historical';
+  document.getElementById('weekPicker').value = date;
+  updateView();
+  document.querySelector('.main-grid')?.scrollIntoView({ behavior:'smooth' });
+}
+
+// ── SCENARIO VECTOR ────────────────────────────────────────────
+function renderScenarioVector(scenarios) {
+  const meta   = STATE.data.scenarios_meta || [];
+  const sorted = [...meta].sort((a,b) => (scenarios[b.code]||0) - (scenarios[a.code]||0));
+  const container = document.getElementById('scenarioList');
+  container.innerHTML = '';
+  sorted.forEach(sc => {
+    const pct = scenarios[sc.code] || 0;
+    if (!pct) return;
+    container.innerHTML += `
+      <div class="scenario-row">
+        <div class="scenario-bg" style="width:${pct}%;background:${sc.color}"></div>
+        <div class="s-dot" style="background:${sc.color}"></div>
+        <div class="s-name">${sc.name}</div>
+        <div class="s-tag">${sc.tag}</div>
+        <div class="s-pct" style="color:${sc.color}">${pct}%</div>
+      </div>`;
+  });
+}
+
+// ── INDICATORS ─────────────────────────────────────────────────
 function renderIndicators(ind, date) {
-  const f = (v, dec=2, sfx='') => (v!=null&&!isNaN(v)) ? `${parseFloat(v).toFixed(dec)}${sfx}` : '—';
-  const dc = (v, inv=false) => { if(v==null||isNaN(v)) return 'd-fl'; if(inv) return v>0?'d-dn':'d-up'; return v>0?'d-up':v<0?'d-dn':'d-fl'; };
+  const f = (v, dec=2, sfx='') => (v !== null && v !== undefined && !isNaN(v)) ? `${parseFloat(v).toFixed(dec)}${sfx}` : '—';
+  const dc = (v, inv=false) => {
+    if (v == null || isNaN(v)) return 'delta-flat';
+    if (inv) return v > 0 ? 'delta-down' : 'delta-up';
+    return v > 0 ? 'delta-up' : v < 0 ? 'delta-down' : 'delta-flat';
+  };
   const hy = ind.hy_spread;
   const yc = ind.yield_curve;
+  const btp = ind.btp_spread;
+
   const items = [
-    { l:'CPI YoY',           v:f(ind.cpi_yoy,1,'%'),    sub:date?.slice(0,10)||'', dl:`MoM: ${f(ind.cpi_mom,2,'%')}`,        dc:dc(ind.cpi_mom) },
-    { l:'Fed Funds',         v:f(ind.fed_funds,2,'%'),  sub:'tasso policy',          dl:`Δ12m: ${f(ind.fed_delta12m,2,'pp')}`, dc:dc(ind.fed_delta12m) },
-    { l:'Yield Curve 10Y-2Y',v:f(yc,2,'%'),             sub:'+ = normale',           dl:yc<0?'⚠ Invertita':'Normale',          dc:yc<0?'d-dn':'d-up' },
-    { l:'Real Yield 10Y',    v:f(ind.real_yield,2,'%'), sub:'TIPS',                   dl:ind.real_yield<0?'Repressione':'Positivo', dc:dc(ind.real_yield) },
-    { l:'HY Credit Spread',  v:f(hy,0,' bps'),          sub:'vs Treasury',            dl:hy>500?'⚠ Stress creditizio':hy<350?'✓ Sereno':'Normale', dc:'d-fl' },
-    { l:'Disoccupazione',    v:f(ind.unemployment,1,'%'),sub:'USA',                   dl:`Δ3m: ${f(ind.unemp_delta,2,'pp')}`,   dc:dc(ind.unemp_delta,true) },
-    { l:'M2 Growth YoY',     v:f(ind.m2_yoy,1,'%'),    sub:'liquidità',              dl:ind.m2_yoy<2?'Contrazione':'Espansione',dc:dc(ind.m2_yoy) },
-    { l:'BTP-Bund Spread',   v:f(ind.btp_spread,0,' bps'),sub:'rischio EU',           dl:ind.btp_spread>200?'⚠ Attenzione':'✓ Ok', dc:'d-fl' },
+    { l:'CPI YoY',           v:f(ind.cpi_yoy,1,'%'),    sub:date?.substring(0,10)||'', dl:`MoM: ${f(ind.cpi_mom,2,'%')}`,       dc:dc(ind.cpi_mom) },
+    { l:'FED FUNDS',         v:f(ind.fed_funds,2,'%'),  sub:'tasso policy',              dl:`Δ12m: ${f(ind.fed_delta12m,2,'pp')}`, dc:dc(ind.fed_delta12m) },
+    { l:'YIELD CURVE 10Y-2Y',v:f(yc,2,'%'),             sub:'+ = normale',               dl:yc<0?'⚠ INVERTITA':'NORMALE',          dc:yc<0?'delta-down':'delta-up' },
+    { l:'REAL YIELD 10Y',    v:f(ind.real_yield,2,'%'), sub:'TIPS',                       dl:ind.real_yield<0?'REPRESSIONE':'POSITIVO', dc:dc(ind.real_yield) },
+    { l:'HY CREDIT SPREAD',  v:f(hy,0,'bps'),           sub:'vs Treasury',               dl:hy>500?'⚠ STRESS CREDITIZIO':hy<350?'✓ SERENO':'NORMALE', dc:'delta-flat' },
+    { l:'DISOCCUPAZIONE',    v:f(ind.unemployment,1,'%'),sub:'USA',                      dl:`Δ3m: ${f(ind.unemp_delta,2,'pp')}`,   dc:dc(ind.unemp_delta,true) },
+    { l:'M2 GROWTH YoY',     v:f(ind.m2_yoy,1,'%'),    sub:'liquidità',                 dl:ind.m2_yoy<2?'CONTRAZIONE':'ESPANSIONE',dc:dc(ind.m2_yoy) },
+    { l:'BTP-BUND SPREAD',   v:f(btp,0,'bps'),          sub:'rischio EU',                dl:btp>200?'⚠ ATTENZIONE':'✓ OK',          dc:'delta-flat' },
   ];
+
   document.getElementById('indicatorsGrid').innerHTML = items.map(it => `
     <div class="ind-box">
       <div class="ind-label">${it.l}</div>
@@ -594,45 +578,41 @@ function renderIndicators(ind, date) {
     </div>`).join('');
 }
 
-// ── SHOCK BADGES ─────────────────────────────────────────────
+// ── SHOCK BADGES ───────────────────────────────────────────────
 function renderShockBadges(dateStr) {
   const today = new Date().toISOString().split('T')[0];
-  let activeCount = 0;
-  const html = Object.entries(SHOCK_LABELS).map(([id,[label,start,end]])=>{
-    const endDate = end||today;
-    const active = dateStr>=start && dateStr<=endDate;
-    if(active) activeCount++;
-    return `<span class="shock ${active?'shock-on':'shock-off'}">${active?'⚡ ':''} ${label}</span>`;
+  const html = Object.entries(SHOCK_LABELS).map(([id, [label, start, end]]) => {
+    const endDate = end || today;
+    const active = dateStr >= start && dateStr <= endDate;
+    return `<span class="shock-badge ${active?'shock-active':'shock-inactive'}">${label}</span>`;
   }).join('');
   document.getElementById('shockBadges').innerHTML = html;
-  document.getElementById('pill-shock').textContent = activeCount || '0';
 }
 
-// ── ORACLE FORECAST ──────────────────────────────────────────
+// ── ORACLE FORECAST ────────────────────────────────────────────
 function renderOracle(isCurrent) {
   const forecast  = STATE.data.forecast || {};
   const meta      = STATE.data.scenarios_meta || [];
   const horizons  = ['1w','2w','4w','8w'];
-  const labels    = {'1w':'1 settimana','2w':'2 settimane','4w':'4 settimane','8w':'8 settimane'};
+  const labels    = {'1w':'1 SETTIMANA','2w':'2 SETTIMANE','4w':'4 SETTIMANE','8w':'8 SETTIMANE'};
+
   if (!isCurrent || !Object.keys(forecast).length) {
     document.getElementById('oracleGrid').innerHTML =
-      '<div style="color:var(--muted2);font-size:11px;grid-column:1/-1;padding:8px">Disponibile solo per la settimana corrente.</div>';
+      '<div style="color:var(--text-dim);font-size:11px;grid-column:1/-1;padding:10px 0">Disponibile solo per la settimana corrente</div>';
     return;
   }
+
   document.getElementById('oracleGrid').innerHTML = horizons.map(h => {
-    const dist   = forecast[h]||{};
-    const sorted = [...meta].sort((a,b)=>(dist[b.code]||0)-(dist[a.code]||0)).slice(0,5);
-    if (h==='4w') {
-      document.getElementById('pill-oracle').textContent = sorted[0]?.name || '—';
-    }
+    const dist   = forecast[h] || {};
+    const sorted = [...meta].sort((a,b) => (dist[b.code]||0) - (dist[a.code]||0)).slice(0,5);
     return `
-      <div class="oracle-col ${h==='4w'?'best':''}">
-        <div class="oracle-h">${labels[h]}${h==='4w'?' ★':''}</div>
-        ${sorted.map((sc,i)=>{
-          const pct=dist[sc.code]||0;
-          return `<div class="oracle-row">
-            <div class="oracle-bar" style="width:${pct}%;background:${sc.color}"></div>
-            <div class="oracle-name" style="${i===0?'color:'+sc.color+';font-weight:600':''}">${sc.name}</div>
+      <div class="oracle-col ${h==='4w'?'oracle-winner':''}">
+        <div class="oracle-horizon">${labels[h]}</div>
+        ${sorted.map((sc,i) => {
+          const pct = dist[sc.code] || 0;
+          return `<div class="oracle-sc-row" style="padding:3px 4px">
+            <div class="oracle-bar-bg" style="width:${pct}%;background:${sc.color}"></div>
+            <div class="oracle-name" style="${i===0?'color:'+sc.color:''}">${sc.name}</div>
             <div class="oracle-pct" style="color:${sc.color}">${pct}%</div>
           </div>`;
         }).join('')}
@@ -640,404 +620,252 @@ function renderOracle(isCurrent) {
   }).join('');
 }
 
-// ── ULTIMI 18 MESI ───────────────────────────────────────────
-function renderLast18Months() {
+// ── 7 DOMANDE ──────────────────────────────────────────────────
+function answerSevenQuestions(entry) {
+  const sc  = entry.scenarios;
+  const ind = entry.indicators || STATE.data.macro_indicators;
+  const meta= STATE.data.scenarios_meta || [];
+  const sw  = STATE.data.scenario_weights;
+  const forecast = STATE.data.forecast || {};
+
+  const sorted   = [...meta].sort((a,b) => (sc[b.code]||0) - (sc[a.code]||0));
+  const dominant = sorted[0];
+  const top3     = sorted.slice(0,3);
+
+  document.getElementById('q1').innerHTML =
+    `Regime dominante: <strong>${dominant.name}</strong> (${sc[dominant.code]}%)<br>
+     Mix: ${top3.map(s => `${s.name} ${sc[s.code]}%`).join(' · ')}`;
+  document.getElementById('q1').className = 'q-answer';
+  document.getElementById('q1-meta').textContent = `Settimana: ${entry.date}`;
+  document.getElementById('q1-conf').textContent = `Confidenza: ${sc[dominant.code]}%`;
+
+  const f4w  = forecast['4w'] || {};
+  const top4w = [...meta].sort((a,b) => (f4w[b.code]||0)-(f4w[a.code]||0)).slice(0,3);
+  if (top4w.length && top4w[0].code !== dominant.code) {
+    document.getElementById('q2').innerHTML =
+      `Nelle prossime 4 settimane, storicamente:<br>` +
+      top4w.map(s => `→ <strong>${s.name}</strong> ${f4w[s.code]||0}%`).join('<br>');
+    document.getElementById('q2').className = 'q-answer';
+    document.getElementById('q2-meta').textContent = 'Markov chain · dataset storico';
+    document.getElementById('q2-conf').textContent = `Top: ${top4w[0].name} ${f4w[top4w[0].code]||0}%`;
+  } else {
+    document.getElementById('q2').textContent = 'Scenario attuale confermato a 4 settimane';
+    document.getElementById('q2').className = 'q-answer';
+  }
+
+  const warnings = [];
+  if (ind.hy_spread!=null && Math.abs(ind.hy_spread-500)<80) warnings.push(`HY Spread a ${ind.hy_spread.toFixed(0)}bps — vicino soglia Risk-Off (500bps)`);
+  if (ind.yield_curve!=null && Math.abs(ind.yield_curve)<0.3) warnings.push(`Yield Curve a ${ind.yield_curve.toFixed(2)}% — vicino all'inversione`);
+  if (ind.cpi_yoy!=null && Math.abs(ind.cpi_yoy-4.0)<0.5) warnings.push(`CPI ${ind.cpi_yoy.toFixed(1)}% — vicino soglia Stagflazione (4%)`);
+  if (ind.fed_funds!=null && ind.fed_funds<1.0) warnings.push(`Fed Funds ${ind.fed_funds.toFixed(2)}% — regime ZIRP attivo`);
+  const idx = sw.findIndex(w => w.date >= entry.date);
+  if (idx > 1) {
+    const prev  = sw[idx-1].scenarios;
+    const delta = Math.abs((sc[dominant.code]||0) - (prev[dominant.code]||0));
+    if (delta > 8) warnings.push(`⚡ Vettore in rapida evoluzione: Δ${dominant.name} = ${delta>0?'+':''}${delta}pp`);
+  }
+  document.getElementById('q3').innerHTML = warnings.length
+    ? warnings.map(w => `⚑ ${w}`).join('<br>')
+    : 'Nessuna transizione imminente rilevata';
+  document.getElementById('q3').className = 'q-answer' + (warnings.length ? '' : ' empty');
+
+  const transitions = getHistoricalTransitions(dominant.code);
+  document.getElementById('q4').innerHTML = transitions.length
+    ? transitions.slice(0,3).map(t => `→ <strong>${t.to}</strong> (${t.pct}% dei casi, 4w)`).join('<br>')
+    : 'Dataset insufficiente';
+  document.getElementById('q4').className = 'q-answer' + (transitions.length ? '' : ' empty');
+
+  const similar = countSimilarWeeks(sc);
+  const pct5    = sw.length > 0 ? Math.round(similar/sw.length*100) : 0;
+  document.getElementById('q5').textContent = `Settimane simili: ${similar} su ${sw.length} (${pct5}% del dataset)`;
+  document.getElementById('q5').className = 'q-answer';
+  document.getElementById('q5-meta').textContent = pct5 < 5 ? '⚠ MOMENTO RARO' : 'Contesto storico presente';
+  document.getElementById('q5-conf').textContent = `${similar} settimane`;
+
+  const shocks   = meta.filter(s=>s.tag==='SHOCK').map(s=>({...s,pct:sc[s.code]||0})).sort((a,b)=>b.pct-a.pct);
+  const avgShock = sw.length>0 ? meta.filter(s=>s.tag==='SHOCK').reduce((sum,s)=>sum+sw.reduce((a,w)=>a+(w.scenarios[s.code]||0),0)/sw.length,0)/4 : 5;
+  const topShock = shocks[0];
+  const ratio    = avgShock>0 ? (topShock.pct/avgShock).toFixed(1) : '—';
+  document.getElementById('q6').textContent = `${topShock.name}: ${topShock.pct}% (${ratio}x media storica)`;
+  document.getElementById('q6').className = 'q-answer' + (topShock.pct > 10 ? '' : ' empty');
+  document.getElementById('q6-meta').textContent = `Media storica shock: ${avgShock.toFixed(1)}%`;
+  document.getElementById('q6-conf').textContent = `Ratio: ${ratio}x`;
+
+  const divs = STATE.data.etf_divergences || [];
+  if (divs.length) {
+    document.getElementById('q7').innerHTML = divs.map(d =>
+      `<div class="div-row">
+        <span class="div-ticker">${d.ticker}</span>
+        <span class="div-name">${d.name}</span>
+        <span class="div-signal">Atteso: ${d.expected} → Effettivo: ${d.actual_ret>0?'+':''}${d.actual_ret.toFixed(1)}% 1w</span>
+      </div>`
+    ).join('');
+    document.getElementById('q7').className = 'q-answer';
+    document.getElementById('q7-meta').textContent = `Regime: ${dominant.name}`;
+    document.getElementById('q7-conf').textContent = `${divs.length} divergenze`;
+  } else {
+    document.getElementById('q7').textContent = 'Nessuna divergenza significativa rilevata nel regime attuale';
+    document.getElementById('q7').className = 'q-answer';
+  }
+}
+
+// ── TRANSITION MATRIX ──────────────────────────────────────────
+function getHistoricalTransitions(fromCode) {
   const sw   = STATE.data.scenario_weights;
+  if (sw.length < 10) return [];
   const meta = STATE.data.scenarios_meta || [];
-  // Ultimi 78 periodi (~18 mesi)
-  const slice = sw.slice(-78);
-  const grid  = document.getElementById('m18Grid');
-  const leg   = document.getElementById('m18Legend');
-  grid.innerHTML = '';
-
-  slice.forEach((week, i) => {
-    const sorted = [...meta].sort((a,b)=>(week.scenarios[b.code]||0)-(week.scenarios[a.code]||0));
-    const dom    = sorted[0];
-    const domPct = week.scenarios[dom?.code]||0;
-    const label  = week.date.slice(2,7); // YY-MM
-
-    const segsHtml = sorted.map(sc => {
-      const pct = week.scenarios[sc.code]||0;
-      if(!pct) return '';
-      return `<div class="m18-seg" style="height:${pct}%;background:${sc.color};opacity:.85"></div>`;
-    }).join('');
-
-    const tipLines = sorted.filter(s=>week.scenarios[s.code]>2).map(s=>
-      `${s.name}: ${week.scenarios[s.code]}%`
-    ).join('\n');
-
-    grid.innerHTML += `
-      <div class="m18-col" onclick="jumpToWeek('${week.date}')">
-        <div class="m18-tooltip">${week.date}<br>${tipLines}</div>
-        <div class="m18-bar">${segsHtml}</div>
-        <div class="m18-label" style="color:${i%4===0?'var(--text)':'var(--muted2)'}">${i%4===0?label:''}</div>
-      </div>`;
-  });
-
-  // Legenda
-  leg.innerHTML = meta.map(sc =>
-    `<div class="tl-leg-item"><div class="tl-leg-dot" style="background:${sc.color}"></div>${sc.name}</div>`
-  ).join('');
+  const counts = {}; let total = 0;
+  for (let i = 0; i < sw.length - 4; i++) {
+    const domCurr = getDominant(sw[i].scenarios);
+    if (domCurr !== fromCode) continue;
+    const domFut  = getDominant(sw[i+4].scenarios);
+    if (domFut !== fromCode) { counts[domFut] = (counts[domFut]||0)+1; total++; }
+  }
+  if (!total) return [];
+  return Object.entries(counts)
+    .map(([code,n]) => ({ to:meta.find(s=>s.code===code)?.name||code, pct:Math.round(n/total*100) }))
+    .sort((a,b) => b.pct-a.pct);
+}
+function getDominant(scenarios) {
+  return Object.entries(scenarios).sort((a,b)=>b[1]-a[1])[0]?.[0];
+}
+function countSimilarWeeks(cs) {
+  const sw  = STATE.data.scenario_weights;
+  const dom = getDominant(cs);
+  const thr = (cs[dom]||0) * 0.7;
+  return sw.filter(w => getDominant(w.scenarios)===dom && (w.scenarios[dom]||0)>=thr).length;
+}
+function renderTransitionMatrix(cs) {
+  const dom   = getDominant(cs);
+  const trans = getHistoricalTransitions(dom);
+  const meta  = STATE.data.scenarios_meta || [];
+  const domName = meta.find(s=>s.code===dom)?.name||dom;
+  const container = document.getElementById('transitionTable');
+  if (!trans.length) { container.innerHTML='<div style="color:var(--text-dim);font-size:11px;padding:12px 0">Dati insufficienti</div>'; return; }
+  container.innerHTML = `
+    <div style="font-size:10px;color:var(--text-dim);margin-bottom:10px">
+      Da <strong style="color:var(--accent)">${domName}</strong> — transizioni storiche a 4 settimane
+    </div>
+    <table class="trans-table">
+      <thead><tr><th>SCENARIO SUCCESSIVO</th><th>PROBABILITÀ</th></tr></thead>
+      <tbody>${trans.slice(0,6).map(t=>`
+        <tr><td>${t.to}</td><td>
+          <span class="pct-bar" style="width:${t.pct}px"></span>${t.pct}%
+        </td></tr>`).join('')}
+      </tbody>
+    </table>`;
 }
 
-function jumpToWeek(date) {
-  document.getElementById('viewMode').value = 'historical';
-  document.getElementById('weekPicker').value = date;
-  updateView();
-  document.querySelector('.main-grid')?.scrollIntoView({behavior:'smooth'});
-}
-
-// ── TIMELINE COMPLETA ────────────────────────────────────────
+// ── TIMELINE ───────────────────────────────────────────────────
 function drawTimeline() {
   const canvas = document.getElementById('timelineCanvas');
   const wrap   = canvas.parentElement;
-  const W      = Math.max(700, wrap.clientWidth || 900);
-  const H      = 100;
+  const W = Math.max(800, wrap.clientWidth || 1000);
+  const H = 120;
   canvas.width = W; canvas.height = H;
-  const ctx    = canvas.getContext('2d');
-  const data   = STATE.data.scenario_weights;
-  const meta   = STATE.data.scenarios_meta || [];
+  const ctx  = canvas.getContext('2d');
+  const data = STATE.data.scenario_weights;
+  const meta = STATE.data.scenarios_meta || [];
   if (!data.length) return;
 
-  ctx.fillStyle = '#f4f6f9';
+  ctx.fillStyle = '#070A0F';
   ctx.fillRect(0, 0, W, H);
   const barW = W / data.length;
-  const topH = H - 18;
+  const topH = H - 24;
 
   data.forEach((week, i) => {
-    const sorted = [...meta].sort((a,b)=>(week.scenarios[b.code]||0)-(week.scenarios[a.code]||0));
+    const sorted = [...meta].sort((a,b) => (week.scenarios[b.code]||0)-(week.scenarios[a.code]||0));
     let y = 0;
     sorted.forEach(sc => {
-      const pct = week.scenarios[sc.code]||0;
-      if(!pct) return;
-      const barH = (pct/100)*topH;
-      ctx.fillStyle = sc.color;
-      ctx.globalAlpha = 0.75;
+      const pct = week.scenarios[sc.code] || 0;
+      if (!pct) return;
+      const barH = (pct/100) * topH;
+      ctx.fillStyle = sc.color; ctx.globalAlpha = 0.85;
       ctx.fillRect(i*barW, y, barW+0.5, barH);
       y += barH;
     });
     ctx.globalAlpha = 1;
   });
 
-  ctx.fillStyle = '#dde3ec'; ctx.font = '8px DM Sans, sans-serif';
-  ctx.textAlign = 'center';
+  ctx.fillStyle = '#4A6070'; ctx.font = '9px Space Mono, monospace'; ctx.textAlign = 'center';
   let lastYear = '';
   data.forEach((week, i) => {
-    const year = week.date.slice(0,4);
+    const year = week.date.substring(0,4);
     if (year !== lastYear) {
       lastYear = year;
       const x = i * barW;
-      ctx.fillStyle = '#dde3ec'; ctx.fillRect(x, 0, 1, topH);
-      ctx.fillStyle = '#6b7c93'; ctx.fillText(year, x+18, H-4);
+      ctx.fillStyle = '#1E2A38'; ctx.fillRect(x, 0, 1, topH);
+      ctx.fillStyle = '#4A6070'; ctx.fillText(year, x+20, H-6);
     }
   });
 
   if (STATE.currentWeek) {
     const idx = data.findIndex(w => w.date >= STATE.currentWeek);
-    if (idx >= 0) {
-      ctx.fillStyle = 'rgba(26,111,207,.25)';
-      ctx.fillRect(idx*barW-2, 0, 5, topH);
-    }
+    if (idx >= 0) { ctx.fillStyle='rgba(255,255,255,.15)'; ctx.fillRect(idx*barW-2, 0, 4, topH); }
   }
 
   const box = document.getElementById('legendBox');
-  box.innerHTML = meta.map(sc =>
-    `<div class="tl-leg-item"><div class="tl-leg-dot" style="background:${sc.color}"></div>${sc.name}</div>`
-  ).join('');
+  box.innerHTML = '<span style="font-size:9px;color:var(--text-dim)">LEGENDA: </span>' +
+    (STATE.data.scenarios_meta||[]).map(sc =>
+      `<span style="font-size:9px;color:${sc.color};margin-right:8px">
+        <span style="display:inline-block;width:8px;height:8px;background:${sc.color};margin-right:3px;vertical-align:middle;border-radius:50%"></span>${sc.name}
+      </span>`
+    ).join('');
 }
 
-// ── 7 DOMANDE ────────────────────────────────────────────────
-function answerSevenQuestions(entry) {
-  const sc  = entry.scenarios;
-  const ind = entry.indicators || STATE.data.macro_indicators;
-  const meta= STATE.data.scenarios_meta || [];
-  const sw  = STATE.data.scenario_weights;
-  const f   = STATE.data.forecast || {};
-
-  const sorted  = [...meta].sort((a,b)=>(sc[b.code]||0)-(sc[a.code]||0));
-  const dominant= sorted[0];
-  const top3    = sorted.slice(0,3);
-
-  const set = (id, html, isEmpty=false) => {
-    const el=document.getElementById(id);
-    el.innerHTML=html; el.className='q-ans'+(isEmpty?' empty':'');
-  };
-  const setMeta=(id,t,c)=>{ document.getElementById(id).textContent=t; document.getElementById(id.replace('-meta','-conf')).textContent=c; };
-
-  set('q1',`Regime dominante: <strong>${dominant.name}</strong> (${sc[dominant.code]}%)<br>Mix: ${top3.map(s=>`${s.name} ${sc[s.code]}%`).join(' · ')}`);
-  setMeta('q1-meta',`Settimana: ${entry.date}`,`Confidenza: ${sc[dominant.code]}%`);
-
-  const f4w = f['4w']||{};
-  const top4w = [...meta].sort((a,b)=>(f4w[b.code]||0)-(f4w[a.code]||0)).slice(0,3);
-  if(top4w.length){
-    set('q2',top4w.map(s=>`→ <strong>${s.name}</strong>: ${f4w[s.code]||0}%`).join('<br>'));
-    setMeta('q2-meta','Markov chain · dataset storico',`Top: ${top4w[0].name} ${f4w[top4w[0].code]||0}%`);
-  }
-
-  const warnings=[];
-  if(ind.hy_spread!=null&&Math.abs(ind.hy_spread-500)<80) warnings.push(`HY Spread ${ind.hy_spread.toFixed(0)}bps — vicino soglia Risk-Off`);
-  if(ind.yield_curve!=null&&Math.abs(ind.yield_curve)<0.3) warnings.push(`Yield Curve ${ind.yield_curve.toFixed(2)}% — vicino inversione`);
-  if(ind.cpi_yoy!=null&&Math.abs(ind.cpi_yoy-4.0)<0.5) warnings.push(`CPI ${ind.cpi_yoy.toFixed(1)}% — vicino soglia Stagflazione`);
-  const idx=sw.findIndex(w=>w.date>=entry.date);
-  if(idx>1){const prev=sw[idx-1].scenarios;const d=Math.abs((sc[dominant.code]||0)-(prev[dominant.code]||0));if(d>8)warnings.push(`⚡ Vettore in rapida evoluzione: Δ${dominant.name}=${d>0?'+':''}${d}pp`);}
-  set('q3',warnings.length?warnings.map(w=>`⚑ ${w}`).join('<br>'):'Nessuna transizione imminente rilevata',!warnings.length);
-  setMeta('q3-meta',`${warnings.length} segnali`,entry.date);
-
-  const trans=getHistoricalTransitions(dominant.code);
-  set('q4',trans.length?trans.slice(0,3).map(t=>`→ <strong>${t.to}</strong> (${t.pct}% dei casi, 4w)`).join('<br>'):'Dataset insufficiente',!trans.length);
-  setMeta('q4-meta','Transizioni storiche a 4w',`${trans.length} percorsi`);
-
-  const similar=countSimilarWeeks(sc);
-  const pct5=sw.length>0?Math.round(similar/sw.length*100):0;
-  set('q5',`Settimane simili: <strong>${similar}</strong> su ${sw.length} (${pct5}% del dataset)`);
-  setMeta('q5-meta',pct5<5?'⚠ Momento raro':'Contesto storico presente',`${similar} settimane`);
-
-  const shocks=meta.filter(s=>s.tag==='SHOCK').map(s=>({...s,pct:sc[s.code]||0})).sort((a,b)=>b.pct-a.pct);
-  const avgShock=sw.length>0?meta.filter(s=>s.tag==='SHOCK').reduce((sum,s)=>sum+sw.reduce((a,w)=>a+(w.scenarios[s.code]||0),0)/sw.length,0)/4:5;
-  const topShock=shocks[0];
-  if(topShock){
-    const ratio=avgShock>0?(topShock.pct/avgShock).toFixed(1):'—';
-    set('q6',`${topShock.name}: ${topShock.pct}% (${ratio}x media storica)`,topShock.pct<5);
-    setMeta('q6-meta',`Media storica shock: ${avgShock.toFixed(1)}%`,`Ratio: ${ratio}x`);
-  }
-
-  const divs=STATE.data.etf_divergences||[];
-  if(divs.length){
-    set('q7',divs.map(d=>`<div style="display:flex;gap:8px;font-size:10px;padding:3px 0;border-bottom:1px solid var(--border2)"><span style="color:var(--accent);font-weight:700;min-width:60px;font-family:var(--mono)">${d.ticker}</span><span style="flex:1;color:var(--muted)">${d.name}</span><span style="color:var(--yellow)">Att:${d.expected} → ${d.actual_ret>0?'+':''}${d.actual_ret.toFixed(1)}%</span></div>`).join(''));
-    setMeta('q7-meta',`Regime: ${dominant.name}`,`${divs.length} divergenze`);
-  } else {
-    set('q7','Nessuna divergenza significativa rilevata nel regime attuale.',true);
-    setMeta('q7-meta',`Regime: ${dominant.name}`,'—');
-  }
-}
-
-// ── TRANSITION MATRIX ────────────────────────────────────────
-function getHistoricalTransitions(fromCode) {
-  const sw=STATE.data.scenario_weights; if(sw.length<10) return [];
-  const meta=STATE.data.scenarios_meta||[];
-  const counts={}; let total=0;
-  for(let i=0;i<sw.length-4;i++){
-    const dc=getDominant(sw[i].scenarios);
-    if(dc!==fromCode) continue;
-    const df=getDominant(sw[i+4].scenarios);
-    if(df!==fromCode){counts[df]=(counts[df]||0)+1;total++;}
-  }
-  if(!total) return [];
-  return Object.entries(counts).map(([code,n])=>({to:meta.find(s=>s.code===code)?.name||code,pct:Math.round(n/total*100)})).sort((a,b)=>b.pct-a.pct);
-}
-function getDominant(scenarios){return Object.entries(scenarios).sort((a,b)=>b[1]-a[1])[0]?.[0];}
-function countSimilarWeeks(cs){const sw=STATE.data.scenario_weights;const dom=getDominant(cs);const thr=(cs[dom]||0)*.7;return sw.filter(w=>getDominant(w.scenarios)===dom&&(w.scenarios[dom]||0)>=thr).length;}
-function renderTransitionMatrix(cs){
-  const dom=getDominant(cs);const trans=getHistoricalTransitions(dom);const meta=STATE.data.scenarios_meta||[];
-  const domName=meta.find(s=>s.code===dom)?.name||dom;const c=document.getElementById('transitionTable');
-  if(!trans.length){c.innerHTML='<div style="color:var(--muted2);font-size:11px;padding:10px 0">Dati insufficienti</div>';return;}
-  c.innerHTML=`<div style="font-size:10px;color:var(--muted);margin-bottom:8px">Da <strong style="color:var(--accent)">${domName}</strong> — transizioni storiche a 4 settimane</div>
-    <table class="trans-table"><thead><tr><th>Scenario successivo</th><th>Probabilità storica</th></tr></thead>
-    <tbody>${trans.slice(0,6).map(t=>`<tr><td>${t.to}</td><td><span class="pct-bar" style="width:${t.pct}px"></span>${t.pct}%</td></tr>`).join('')}</tbody></table>`;
-}
-
-// ── ETF MONITOR ──────────────────────────────────────────────
-function renderETF(){
-  const etf=STATE.data.etf_data||{};const list=STATE.data.etf_list||[];
-  if(!Object.keys(etf).length){document.getElementById('etfGrid').innerHTML='<div style="color:var(--muted2);font-size:11px;padding:14px 0">ETF non disponibili</div>';return;}
-  const areas={};
-  list.forEach(e=>{if(etf[e.t]){if(!areas[e.area])areas[e.area]=[];areas[e.area].push({...e,...etf[e.t]});}});
-  let html='';
-  Object.entries(areas).forEach(([area,items])=>{
-    html+=`<div class="etf-area-label">${area}</div><div class="etf-grid">`;
-    items.forEach(e=>{
-      const r=e.ret_1w; const cls=r>0.3?'r-up':r<-0.3?'r-dn':'r-fl'; const sign=r>0?'+':'';
-      html+=`<div class="etf-box"><div class="etf-ticker">${e.t}</div><div class="etf-name">${e.name}</div><div class="etf-price">${e.price!=null?'€'+e.price.toFixed(2):'—'}</div><div class="etf-ret ${cls}">${r!=null?sign+r.toFixed(1)+'% 1w':'—'}</div></div>`;
-    });
-    html+='</div>';
-  });
-  document.getElementById('etfGrid').innerHTML=html;
-}
-
-// ══════════════════════════════════════════════════════════════
-//  ALLOCAZIONE
-// ══════════════════════════════════════════════════════════════
-
-function toggleAlloc(){
-  const sec=document.getElementById('allocSection');
-  const tog=document.getElementById('allocToggle');
-  const isOpen=sec.classList.contains('open');
-  sec.classList.toggle('open',!isOpen);
-  tog.classList.toggle('open',!isOpen);
-}
-
-function renderAllocation(scenarios){
-  if(!scenarios) return;
-  const meta=STATE.data.scenarios_meta||[];
-
-  // Calcola allocazione blended (Opzione C): media pesata sulle probabilità scenario
-  const alloc={};
-  const ret={};
-  SUBCLASSES.forEach(sc=>{
-    let totAlloc=0, totRet=0, totWeight=0;
-    meta.forEach(s=>{
-      const w=(scenarios[s.code]||0)/100;
-      const baseAlloc=ALLOC_BASE[s.code]||ALLOC_BASE.NEUTRO;
-      const baseRet=RET_BASE[s.code]||RET_BASE.NEUTRO;
-      totAlloc+=w*(baseAlloc[sc.key]||0);
-      totRet+=w*(baseRet[sc.key]||0);
-      totWeight+=w;
-    });
-    alloc[sc.key]=totWeight>0?Math.round(totAlloc/totWeight):0;
-    ret[sc.key]=totWeight>0?(totRet/totWeight):0;
-  });
-
-  // Normalizza a 100%
-  const sum=Object.values(alloc).reduce((a,b)=>a+b,0);
-  if(sum>0) SUBCLASSES.forEach(sc=>{ alloc[sc.key]=Math.round(alloc[sc.key]/sum*100); });
-
-  // Rendimento atteso portafoglio
-  let portRet=0;
-  SUBCLASSES.forEach(sc=>{ portRet+=(alloc[sc.key]/100)*(ret[sc.key]||0); });
-  document.getElementById('pill-alloc-ret').textContent=
-    (portRet>=0?'+':'')+portRet.toFixed(2)+'% / 4w';
-  document.getElementById('pill-alloc-ret').style.color=portRet>=0?'var(--green)':'var(--red)';
-
-  // Riepilogo totale per macro-classe
-  const macroTotals={EQUITY:0,BOND:0,MATERIE:0};
-  SUBCLASSES.forEach(sc=>{ macroTotals[sc.class]=(macroTotals[sc.class]||0)+(alloc[sc.key]||0); });
-  const macroColors={EQUITY:'#1a6fcf',BOND:'#7c3aed',MATERIE:'#d97706'};
-  document.getElementById('allocTotal').innerHTML=`
-    ${Object.entries(macroTotals).map(([k,v])=>`
-      <div class="alloc-total-item">
-        <div class="lbl">${k}</div>
-        <div class="val" style="color:${macroColors[k]}">${v}%</div>
-        <div class="sub">${k==='EQUITY'?'Azionario':k==='BOND'?'Obbligazionario':'Materie prime'}</div>
-      </div>`).join('')}
-    <div style="flex:1"></div>
-    <div class="alloc-total-item">
-      <div class="lbl">RENDIMENTO ATTESO 4W</div>
-      <div class="val" style="color:${portRet>=0?'#22c55e':'#ef4444'}">${portRet>=0?'+':''}${portRet.toFixed(2)}%</div>
-      <div class="sub">blended · Opzione C</div>
-    </div>
-    <div class="alloc-total-item">
-      <div class="lbl">DATA</div>
-      <div class="val" style="font-size:13px">${new Date().toLocaleDateString('it-IT')}</div>
-      <div class="sub">Ultimo aggiornamento</div>
-    </div>`;
-
-  // Griglia sotto-classi
-  const classColors={EQUITY:'#1a6fcf',BOND:'#7c3aed',MATERIE:'#d97706'};
-  document.getElementById('allocGrid').innerHTML = SUBCLASSES.map(sc=>{
-    const pct=alloc[sc.key]||0;
-    const r=ret[sc.key]||0;
-    const rStr=(r>=0?'+':'')+r.toFixed(2)+'%';
-    const rColor=r>=0?'var(--green)':'var(--red)';
-    return `
-      <div class="alloc-box">
-        <div class="alloc-box-header">
-          <span class="alloc-class" style="color:${classColors[sc.class]}">${sc.class}</span>
-          <span class="alloc-pct" style="color:${sc.color}">${pct}%</span>
-        </div>
-        <div class="alloc-subclass">${sc.label}</div>
-        <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:${pct}%;background:${sc.color}"></div></div>
-        <div class="alloc-tickers">${sc.tickers.join(' · ')}</div>
-        <div class="alloc-ret">
-          <span style="color:${rColor};font-size:13px">${rStr}</span>
-          <span class="alloc-ret-range">att. 4w</span>
-        </div>
-      </div>`;
-  }).join('');
-
-  // Salva in storico locale + aggiorna tabella
-  saveToHistory(scenarios, alloc, ret, portRet);
-}
-
-// ── STORICO ALLOCAZIONI ──────────────────────────────────────
-
-async function loadAllocHistory(){
-  try{
-    const r=await fetch('data/allocation_history.json?t='+Date.now());
-    if(r.ok){
-      const json=await r.json();
-      STATE.allocHistory=json||[];
-    }
-  }catch(e){}
-  renderHistTable();
-}
-
-function saveToHistory(scenarios, alloc, ret, portRet){
-  const today=new Date().toISOString().split('T')[0];
-  const dom=getDominant(scenarios);
-  const entry={
-    date:today, regime:dom,
-    ...Object.fromEntries(SUBCLASSES.map(sc=>[sc.key,alloc[sc.key]||0])),
-    ret_att:parseFloat(portRet.toFixed(2)),
-  };
-  // Evita duplicati sulla stessa data
-  const exists=STATE.allocHistory.findIndex(h=>h.date===today);
-  if(exists>=0) STATE.allocHistory[exists]=entry;
-  else STATE.allocHistory.unshift(entry);
-  renderHistTable();
-}
-
-function renderHistTable(){
-  const tbody=document.getElementById('histBody');
-  if(!tbody) return;
-  if(!STATE.allocHistory.length){
-    tbody.innerHTML='<tr><td colspan="12" style="color:var(--muted2);text-align:center;padding:20px">Storico non ancora disponibile · verrà popolato dal workflow giornaliero</td></tr>';
+// ── ETF MONITOR ────────────────────────────────────────────────
+function renderETF() {
+  const etf  = STATE.data.etf_data || {};
+  const list = STATE.data.etf_list || [];
+  if (!Object.keys(etf).length) {
+    document.getElementById('etfGrid').innerHTML =
+      '<div style="color:var(--text-dim);font-size:11px;padding:16px 0">ETF non disponibili</div>';
     return;
   }
-  const regimeColor=r=>REGIME_COLORS[r]||'#64748b';
-  tbody.innerHTML=STATE.allocHistory.map(h=>`
-    <tr>
-      <td>${h.date}</td>
-      <td><span class="regime-badge" style="background:${regimeColor(h.regime)}20;color:${regimeColor(h.regime)};border:1px solid ${regimeColor(h.regime)}40">${h.regime||'—'}</span></td>
-      ${SUBCLASSES.map(sc=>`<td style="text-align:center">${h[sc.key]??'—'}%</td>`).join('')}
-      <td style="text-align:center;font-weight:700;color:${h.ret_att>=0?'var(--green)':'var(--red)'}">${h.ret_att>=0?'+':''}${h.ret_att??'—'}%</td>
-    </tr>`).join('');
-  const note=document.getElementById('histNote');
-  if(note) note.textContent=`Storico: ${STATE.allocHistory.length} record · aggiornamento giornaliero via GitHub Actions`;
+  const areas = {};
+  list.forEach(e => {
+    if (etf[e.t]) { if (!areas[e.area]) areas[e.area]=[]; areas[e.area].push({...e,...etf[e.t]}); }
+  });
+  let html = '';
+  Object.entries(areas).forEach(([area, items]) => {
+    html += `<div class="etf-area-label">${area.toUpperCase()}</div><div class="etf-grid">`;
+    items.forEach(e => {
+      const r1w = e.ret_1w;
+      const cls = r1w>0.3?'etf-pos':r1w<-0.3?'etf-neg':'etf-flat';
+      const sign = r1w>0?'+':'';
+      html += `<div class="etf-box">
+        <div class="etf-ticker">${e.t}</div>
+        <div class="etf-name">${e.name}</div>
+        <div class="etf-price">${e.price!=null?'€'+e.price.toFixed(2):'—'}</div>
+        <div class="etf-ret ${cls}">${r1w!=null?sign+r1w.toFixed(1)+'% 1w':'—'}</div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  document.getElementById('etfGrid').innerHTML = html;
 }
 
-// ── EXPORT ALLOCAZIONE EXCEL (CSV per Excel) ─────────────────
-function exportAllocExcel(){
-  if(!STATE.allocHistory.length){ alert('Nessuno storico disponibile.'); return; }
-  const headers=['Data','Regime',...SUBCLASSES.map(sc=>sc.label),'Rendimento atteso 4w'];
-  const rows=STATE.allocHistory.map(h=>[
-    h.date, h.regime||'—',
-    ...SUBCLASSES.map(sc=>(h[sc.key]??0)+'%'),
-    (h.ret_att>=0?'+':'')+h.ret_att+'%',
-  ]);
-  const csv=[headers,...rows].map(r=>r.join(';')).join('\n');
-  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`RAPTOR_Allocazione_${new Date().toISOString().split('T')[0]}.csv`;
-  a.click();
+// ── EXPORT ─────────────────────────────────────────────────────
+function exportJSON() {
+  if (!STATE.data) return;
+  const blob = new Blob([JSON.stringify(STATE.data,null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`raptor_${new Date().toISOString().split('T')[0]}.json`; a.click();
+}
+function exportCSV() {
+  if (!STATE.data) return;
+  const sw    = STATE.data.scenario_weights;
+  const codes = (STATE.data.scenarios_meta||[]).map(s=>s.code);
+  const header = ['date',...codes].join(',');
+  const rows   = sw.map(w=>[w.date,...codes.map(c=>w.scenarios[c]||0)].join(','));
+  const blob   = new Blob([[header,...rows].join('\n')],{type:'text/csv'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`raptor_scenarios_${new Date().toISOString().split('T')[0]}.csv`; a.click();
 }
 
-// ── EXPORT JSON / CSV ────────────────────────────────────────
-function exportJSON(){
-  if(!STATE.data) return;
-  const blob=new Blob([JSON.stringify(STATE.data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`raptor_macro_${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-}
-
-function exportCSV(){
-  if(!STATE.data) return;
-  const sw=STATE.data.scenario_weights;
-  const codes=(STATE.data.scenarios_meta||[]).map(s=>s.code);
-  const header=['date',...codes].join(',');
-  const rows=sw.map(w=>[w.date,...codes.map(c=>w.scenarios[c]||0)].join(','));
-  const blob=new Blob([[header,...rows].join('\n')],{type:'text/csv'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`raptor_scenarios_${new Date().toISOString().split('T')[0]}.csv`;
-  a.click();
-}
-
-// ── INIT ─────────────────────────────────────────────────────
+// ── INIT ───────────────────────────────────────────────────────
 window.addEventListener('load', loadData);
-window.addEventListener('resize', ()=>{ if(STATE.data){drawTimeline();} });
+window.addEventListener('resize', () => { if (STATE.data) drawTimeline(); });
 </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
       "regime": "GOLDILOCKS",
       "regime_probs": {},
       "rebalance": "REBALANCE",
-      "rebalance_reason": "Deviazione massima 14% su PJS1.MI · WS5X.MI, NTSZ.MI, WRTY.MI, WSPE.MI, STHE.MI, EUHA.MI, EMLI.MI, WWRD.MI, PJS1.MI, EUHI.MI, WSPX.MI, WNAS.MI in · PJS1, WS5X, WSPE, STHE, EUHA, NTSZ, WRTY, WWRD, EMLI, EUHI, WSPX, WNAS out",
+      "rebalance_reason": "Deviazione massima 14% su PJS1 · WS5X.MI, NTSZ.MI, WRTY.MI, WSPE.MI, STHE.MI, EUHA.MI, EMLI.MI, WWRD.MI, PJS1.MI, EUHI.MI, WSPX.MI, WNAS.MI in · PJS1, WS5X, WSPE, STHE, EUHA, NTSZ, WRTY, WWRD, EMLI, EUHI, WSPX, WNAS out",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -255,7 +255,7 @@
         "BOND_IG": 14,
         "BOND_EM": 6
       },
-      "generated_at": "2026-04-10T08:47:40.417380+00:00"
+      "generated_at": "2026-04-10T09:50:09.074692+00:00"
     }
   ]
 }

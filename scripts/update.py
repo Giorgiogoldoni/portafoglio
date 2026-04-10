@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, date
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-FRED_KEY     = os.environ.get('FRED_API_KEY', '')
+# ── FRED_KEY rimossa — usiamo endpoint CSV pubblico senza autenticazione ──
 GMAIL_USER   = os.environ.get('GMAIL_USER', '')
 GMAIL_PASS   = os.environ.get('GMAIL_APP_PASSWORD', '')
 NOTIFY_EMAIL = os.environ.get('NOTIFY_EMAIL', '')
@@ -49,6 +49,7 @@ SHOCK_PERIODS = [
     {'id':9, 'start':'2018-03-22','end':'2018-12-31','intensity':0.5},
 ]
 
+# ── FRED series da scaricare (via CSV pubblico) ───────────────────
 FRED_SERIES = [
     {'id':'CPIAUCSL',       'name':'CPI',           'freq':'m'},
     {'id':'FEDFUNDS',       'name':'FedFunds',       'freq':'m'},
@@ -138,22 +139,51 @@ def get_shock_intensity(date_str, shock_id):
         if sp['start'] <= date_str <= end: return sp['intensity']
     return 0.0
 
-def fetch_fred(series_id, freq='m', retries=3):
-    params = {'series_id':series_id,'observation_start':START_DATE,'api_key':FRED_KEY,'file_type':'json'}
-    if freq in ('m','q'): params['frequency'] = freq
+# ════════════════════════════════════════════════════════════════
+#  NUOVA FUNZIONE — FRED CSV pubblico (nessuna API key richiesta)
+# ════════════════════════════════════════════════════════════════
+def fetch_fred_csv(series_id, retries=3):
+    """
+    Scarica serie FRED via endpoint CSV pubblico.
+    URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=SERIES_ID
+    Non richiede API key.
+    """
+    url = f'https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (compatible; RAPTOR/2.1)',
+        'Accept': 'text/csv,text/plain,*/*',
+    }
     for attempt in range(retries):
         try:
-            r = requests.get('https://api.stlouisfed.org/fred/series/observations', params=params, timeout=30)
-            data = r.json()
-            if 'error_message' in data:
-                print(f"  FRED error {series_id}: {data['error_message']}")
+            r = requests.get(url, timeout=30, headers=headers)
+            if r.status_code != 200:
+                print(f"  err {series_id}: HTTP {r.status_code}")
+                time.sleep(3)
+                continue
+            lines = r.text.strip().split('\n')
+            if len(lines) < 2:
+                print(f"  err {series_id}: risposta vuota")
                 return []
-            obs = [{'date':o['date'],'value':float(o['value'])} for o in data.get('observations',[]) if o['value'] != '.']
+            obs = []
+            for line in lines[1:]:   # salta header "DATE,VALUE"
+                parts = line.strip().split(',')
+                if len(parts) != 2:
+                    continue
+                date_str, val_str = parts[0].strip(), parts[1].strip()
+                if val_str in ('.', '', 'NA', 'NaN'):
+                    continue
+                if date_str < START_DATE:
+                    continue
+                try:
+                    obs.append({'date': date_str, 'value': float(val_str)})
+                except ValueError:
+                    continue
             print(f"  ok {series_id}: {len(obs)} obs")
             return obs
         except Exception as e:
             print(f"  err {series_id} attempt {attempt+1}: {e}")
-            time.sleep(2)
+            time.sleep(3)
+    print(f"  FAIL {series_id}: nessun dato dopo {retries} tentativi")
     return []
 
 def fetch_etf_data():
@@ -468,12 +498,13 @@ def main():
             print(f"  Prev: {prev_data.get('generated','?')}")
         except: pass
 
-    print("\n[1/5] FRED...")
+    # ── FRED via CSV pubblico (nessuna API key) ───────────────────
+    print("\n[1/5] FRED CSV pubblico...")
     raw = {}
     for s in FRED_SERIES:
         print(f"  {s['id']}...")
-        raw[s['name']] = fetch_fred(s['id'], s['freq'])
-        time.sleep(0.3)
+        raw[s['name']] = fetch_fred_csv(s['id'])
+        time.sleep(0.5)   # rispetta rate limit FRED
 
     print("\n[2/5] Transforms...")
     compute_transforms(raw)
@@ -493,12 +524,14 @@ def main():
     active_shocks = get_active_shocks(current['date'])
     alerts        = check_alerts(current, prev_data, etf_data)
 
+    print(f"\n  Regime corrente: {current_dom} ({current['scenarios'][current_dom]}%)")
+
     print("\n[5/5] Groq Oracle...")
     oracle_comment = generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks)
 
     output = {
         'generated':        datetime.utcnow().isoformat() + 'Z',
-        'version':          '2.1',
+        'version':          '2.2',
         'current_week':     current['date'],
         'macro_indicators': current['indicators'],
         'scenario_weights': scenario_weights,

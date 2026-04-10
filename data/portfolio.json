@@ -12,7 +12,7 @@
         "EUFORIA": 15
       },
       "rebalance": "REBALANCE",
-      "rebalance_reason": "Cambio regime: GOLDILOCKS → REFLAZIONE · WS5X.MI, NTSZ.MI, WRTY.MI, WWRD.MI, WSPE.MI, WSPX.MI, WNAS.MI, EUHA.MI, STHE.MI, EUHI.MI, EMLI.MI, NTSX.MI in · PJS1, WS5X, WSPE, STHE, EUHA, NTSZ, WRTY, WWRD, EMLI, EUHI, WSPX, WNAS out",
+      "rebalance_reason": "Deviazione massima 13% su WS5X.MI · WS5X.MI, NTSZ.MI, WRTY.MI, WWRD.MI, WSPE.MI, WSPX.MI, WNAS.MI, EUHA.MI, STHE.MI, EUHI.MI, EMLI.MI, NTSX.MI in · WS5X, WWRD, WSPE, WSPX, WNAS, EUHA, STHE, NTSZ, WRTY, EUHI, EMLI, NTSX out",
       "portfolio": [
         {
           "ticker": "WS5X",
@@ -262,7 +262,7 @@
         "BOND_IG": 0,
         "BOND_EM": 6
       },
-      "generated_at": "2026-04-10T10:06:59.387114+00:00"
+      "generated_at": "2026-04-10T11:52:18.913672+00:00"
     }
   ]
 }

@@ -417,6 +417,10 @@ def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
     alert_ctx = ' | '.join(a['msg'] for a in alerts) if alerts else 'nessuno'
     shock_ctx = ', '.join(active_shocks) if active_shocks else 'nessuno'
 
+    # Pre-compute ETF strings (no backslash in f-string — Python 3.11 fix)
+    top_etf_str = ' | '.join(t + ': ' + ('+' if d['ret_1w'] > 0 else '') + str(round(d['ret_1w'],1)) + '%' for t,d in top_etf if d.get('ret_1w') is not None)
+    bot_etf_str = ' | '.join(t + ': ' + ('+' if d['ret_1w'] > 0 else '') + str(round(d['ret_1w'],1)) + '%' for t,d in bot_etf if d.get('ret_1w') is not None)
+
     # ── PROMPT AGGRESSIVO E OPERATIVO v2.4 ──────────────────────
     prompt = (
         "Sei RAPTOR, un hedge fund manager con 30 anni di esperienza sui mercati globali. "
@@ -437,8 +441,8 @@ def generate_oracle_comment(current, forecast, etf_data, alerts, active_shocks):
         f"CPI YoY: {ind.get('cpi_yoy','?')}% | Fed Funds: {ind.get('fed_funds','?')}% | "
         f"Yield Curve: {ind.get('yield_curve','?')}% | HY Spread: {ind.get('hy_spread','?')}bps\n"
         f"Real Yield 10Y: {ind.get('real_yield','?')}% | Yield 10Y: {ind.get('yield10y','?')}%\n"
-        f"TOP ETF 1w: {' | '.join(f'{t}: {d[\"ret_1w\"]:+.1f}%' for t,d in top_etf if d.get('ret_1w') is not None)}\n"
-        f"PEGGIORI 1w: {' | '.join(f'{t}: {d[\"ret_1w\"]:+.1f}%' for t,d in bot_etf if d.get('ret_1w') is not None)}\n"
+        f"TOP ETF 1w: {top_etf_str}\n"
+        f"PEGGIORI 1w: {bot_etf_str}\n"
         f"Shock attivi: {shock_ctx}\n"
         f"Alert: {alert_ctx}\n"
         f"Previsione 4w (Markov): {fcast_str} → probabile {fcast_dom[0]} al {fcast_dom[1]}%\n\n"

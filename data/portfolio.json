@@ -12,7 +12,7 @@
         "EUFORIA": 15
       },
       "rebalance": "REBALANCE",
-      "rebalance_reason": "Deviazione massima 12% su WS5X · WS5X.MI, WRTY.MI, WSPE.MI, WNAS.MI, WWRD.MI, WSPX.MI, NTSG.MI, NTSZ.MI, NTSX.MI, EUHA.MI, EUHI.MI, STHE.MI in · WS5X, WWRD, WSPE, WSPX, WNAS, EUHA, WRTY, EUHI, STHE, NTSZ, NTSG, NTSX out",
+      "rebalance_reason": "Deviazione massima 12% su WS5X.MI · WS5X.MI, WRTY.MI, WSPE.MI, WNAS.MI, WWRD.MI, WSPX.MI, NTSG.MI, NTSZ.MI, NTSX.MI, EUHA.MI, EUHI.MI, STHE.MI in · WS5X, WSPE, WNAS, WWRD, WSPX, EUHA, WRTY, EUHI, STHE, NTSG, NTSZ, NTSX out",
       "portfolio": [
         {
           "ticker": "WS5X",
@@ -262,7 +262,7 @@
         "BOND_IG": 0,
         "BOND_EM": 0
       },
-      "generated_at": "2026-04-15T11:57:54.021418+00:00"
+      "generated_at": "2026-04-15T12:32:41.420295+00:00"
     },
     {
       "date": "2026-04-14",

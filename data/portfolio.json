@@ -12,7 +12,7 @@
         "EUFORIA": 15
       },
       "rebalance": "REBALANCE",
-      "rebalance_reason": "Deviazione massima 11% su WSPE · WNAS.MI, WSPE.MI, NTSX.MI, WRTY.MI, NTSG.MI, WWRD.MI, WSPX.MI, WS5X.MI, NTSZ.MI, EUHA.MI, STHE.MI, EUHI.MI in · WNAS, WSPE, WWRD, WSPX, WS5X, EUHA, EUHI, NTSX, STHE, WRTY, NTSG, NTSZ out",
+      "rebalance_reason": "Deviazione massima 11% su WNAS.MI · WNAS.MI, WSPE.MI, NTSX.MI, WRTY.MI, NTSG.MI, WWRD.MI, WSPX.MI, WS5X.MI, NTSZ.MI, EUHA.MI, EUHI.MI, STHE.MI in · WNAS, WSPE, WWRD, WSPX, WS5X, NTSX, EUHA, STHE, WRTY, NTSG, NTSZ, EUHI out",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -115,26 +115,6 @@
           "ret_12w": 0.67
         },
         {
-          "ticker": "NTSX",
-          "ticker_full": "NTSX.MI",
-          "name": "WT US Efficient Core",
-          "cat": "EFF_CORE",
-          "sub": "US_EC",
-          "risk_factor": 1.5,
-          "currency": "USD",
-          "weight": 8,
-          "weight_prev": 0,
-          "weight_delta": 8,
-          "macro_score": 59,
-          "momentum_score": 78,
-          "quality_score": 87,
-          "final_score": 69,
-          "price": 34.165,
-          "ret_1w": 2.63,
-          "ret_4w": 2.02,
-          "ret_12w": 1.12
-        },
-        {
           "ticker": "EUHA",
           "ticker_full": "EUHA.MI",
           "name": "PIMCO Euro HY Acc",
@@ -155,6 +135,46 @@
           "ret_12w": 0
         },
         {
+          "ticker": "EUHI",
+          "ticker_full": "EUHI.MI",
+          "name": "PIMCO Euro ST HY",
+          "cat": "BOND_HY",
+          "sub": "EU_HY",
+          "risk_factor": 1.0,
+          "currency": "EUR",
+          "weight": 8,
+          "weight_prev": 0,
+          "weight_delta": 8,
+          "macro_score": 47,
+          "momentum_score": 35,
+          "quality_score": 82,
+          "final_score": 49,
+          "price": 9.272,
+          "ret_1w": 0.24,
+          "ret_4w": 1.01,
+          "ret_12w": -0.39
+        },
+        {
+          "ticker": "NTSX",
+          "ticker_full": "NTSX.MI",
+          "name": "WT US Efficient Core",
+          "cat": "EFF_CORE",
+          "sub": "US_EC",
+          "risk_factor": 1.5,
+          "currency": "USD",
+          "weight": 7,
+          "weight_prev": 0,
+          "weight_delta": 7,
+          "macro_score": 59,
+          "momentum_score": 78,
+          "quality_score": 87,
+          "final_score": 69,
+          "price": 34.165,
+          "ret_1w": 2.63,
+          "ret_4w": 2.02,
+          "ret_12w": 1.12
+        },
+        {
           "ticker": "STHE",
           "ticker_full": "STHE.MI",
           "name": "PIMCO US ST HY EUR",
@@ -162,9 +182,9 @@
           "sub": "US_HY_EUR",
           "risk_factor": 1.0,
           "currency": "EUR",
-          "weight": 8,
+          "weight": 7,
           "weight_prev": 0,
-          "weight_delta": 8,
+          "weight_delta": 7,
           "macro_score": 42,
           "momentum_score": 42,
           "quality_score": 83,
@@ -233,36 +253,16 @@
           "ret_1w": 0.99,
           "ret_4w": 3.44,
           "ret_12w": 0.67
-        },
-        {
-          "ticker": "EUHI",
-          "ticker_full": "EUHI.MI",
-          "name": "PIMCO Euro ST HY",
-          "cat": "BOND_HY",
-          "sub": "EU_HY",
-          "risk_factor": 1.0,
-          "currency": "EUR",
-          "weight": 6,
-          "weight_prev": 0,
-          "weight_delta": 6,
-          "macro_score": 47,
-          "momentum_score": 24,
-          "quality_score": 82,
-          "final_score": 45,
-          "price": 9.272,
-          "ret_1w": 0.24,
-          "ret_4w": 0.66,
-          "ret_12w": -1.16
         }
       ],
       "macro_breakdown": {
         "EQUITY": 52,
-        "EFF_CORE": 26,
-        "BOND_HY": 22,
+        "EFF_CORE": 25,
+        "BOND_HY": 23,
         "BOND_IG": 0,
         "BOND_EM": 0
       },
-      "generated_at": "2026-04-16T13:44:21.679307+00:00"
+      "generated_at": "2026-04-16T13:51:38.361888+00:00"
     },
     {
       "date": "2026-04-15",

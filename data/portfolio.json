@@ -12,7 +12,7 @@
         "EUFORIA": 15
       },
       "rebalance": "REBALANCE",
-      "rebalance_reason": "Deviazione massima 11% su WSPE · WNAS.MI, WSPE.MI, NTSX.MI, WRTY.MI, NTSG.MI, WWRD.MI, WSPX.MI, WS5X.MI, NTSZ.MI, EUHA.MI, EUHI.MI, STHE.MI in · WNAS, WSPE, WWRD, WSPX, WS5X, EUHA, EUHI, NTSX, STHE, WRTY, NTSG, NTSZ out",
+      "rebalance_reason": "Deviazione massima 11% su WNAS · WNAS.MI, WSPE.MI, NTSX.MI, WRTY.MI, NTSG.MI, WWRD.MI, WSPX.MI, WS5X.MI, NTSZ.MI, EUHA.MI, EUHI.MI, STHE.MI in · WNAS, WSPE, WWRD, WSPX, WS5X, EUHA, EUHI, NTSX, STHE, WRTY, NTSG, NTSZ out",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -262,7 +262,7 @@
         "BOND_IG": 0,
         "BOND_EM": 0
       },
-      "generated_at": "2026-04-16T13:55:50.155317+00:00"
+      "generated_at": "2026-04-16T13:59:38.238773+00:00"
     },
     {
       "date": "2026-04-15",

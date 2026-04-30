@@ -1,5 +1,40 @@
 [
   {
+    "date": "2026-04-30",
+    "regime": "REFLAZIONE",
+    "regime_scenarios": {
+      "GOLDILOCKS": 20,
+      "REFLAZIONE": 31,
+      "RISK_OFF": 4,
+      "DISINFLAZIONE": 20,
+      "TIGHTENING": 9,
+      "EUFORIA": 15
+    },
+    "eq_growth": 29,
+    "eq_value": 14,
+    "eq_em": 11,
+    "bond_ct": 8,
+    "bond_inf": 7,
+    "bond_hy": 11,
+    "oro": 8,
+    "energia": 6,
+    "mat_ind": 6,
+    "ret_eq_growth": 1.647,
+    "ret_eq_value": 1.139,
+    "ret_eq_em": 1.338,
+    "ret_bond_ct": 0.148,
+    "ret_bond_inf": 0.348,
+    "ret_bond_hy": 0.62,
+    "ret_oro": 0.5,
+    "ret_energia": 0.872,
+    "ret_mat_ind": 0.72,
+    "macro_equity": 54,
+    "macro_bond": 26,
+    "macro_materie": 20,
+    "ret_att_4w": 1.025,
+    "generated_at": "2026-04-30T12:16:47.027204+00:00"
+  },
+  {
     "date": "2026-04-29",
     "regime": "REFLAZIONE",
     "regime_scenarios": {

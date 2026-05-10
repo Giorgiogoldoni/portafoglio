@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAPTOR PORTFOLIO</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+  :root {
+    --bg:#ffffff; --bg2:#f8f9fb; --bg3:#f0f2f5;
+    --border:#e4e8f0; --border2:#eef0f5;
+    --accent:#1a6fcf; --accent2:#e07b00; --accent3:#16a34a;
+    --text:#1a2332; --muted:#6b7c93; --muted2:#a0aec0;
+    --danger:#dc2626; --warning:#d97706; --success:#16a34a; --gold:#b45309;
+    --cat-equity:#1a6fcf; --cat-asia:#0ea5e9; --cat-em:#7c3aed;
+    --cat-ec:#6366f1; --cat-hy:#ea580c; --cat-ig:#059669;
+    --cat-em-bond:#b45309; --cat-gold:#d97706; --cat-energy:#dc2626; --cat-cash:#64748b;
+    --etp:#16a34a; --etf:#6b7c93;
+    --hold:#16a34a; --partial:#d97706; --rebalance:#dc2626; --init:#1a6fcf;
+    --font:'Syne',system-ui,sans-serif; --mono:'Space Mono',monospace;
+    --radius:8px; --shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13px;line-height:1.5;}
+  .wrap{max-width:1440px;margin:0 auto;padding:20px 24px;}
+
+  /* HEADER */
+  .hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:2px solid var(--border);margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .logo{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+  .logo span{color:var(--accent);}
+  .logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+  .hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .status-pill{display:flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:10px;color:var(--muted);}
+  .dot{width:7px;height:7px;border-radius:50%;}
+  .dot.ok{background:var(--success);animation:pulse 2s infinite;}
+  .dot.err{background:var(--danger);}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .btn{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:11px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;text-decoration:none;white-space:nowrap;}
+  .btn:hover{border-color:var(--accent);color:var(--accent);}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .btn.primary:hover{filter:brightness(1.1);}
+  .btn.success{background:#f0fdf4;border-color:var(--success);color:var(--success);}
+  .btn.success:hover{background:var(--success);color:#fff;}
+
+  /* REBALANCE BANNER */
+  .rb-banner{display:flex;align-items:center;gap:14px;padding:14px 18px;margin-bottom:18px;border-radius:var(--radius);border:1px solid;border-left:4px solid;}
+  .rb-HOLD    {border-color:#bbf7d0;border-left-color:var(--hold);background:#f0fdf4;}
+  .rb-PARTIAL {border-color:#fde68a;border-left-color:var(--partial);background:#fffbeb;}
+  .rb-REBALANCE{border-color:#fecaca;border-left-color:var(--rebalance);background:#fff5f5;}
+  .rb-INIT    {border-color:#bfdbfe;border-left-color:var(--init);background:#eff6ff;}
+  .rb-icon{font-size:24px;flex-shrink:0;}
+  .rb-label{font-size:13px;font-weight:700;letter-spacing:.5px;}
+  .rb-reason{font-size:10px;color:var(--muted);margin-top:2px;}
+  .rb-date{font-size:10px;color:var(--muted);margin-left:auto;white-space:nowrap;}
+
+  /* PILLS */
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .pill{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;min-width:110px;}
+  .pill-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+  .pill-val{font-size:18px;font-weight:700;color:var(--text);line-height:1.1;}
+  .pill-sub{font-size:9px;color:var(--muted2);margin-top:1px;}
+
+  /* WEEK NAV */
+  .week-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;}
+  .week-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;}
+  select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:11px;padding:4px 8px;border-radius:5px;outline:none;cursor:pointer;}
+
+  /* CAT BREAKDOWN */
+  .section{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .sec-title{font-size:9px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border2);}
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;}
+  .cat-box{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;border-top:3px solid;}
+  .cat-name{font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+  .cat-pct{font-size:20px;font-weight:700;line-height:1;}
+  .cat-bar-wrap{margin-top:6px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .cat-bar{height:100%;border-radius:2px;transition:width .5s ease;}
+
+  /* TABLE */
+  .tbl-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:11px;}
+  th{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;text-align:left;padding:6px 10px;border-bottom:1.5px solid var(--border);white-space:nowrap;background:var(--bg2);}
+  td{padding:7px 10px;border-bottom:1px solid var(--border2);vertical-align:middle;}
+  tr:hover td{background:var(--bg2);}
+  .tk{font-weight:700;font-size:12px;color:var(--text);font-family:var(--mono);}
+  .nm{font-size:10px;color:var(--muted);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cat-badge{font-size:8px;padding:2px 7px;border-radius:10px;font-weight:600;white-space:nowrap;border:1px solid;}
+  .fiscal-badge{font-size:8px;padding:1px 6px;border-radius:10px;font-weight:700;border:1px solid;}
+  .fiscal-ETP{color:var(--etp);border-color:#bbf7d0;background:#f0fdf4;}
+  .fiscal-ETF{color:var(--etf);border-color:var(--border);background:var(--bg2);}
+  .w-cell{font-size:14px;font-weight:700;}
+  .delta-new{color:var(--accent);font-size:9px;font-weight:700;}
+  .delta-pos{color:var(--success);}
+  .delta-neg{color:var(--danger);}
+  .delta-zero{color:var(--muted2);}
+  .score-wrap{display:flex;align-items:center;gap:5px;}
+  .score-bar-bg{width:50px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0;}
+  .score-bar-fg{height:100%;border-radius:3px;}
+  .ret-pos{color:var(--success);}
+  .ret-neg{color:var(--danger);}
+  .ret-flat{color:var(--muted2);}
+
+  /* HISTORY */
+  .hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(14px,1fr));gap:2px;margin-top:8px;}
+  .hist-col{position:relative;cursor:pointer;}
+  .hist-bar{height:60px;display:flex;flex-direction:column;justify-content:flex-end;}
+  .hist-seg{width:100%;}
+  .hist-lbl{font-size:6px;color:var(--muted2);text-align:center;margin-top:2px;}
+  .hist-tip{position:absolute;bottom:68px;left:50%;transform:translateX(-50%);
+    background:var(--text);color:#fff;font-size:9px;padding:6px 10px;border-radius:5px;
+    white-space:pre;pointer-events:none;opacity:0;transition:opacity .15s;z-index:20;min-width:130px;}
+  .hist-col:hover .hist-tip{opacity:1;}
+
+  /* EXPORT */
+  .export-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:11px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;}
+  .export-info{flex:1;font-size:10px;color:var(--muted);}
+
+  /* LOADER */
+  .loader{text-align:center;padding:80px;color:var(--muted);}
+  .loader-spin{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* CAT COLORS */
+  .c-EQUITY{color:var(--cat-equity);border-color:#bfdbfe;background:#eff6ff;}
+  .c-EQUITY_ASIA{color:var(--cat-asia);border-color:#bae6fd;background:#f0f9ff;}
+  .c-EQUITY_EM{color:var(--cat-em);border-color:#e9d5ff;background:#faf5ff;}
+  .c-EFF_CORE{color:var(--cat-ec);border-color:#c7d2fe;background:#eef2ff;}
+  .c-BOND_HY{color:var(--cat-hy);border-color:#fed7aa;background:#fff7ed;}
+  .c-BOND_IG{color:var(--cat-ig);border-color:#a7f3d0;background:#ecfdf5;}
+  .c-BOND_EM{color:var(--cat-em-bond);border-color:#fde68a;background:#fffbeb;}
+  .c-GOLD{color:var(--cat-gold);border-color:#fde68a;background:#fffbeb;}
+  .c-ENERGY{color:var(--cat-energy);border-color:#fecaca;background:#fff5f5;}
+  .c-CASH{color:var(--cat-cash);border-color:#e2e8f0;background:#f8fafc;}
+
+  @media(max-width:768px){.wrap{padding:12px 14px;}.cat-grid{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div>
+      <div class="logo">RAPTOR <span>PORTFOLIO</span></div>
+      <div class="logo-sub">Ottimizzazione Macro × Momentum · 25 ETF Universe</div>
+    </div>
+    <div class="hdr-right">
+      <div class="status-pill"><div class="dot" id="sDot"></div><span id="sTxt">caricamento</span></div>
+      <span id="lastUpd" style="font-size:10px;color:var(--muted)">—</span>
+      <a class="btn" href="macro.html">🔮 Macro Mover</a>
+      <a class="btn" href="https://giorgiogoldoni.github.io/trader/" target="_top">← Hub</a>
+    </div>
+  </div>
+
+  <div id="loaderMsg" class="loader"><div class="loader-spin"></div>Caricamento portafoglio...</div>
+
+  <div id="main" style="display:none">
+
+    <!-- REBALANCE BANNER -->
+    <div class="rb-banner" id="rbBanner">
+      <div class="rb-icon" id="rbIcon">—</div>
+      <div><div class="rb-label" id="rbLabel">—</div><div class="rb-reason" id="rbReason">—</div></div>
+      <div class="rb-date" id="rbDate">—</div>
+    </div>
+
+    <!-- WEEK NAV -->
+    <div class="week-nav">
+      <span class="week-label">Settimana</span>
+      <select id="weekSel" onchange="renderWeek()"></select>
+      <span style="flex:1"></span>
+      <span id="regimeBadge" style="font-size:10px;font-weight:700;color:var(--accent2)"></span>
+    </div>
+
+    <!-- PILLS -->
+    <div class="pills" id="pills"></div>
+
+    <!-- CAT BREAKDOWN -->
+    <div class="section">
+      <div class="sec-title">Esposizione per macro-classe</div>
+      <div class="cat-grid" id="catGrid"></div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="section">
+      <div class="sec-title">Portafoglio — dettaglio ETF</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Ticker</th><th>Nome</th><th>Categoria</th><th>Fiscal</th>
+            <th>Peso%</th><th>Δ Prev</th><th>Score</th>
+            <th>Macro</th><th>Mom</th><th>Qual</th>
+            <th>1W%</th><th>4W%</th><th>12W%</th><th>CCY</th>
+          </tr></thead>
+          <tbody id="pfBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STORICO -->
+    <div class="section">
+      <div class="sec-title">Storico allocazioni — ultime settimane</div>
+      <div class="hist-grid" id="histGrid"></div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="export-bar">
+      <div class="export-info" id="expInfo">—</div>
+      <button class="btn success" onclick="exportExcel()">⬇ Excel</button>
+      <button class="btn" onclick="exportJSON()">⬇ JSON</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const CAT_COLORS = {
+  EQUITY:'#1a6fcf', EQUITY_ASIA:'#0ea5e9', EQUITY_EM:'#7c3aed',
+  EFF_CORE:'#6366f1', BOND_HY:'#ea580c', BOND_IG:'#059669',
+  BOND_EM:'#b45309', GOLD:'#d97706', ENERGY:'#dc2626', CASH:'#64748b',
+};
+const CAT_LABELS = {
+  EQUITY:'Equity', EQUITY_ASIA:'Asia', EQUITY_EM:'EM Equity',
+  EFF_CORE:'Eff. Core', BOND_HY:'Bond HY', BOND_IG:'Bond IG',
+  BOND_EM:'Bond EM', GOLD:'Oro', ENERGY:'Energia', CASH:'Cash',
+};
+const RB_META = {
+  HOLD:     {icon:'✅',label:'HOLD — Nessun ribilanciamento',    cls:'rb-HOLD'},
+  PARTIAL:  {icon:'⚠️',label:'PARTIAL — Ribilanciamento parziale',cls:'rb-PARTIAL'},
+  REBALANCE:{icon:'🔄',label:'REBALANCE — Ribilanciamento completo',cls:'rb-REBALANCE'},
+  INIT:     {icon:'🚀',label:'INIT — Prima configurazione',       cls:'rb-INIT'},
+};
+
+let PF = null;
+
+async function load() {
+  try {
+    const r = await fetch('data/portfolio.json?t=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    PF = await r.json();
+    if (!PF.history?.length) throw new Error('Nessuna settimana');
+    document.getElementById('loaderMsg').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    document.getElementById('sDot').className = 'dot ok';
+    document.getElementById('sTxt').textContent = 'online';
+    const gen = new Date(PF.history[0].generated_at);
+    document.getElementById('lastUpd').textContent = gen.toLocaleString('it-IT');
+    const sel = document.getElementById('weekSel');
+    PF.history.forEach((w,i) => {
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = w.date + (i===0?' (corrente)':'');
+      sel.appendChild(o);
+    });
+    renderWeek();
+    renderHistory();
+    document.getElementById('expInfo').textContent =
+      `25 ETF universe · ${PF.history.length} settimane · aggiornato ${gen.toLocaleString('it-IT')}`;
+  } catch(e) {
+    document.getElementById('sDot').className = 'dot err';
+    document.getElementById('sTxt').textContent = 'errore';
+    document.getElementById('loaderMsg').innerHTML =
+      `<div style="color:var(--danger)">Errore: ${e.message}</div>`;
+  }
+}
+
+function renderWeek() {
+  const idx  = parseInt(document.getElementById('weekSel').value) || 0;
+  const week = PF.history[idx];
+  if (!week) return;
+
+  // Banner
+  const rb = RB_META[week.rebalance] || RB_META.HOLD;
+  const banner = document.getElementById('rbBanner');
+  banner.className = 'rb-banner ' + rb.cls;
+  document.getElementById('rbIcon').textContent   = rb.icon;
+  document.getElementById('rbLabel').textContent  = rb.label;
+  document.getElementById('rbReason').textContent = week.rebalance_reason || '';
+  document.getElementById('rbDate').textContent   = week.date;
+  document.getElementById('regimeBadge').textContent = 'REGIME: ' + week.regime;
+
+  const pf = week.portfolio || [];
+
+  // Pills
+  const newPos = pf.filter(e => e.weight_prev === 0).length;
+  const exits  = PF.history[idx+1]?.portfolio.filter(p => !pf.find(e=>e.ticker===p.ticker)).length || 0;
+  const maxSc  = pf.length ? Math.max(...pf.map(e=>e.final_score)) : 0;
+  const etp    = pf.filter(e=>e.fiscal==='ETP').length;
+  document.getElementById('pills').innerHTML = [
+    {l:'Posizioni attive', v:pf.length,        s:'su 25 ETF'},
+    {l:'Nuovi ingressi',   v:newPos,            s:'questa settimana'},
+    {l:'Uscite',           v:exits,             s:'rispetto alla prec.'},
+    {l:'ETP (compensabili)',v:etp,              s:'su ' + pf.length + ' in portafoglio'},
+    {l:'Score massimo',    v:maxSc,             s:'ETF top'},
+    {l:'Segnale',          v:week.rebalance,    s:week.date},
+  ].map(p=>`<div class="pill"><div class="pill-label">${p.l}</div><div class="pill-val">${p.v}</div><div class="pill-sub">${p.s}</div></div>`).join('');
+
+  // Cat breakdown
+  const bd = week.macro_breakdown || {};
+  const cats = Object.keys(CAT_LABELS);
+  document.getElementById('catGrid').innerHTML = cats.map(c => {
+    const pct = bd[c] || 0;
+    if (!pct) return '';
+    return `<div class="cat-box" style="border-top-color:${CAT_COLORS[c]}">
+      <div class="cat-name">${CAT_LABELS[c]}</div>
+      <div class="cat-pct" style="color:${CAT_COLORS[c]}">${pct}%</div>
+      <div class="cat-bar-wrap"><div class="cat-bar" style="width:${pct}%;background:${CAT_COLORS[c]}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Table
+  document.getElementById('pfBody').innerHTML = pf.map(e => {
+    const dc = e.weight_delta > 0.5 ? 'delta-pos' : e.weight_delta < -0.5 ? 'delta-neg' : 'delta-zero';
+    const ds = e.weight_prev === 0
+      ? '<span class="delta-new">▲ NEW</span>'
+      : e.weight_delta === 0
+        ? '<span class="delta-zero">—</span>'
+        : `<span class="${dc}">${e.weight_delta>0?'▲':'▼'} ${Math.abs(e.weight_delta).toFixed(0)}%</span>`;
+    const rc = v => v > 0.3 ? 'ret-pos' : v < -0.3 ? 'ret-neg' : 'ret-flat';
+    const rf = v => v == null ? '—' : `${v>0?'+':''}${v.toFixed(1)}%`;
+    const scColor = e.final_score>70?'#16a34a':e.final_score>40?'#d97706':'#dc2626';
+    return `<tr>
+      <td class="tk">${e.ticker}</td>
+      <td class="nm" title="${e.name}">${e.name}</td>
+      <td><span class="cat-badge c-${e.cat}">${CAT_LABELS[e.cat]||e.cat}</span></td>
+      <td><span class="fiscal-badge fiscal-${e.fiscal}">${e.fiscal}</span></td>
+      <td class="w-cell" style="color:${CAT_COLORS[e.cat]||'var(--text)'}">${e.weight}%</td>
+      <td>${ds}</td>
+      <td><div class="score-wrap"><div class="score-bar-bg"><div class="score-bar-fg" style="width:${e.final_score}%;background:${scColor}"></div></div>${e.final_score}</div></td>
+      <td style="color:var(--accent)">${e.macro_score}</td>
+      <td style="color:var(--accent2)">${e.momentum_score}</td>
+      <td style="color:var(--muted)">${e.quality_score}</td>
+      <td class="${rc(e.ret_1w)}">${rf(e.ret_1w)}</td>
+      <td class="${rc(e.ret_4w)}">${rf(e.ret_4w)}</td>
+      <td class="${rc(e.ret_12w)}">${rf(e.ret_12w)}</td>
+      <td style="color:var(--muted)">${e.currency}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderHistory() {
+  const hist = PF.history.slice(0, 30).reverse();
+  document.getElementById('histGrid').innerHTML = hist.map((week, i) => {
+    const pf = week.portfolio || [];
+    const sorted = [...pf].sort((a,b) => {
+      const order = ['EQUITY','EQUITY_ASIA','EQUITY_EM','EFF_CORE','BOND_HY','BOND_IG','BOND_EM','GOLD','ENERGY','CASH'];
+      return order.indexOf(a.cat) - order.indexOf(b.cat);
+    });
+    const segs = sorted.map(e =>
+      `<div class="hist-seg" style="height:${e.weight}%;background:${CAT_COLORS[e.cat]||'#ccc'};opacity:.8"></div>`
+    ).join('');
+    const tip = [
+      week.date,
+      week.regime,
+      ...pf.slice(0,5).map(e=>`${e.ticker}: ${e.weight}%`)
+    ].join('\n');
+    const showLbl = i % 5 === 0;
+    return `<div class="hist-col">
+      <div class="hist-tip">${tip}</div>
+      <div class="hist-bar">${segs}</div>
+      <div class="hist-lbl">${showLbl ? week.date.slice(5) : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function exportExcel() {
+  if (!PF?.history?.length) return;
+  const latest = PF.history[0];
+  const pf = latest.portfolio;
+  // Header
+  const hdr = ['Ticker','Nome','Categoria','Fiscal','Valuta','Peso%','Δ Peso','Score','Macro','Momentum','Quality','Ret 1W%','Ret 4W%','Ret 12W%'];
+  const rows = pf.map(e => [
+    e.ticker, e.name, CAT_LABELS[e.cat]||e.cat, e.fiscal, e.currency,
+    e.weight,
+    e.weight_prev===0 ? 'NEW' : (e.weight_delta>0?'+':'')+e.weight_delta,
+    e.final_score, e.macro_score, e.momentum_score, e.quality_score,
+    e.ret_1w!=null?(e.ret_1w>0?'+':'')+e.ret_1w+'%':'—',
+    e.ret_4w!=null?(e.ret_4w>0?'+':'')+e.ret_4w+'%':'—',
+    e.ret_12w!=null?(e.ret_12w>0?'+':'')+e.ret_12w+'%':'—',
+  ]);
+  // Storico tab
+  const hdrHist = ['Data','Regime','Segnale',...Object.values(CAT_LABELS).map(l=>l+' %')];
+  const rowsHist = PF.history.map(w => {
+    const bd = w.macro_breakdown || {};
+    return [w.date, w.regime, w.rebalance, ...Object.keys(CAT_LABELS).map(c=>bd[c]||0)];
+  });
+  // CSV multi-sezione
+  const sep = ';';
+  const lines = [
+    `RAPTOR PORTFOLIO — ${latest.date} — Regime: ${latest.regime}`,
+    '',
+    '=== PORTAFOGLIO CORRENTE ===',
+    hdr.join(sep),
+    ...rows.map(r => r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(sep)),
+    '',
+    '=== STORICO ALLOCAZIONI ===',
+    hdrHist.join(sep),
+    ...rowsHist.map(r => r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(sep)),
+  ];
+  const blob = new Blob(['\uFEFF'+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `RAPTOR_Portfolio_${latest.date}.csv`;
+  a.click();
+}
+
+function exportJSON() {
+  if (!PF) return;
+  const blob = new Blob([JSON.stringify(PF,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `RAPTOR_Portfolio_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+window.addEventListener('load', load);
+</script>
+</body>
+</html>

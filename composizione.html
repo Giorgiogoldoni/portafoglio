@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAPTOR — Composizione Portafoglio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+:root{
+  --bg:#f5f4f0;--surface:#fff;--border:#e0ddd6;--text:#1a1816;
+  --muted:#7a766e;--muted2:#a8a49c;--tag:#eeece7;
+  --accent:#1a6fcf;--accent2:#e07b00;--success:#16a34a;--danger:#dc2626;--warning:#d97706;
+  --cat-equity:#1a6fcf;--cat-asia:#0ea5e9;--cat-em:#7c3aed;
+  --cat-ec:#6366f1;--cat-hy:#ea580c;--cat-ig:#059669;
+  --cat-em-bond:#b45309;--cat-gold:#d97706;--cat-energy:#dc2626;--cat-cash:#64748b;
+  --mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
+  --radius:8px;--shadow:0 1px 3px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.6;}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 24px;}
+
+/* HEADER */
+header{padding:16px 0 12px;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px;}
+header h1{font-size:18px;font-weight:800;letter-spacing:-.3px;}
+header h1 span{color:var(--accent);}
+.sub{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+.hdr-right{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-family:var(--sans);font-size:11px;font-weight:600;color:var(--text);text-decoration:none;cursor:pointer;transition:all .15s;}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* REGIME BANNER */
+.regime-banner{border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;border:1.5px solid;display:flex;align-items:center;gap:14px;}
+.regime-icon{font-size:28px;flex-shrink:0;}
+.regime-name{font-size:18px;font-weight:800;}
+.regime-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+.regime-mix{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;}
+.mix-pill{font-size:10px;padding:3px 10px;border-radius:12px;border:1px solid;font-weight:600;}
+
+/* SEZIONE */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);}
+.sec-title{font-size:9px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+/* ETF CARD */
+.etf-card{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;}
+.etf-card-header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--tag);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+.etf-card-header:hover{background:#e8e6e0;}
+.etf-ticker{font-family:var(--mono);font-size:16px;font-weight:700;}
+.etf-name{font-size:12px;color:var(--muted);flex:1;}
+.etf-weight{font-size:20px;font-weight:800;}
+.cat-badge{font-size:9px;padding:2px 8px;border-radius:10px;border:1px solid;font-weight:600;}
+.fiscal-badge{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;border:1px solid;}
+.fiscal-ETP{color:var(--success);border-color:#bbf7d0;background:#f0fdf4;}
+.fiscal-ETF{color:var(--muted);border-color:var(--border);background:var(--tag);}
+.toggle-arrow{font-size:12px;color:var(--muted);margin-left:auto;transition:transform .2s;}
+.etf-card.open .toggle-arrow{transform:rotate(180deg);}
+
+.etf-card-body{display:none;padding:16px;}
+.etf-card.open .etf-card-body{display:block;}
+
+/* SCORE BREAKDOWN */
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.score-box{background:var(--tag);border-radius:6px;padding:10px 12px;text-align:center;}
+.score-box .val{font-size:22px;font-weight:800;line-height:1;}
+.score-box .lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.score-bar-wrap{height:5px;background:var(--border);border-radius:3px;margin-top:6px;overflow:hidden;}
+.score-bar{height:100%;border-radius:3px;}
+
+/* MOTIVO */
+.motivo-block{margin-bottom:12px;}
+.motivo-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.motivo-text{font-size:12px;color:var(--text);line-height:1.7;background:var(--tag);border-radius:6px;padding:10px 12px;}
+.motivo-text strong{color:var(--text);}
+.motivo-text .pos{color:var(--success);font-weight:700;}
+.motivo-text .neg{color:var(--danger);font-weight:700;}
+.motivo-text .warn{color:var(--warning);font-weight:700;}
+
+/* CONFRONTO */
+.confronto-grid{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.confronto-item{display:flex;align-items:center;gap:6px;background:var(--tag);border-radius:6px;padding:6px 10px;font-size:11px;}
+.confronto-item.selected{background:#eff6ff;border:1px solid #bfdbfe;}
+.confronto-item.excluded{opacity:.6;}
+.c-score{font-family:var(--mono);font-weight:700;}
+
+/* SENSITIVITÀ */
+.sens-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sens-box{border-radius:6px;padding:10px 12px;}
+.sens-box.in{background:#f0fdf4;border:1px solid #bbf7d0;}
+.sens-box.out{background:#fff5f5;border:1px solid #fecaca;}
+.sens-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.sens-box.in .sens-title{color:var(--success);}
+.sens-box.out .sens-title{color:var(--danger);}
+.sens-item{font-size:10px;color:var(--text);padding:2px 0;}
+
+/* LOADER */
+.loader{text-align:center;padding:60px;color:var(--muted);}
+.loader-spin{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* CAT COLORS */
+.c-EQUITY    {color:var(--cat-equity);border-color:#bfdbfe;background:#eff6ff;}
+.c-EQUITY_ASIA{color:var(--cat-asia);border-color:#bae6fd;background:#f0f9ff;}
+.c-EQUITY_EM {color:var(--cat-em);border-color:#e9d5ff;background:#faf5ff;}
+.c-EFF_CORE  {color:var(--cat-ec);border-color:#c7d2fe;background:#eef2ff;}
+.c-BOND_HY   {color:var(--cat-hy);border-color:#fed7aa;background:#fff7ed;}
+.c-BOND_IG   {color:var(--cat-ig);border-color:#a7f3d0;background:#ecfdf5;}
+.c-BOND_EM   {color:var(--cat-em-bond);border-color:#fde68a;background:#fffbeb;}
+.c-GOLD      {color:var(--cat-gold);border-color:#fde68a;background:#fffbeb;}
+.c-ENERGY    {color:var(--cat-energy);border-color:#fecaca;background:#fff5f5;}
+.c-CASH      {color:var(--cat-cash);border-color:#e2e8f0;background:#f8fafc;}
+
+@media(max-width:680px){
+  .wrap{padding:12px 14px;}
+  .score-grid{grid-template-columns:repeat(2,1fr);}
+  .sens-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>RAPTOR <span>COMPOSIZIONE</span></h1>
+    <div class="sub">Analisi ETF — Perché ogni strumento è in portafoglio</div>
+  </div>
+  <div class="hdr-right">
+    <a class="btn" href="index.html">← Portfolio</a>
+    <a class="btn" href="regimi.html">📊 Regimi</a>
+    <a class="btn" href="macro.html">🔮 Macro</a>
+    <a class="btn" href="https://giorgiogoldoni.github.io/trader/">← Hub</a>
+  </div>
+</header>
+
+<div id="loader" class="loader"><div class="loader-spin"></div>Caricamento analisi...</div>
+<div id="main" style="display:none"></div>
+
+</div>
+<script>
+// ── COSTANTI MODELLO (speculari a update_portfolio.py) ────────────
+const MACRO_PREF = {
+  GOLDILOCKS:   {EQUITY:90,EQUITY_ASIA:70,EQUITY_EM:60,EFF_CORE:85,BOND_HY:60,BOND_IG:15,BOND_EM:50,GOLD:30,ENERGY:40,CASH:0},
+  REFLAZIONE:   {EQUITY:75,EQUITY_ASIA:65,EQUITY_EM:75,EFF_CORE:70,BOND_HY:65,BOND_IG:25,BOND_EM:70,GOLD:70,ENERGY:80,CASH:0},
+  DISINFLAZIONE:{EQUITY:70,EQUITY_ASIA:55,EQUITY_EM:45,EFF_CORE:75,BOND_HY:55,BOND_IG:60,BOND_EM:40,GOLD:50,ENERGY:25,CASH:5},
+  EUFORIA:      {EQUITY:95,EQUITY_ASIA:80,EQUITY_EM:75,EFF_CORE:80,BOND_HY:75,BOND_IG:10,BOND_EM:55,GOLD:20,ENERGY:60,CASH:0},
+  TIGHTENING:   {EQUITY:30,EQUITY_ASIA:25,EQUITY_EM:15,EFF_CORE:35,BOND_HY:25,BOND_IG:72,BOND_EM:20,GOLD:55,ENERGY:45,CASH:15},
+  STAGFLAZIONE: {EQUITY:20,EQUITY_ASIA:15,EQUITY_EM:10,EFF_CORE:25,BOND_HY:20,BOND_IG:48,BOND_EM:30,GOLD:80,ENERGY:75,CASH:20},
+  RECESSIONE:   {EQUITY:5, EQUITY_ASIA:5, EQUITY_EM:0, EFF_CORE:10,BOND_HY:5, BOND_IG:85,BOND_EM:10,GOLD:70,ENERGY:10,CASH:60},
+  RISK_OFF:     {EQUITY:10,EQUITY_ASIA:5, EQUITY_EM:0, EFF_CORE:15,BOND_HY:10,BOND_IG:85,BOND_EM:5, GOLD:75,ENERGY:15,CASH:65},
+  ZIRP:         {EQUITY:65,EQUITY_ASIA:55,EQUITY_EM:55,EFF_CORE:70,BOND_HY:70,BOND_IG:45,BOND_EM:55,GOLD:60,ENERGY:35,CASH:0},
+  GEO_SHOCK:    {EQUITY:15,EQUITY_ASIA:10,EQUITY_EM:5, EFF_CORE:20,BOND_HY:15,BOND_IG:78,BOND_EM:10,GOLD:85,ENERGY:70,CASH:55},
+  PANDEMIC:     {EQUITY:5, EQUITY_ASIA:0, EQUITY_EM:0, EFF_CORE:5, BOND_HY:0, BOND_IG:90,BOND_EM:0, GOLD:60,ENERGY:0, CASH:70},
+  FINANCIAL:    {EQUITY:0, EQUITY_ASIA:0, EQUITY_EM:0, EFF_CORE:5, BOND_HY:0, BOND_IG:90,BOND_EM:0, GOLD:65,ENERGY:0, CASH:70},
+  WAR:          {EQUITY:10,EQUITY_ASIA:5, EQUITY_EM:0, EFF_CORE:15,BOND_HY:10,BOND_IG:80,BOND_EM:5, GOLD:85,ENERGY:80,CASH:60},
+  SOVEREIGN:    {EQUITY:10,EQUITY_ASIA:5, EQUITY_EM:0, EFF_CORE:15,BOND_HY:5, BOND_IG:82,BOND_EM:5, GOLD:70,ENERGY:20,CASH:55},
+};
+
+const SUB_PREF = {
+  GOLDILOCKS:   {GLOBAL:1.0,US:0.9,US_EUR:0.7,EU:0.8,TECH:0.85,EU_SMALL:0.7,JAPAN:0.75,CHINA:0.6,ASIA_PAC:0.7,EM_BROAD:0.6,EM_CORE:0.65,GLOBAL_EC:1.0,US_EC:0.9,EM_EC:0.6,SMALL_EC:0.65,US_HY:0.8,US_HY_EUR:0.7,EU_HY:0.9,EU_HY_A:0.85,EU_IG:0.3,EU_GOVT:0.25,EM_LOCAL:0.7,GOLD:0.4,CRUDE:0.5,CASH:0.0},
+  REFLAZIONE:   {GLOBAL:0.8,US:0.7,US_EUR:0.6,EU:0.75,TECH:0.6,EU_SMALL:0.65,JAPAN:0.7,CHINA:0.75,ASIA_PAC:0.7,EM_BROAD:0.85,EM_CORE:0.85,GLOBAL_EC:0.8,US_EC:0.7,EM_EC:0.9,SMALL_EC:0.75,US_HY:0.75,US_HY_EUR:0.7,EU_HY:0.8,EU_HY_A:0.8,EU_IG:0.4,EU_GOVT:0.35,EM_LOCAL:1.0,GOLD:0.85,CRUDE:1.0,CASH:0.0},
+  TIGHTENING:   {GLOBAL:0.5,US:0.4,US_EUR:0.8,EU:0.5,TECH:0.3,EU_SMALL:0.4,JAPAN:0.55,CHINA:0.3,ASIA_PAC:0.4,EM_BROAD:0.3,EM_CORE:0.3,GLOBAL_EC:0.6,US_EC:0.5,EM_EC:0.3,SMALL_EC:0.3,US_HY:0.4,US_HY_EUR:0.6,EU_HY:0.5,EU_HY_A:0.5,EU_IG:1.0,EU_GOVT:0.9,EM_LOCAL:0.3,GOLD:0.7,CRUDE:0.6,CASH:0.3},
+  RISK_OFF:     {GLOBAL:0.3,US:0.3,US_EUR:0.8,EU:0.3,TECH:0.2,EU_SMALL:0.2,JAPAN:0.45,CHINA:0.1,ASIA_PAC:0.2,EM_BROAD:0.1,EM_CORE:0.1,GLOBAL_EC:0.3,US_EC:0.3,EM_EC:0.1,SMALL_EC:0.1,US_HY:0.2,US_HY_EUR:0.3,EU_HY:0.3,EU_HY_A:0.3,EU_IG:1.0,EU_GOVT:0.95,EM_LOCAL:0.1,GOLD:1.0,CRUDE:0.2,CASH:1.0},
+  RECESSIONE:   {GLOBAL:0.3,US:0.3,US_EUR:0.7,EU:0.4,TECH:0.2,EU_SMALL:0.2,JAPAN:0.4,CHINA:0.15,ASIA_PAC:0.25,EM_BROAD:0.1,EM_CORE:0.1,GLOBAL_EC:0.3,US_EC:0.3,EM_EC:0.1,SMALL_EC:0.1,US_HY:0.2,US_HY_EUR:0.3,EU_HY:0.3,EU_HY_A:0.3,EU_IG:1.0,EU_GOVT:0.95,EM_LOCAL:0.2,GOLD:0.9,CRUDE:0.15,CASH:1.0},
+  STAGFLAZIONE: {GLOBAL:0.4,US:0.3,US_EUR:0.6,EU:0.45,TECH:0.2,EU_SMALL:0.35,JAPAN:0.4,CHINA:0.25,ASIA_PAC:0.35,EM_BROAD:0.3,EM_CORE:0.3,GLOBAL_EC:0.4,US_EC:0.3,EM_EC:0.3,SMALL_EC:0.25,US_HY:0.4,US_HY_EUR:0.5,EU_HY:0.4,EU_HY_A:0.4,EU_IG:0.9,EU_GOVT:0.8,EM_LOCAL:0.5,GOLD:1.0,CRUDE:0.9,CASH:0.35},
+};
+
+const CAT_LABELS = {
+  EQUITY:'Equity',EQUITY_ASIA:'Asia',EQUITY_EM:'EM Equity',
+  EFF_CORE:'Eff. Core',BOND_HY:'Bond HY',BOND_IG:'Bond IG',
+  BOND_EM:'Bond EM',GOLD:'Oro',ENERGY:'Energia',CASH:'Cash',
+};
+const CAT_COLORS = {
+  EQUITY:'#1a6fcf',EQUITY_ASIA:'#0ea5e9',EQUITY_EM:'#7c3aed',
+  EFF_CORE:'#6366f1',BOND_HY:'#ea580c',BOND_IG:'#059669',
+  BOND_EM:'#b45309',GOLD:'#d97706',ENERGY:'#dc2626',CASH:'#64748b',
+};
+const REGIME_META = {
+  GOLDILOCKS:   {icon:'🌟',color:'#00D4FF',label:'Crescita + bassa inflazione — contesto ideale per equity'},
+  REFLAZIONE:   {icon:'📈',color:'#7FFF00',label:'Crescita reflazionistica — materie prime ed EM favoriti'},
+  EUFORIA:      {icon:'🚀',color:'#FFD700',label:'Momentum estremo — equity e HY al massimo'},
+  DISINFLAZIONE:{icon:'🌊',color:'#00BFFF',label:'Inflazione in calo — bond e equity beneficiano'},
+  TIGHTENING:   {icon:'🔒',color:'#E74C3C',label:'Fed hawkish — pressione su equity e bond lunghi'},
+  STAGFLAZIONE: {icon:'⚠️',color:'#FF6B35',label:'Crescita lenta + inflazione alta — oro e materie prime'},
+  RECESSIONE:   {icon:'📉',color:'#8B0000',label:'Recessione conclamata — massima difensività'},
+  RISK_OFF:     {icon:'🔴',color:'#FF3355',label:'Fuga dal rischio — cash, oro e bond governativi'},
+  ZIRP:         {icon:'💧',color:'#9B59B6',label:'Tassi zero — ricerca di rendimento'},
+  GEO_SHOCK:    {icon:'🌍',color:'#F39C12',label:'Shock geopolitico — oro, energia, difensivi'},
+  PANDEMIC:     {icon:'🦠',color:'#FF69B4',label:'Shock pandemico — cash e bond governi'},
+  FINANCIAL:    {icon:'💥',color:'#DC143C',label:'Crisi finanziaria — de-risking totale'},
+  WAR:          {icon:'⚔️',color:'#8B4513',label:'Conflitto — energia, oro, USD'},
+  SOVEREIGN:    {icon:'🏛️',color:'#4B0082',label:'Crisi sovrana — spread in allargamento'},
+};
+
+const UNIVERSE_META = {
+  'WWRD.MI':{sub:'GLOBAL',risk:1.0},'WSPX.MI':{sub:'US',risk:1.0},'WSPE.MI':{sub:'US_EUR',risk:1.0},
+  'WS5X.MI':{sub:'EU',risk:1.0},'WNAS.MI':{sub:'TECH',risk:1.0},'SMEA.MI':{sub:'EU_SMALL',risk:1.0},
+  'WPXJ.MI':{sub:'JAPAN',risk:1.0},'XCHA.MI':{sub:'CHINA',risk:1.1},'XASX.MI':{sub:'ASIA_PAC',risk:1.0},
+  'VFEM.MI':{sub:'EM_BROAD',risk:1.1},'EIMI.MI':{sub:'EM_CORE',risk:1.1},
+  'NTSX.MI':{sub:'US_EC',risk:1.5},'NTSG.MI':{sub:'GLOBAL_EC',risk:1.5},
+  'NTSZ.MI':{sub:'EM_EC',risk:1.5},'WRTY.MI':{sub:'SMALL_EC',risk:1.5},
+  'STHY.MI':{sub:'US_HY',risk:1.0},'STHE.MI':{sub:'US_HY_EUR',risk:1.0},
+  'EUHI.MI':{sub:'EU_HY',risk:1.0},'EUHA.MI':{sub:'EU_HY_A',risk:1.0},
+  'PJS1.MI':{sub:'EU_IG',risk:0.5},'XGIU.MI':{sub:'EU_GOVT',risk:0.7},
+  'EMLI.MI':{sub:'EM_LOCAL',risk:1.2},'PHAU.MI':{sub:'GOLD',risk:1.0},
+  'CRUD.MI':{sub:'CRUDE',risk:1.3},'XEON.MI':{sub:'CASH',risk:0.0},
+};
+const QUALITY = {
+  'WWRD.MI':80,'WSPX.MI':90,'WSPE.MI':85,'WS5X.MI':82,'WNAS.MI':88,'SMEA.MI':75,
+  'WPXJ.MI':78,'XCHA.MI':72,'XASX.MI':74,'VFEM.MI':80,'EIMI.MI':82,
+  'NTSX.MI':87,'NTSG.MI':86,'NTSZ.MI':78,'WRTY.MI':75,
+  'STHY.MI':84,'STHE.MI':83,'EUHI.MI':82,'EUHA.MI':81,
+  'PJS1.MI':90,'XGIU.MI':88,'EMLI.MI':78,'PHAU.MI':88,'CRUD.MI':75,'XEON.MI':95,
+};
+
+// ── CALCOLA MACRO SCORE ───────────────────────────────────────────
+function calcMacroScore(tickerFull, scenarios) {
+  const meta = UNIVERSE_META[tickerFull];
+  if (!meta) return 50;
+  const totW = Object.values(scenarios).reduce((a,b)=>a+b,0) || 1;
+  let sc = 0;
+  for (const [code, pct] of Object.entries(scenarios)) {
+    const w  = pct / totW;
+    const cp = (MACRO_PREF[code]||{})[meta.cat||'EQUITY'] || 50;
+    const sp = (SUB_PREF[code]||{})[meta.sub] || 0.5;
+    sc += w * cp * sp;
+  }
+  return Math.min(100, Math.round(sc));
+}
+
+// ── GENERA COMMENTO ───────────────────────────────────────────────
+function generateComment(etf, regime, scenarios, allScores, inPortfolio) {
+  const meta  = UNIVERSE_META[etf.ticker_full] || {};
+  const cat   = etf.cat;
+  const sub   = meta.sub || '';
+  const risk  = meta.risk || 1;
+  const mp    = MACRO_PREF[regime] || {};
+  const sp    = SUB_PREF[regime]   || {};
+  const catPref = mp[cat] || 50;
+  const subMult = sp[sub] || 0.5;
+
+  let lines = [];
+
+  // Riga 1: regime e categoria
+  if (catPref >= 70) {
+    lines.push(`In regime <strong>${regime}</strong>, la categoria <strong>${CAT_LABELS[cat]||cat}</strong> è <span class="pos">fortemente favorita</span> (macro_pref: ${catPref}/100).`);
+  } else if (catPref >= 40) {
+    lines.push(`In regime <strong>${regime}</strong>, la categoria <strong>${CAT_LABELS[cat]||cat}</strong> è <span class="warn">moderatamente favorita</span> (macro_pref: ${catPref}/100).`);
+  } else {
+    lines.push(`In regime <strong>${regime}</strong>, la categoria <strong>${CAT_LABELS[cat]||cat}</strong> è <span class="neg">poco favorita</span> (macro_pref: ${catPref}/100) — è in portafoglio grazie al momentum.`);
+  }
+
+  // Riga 2: sub-tipo
+  if (subMult >= 0.8) {
+    lines.push(`Il sotto-tipo <strong>${sub}</strong> ha moltiplicatore <span class="pos">${subMult}</span> in questo regime — tra i più alti dell'universo.`);
+  } else if (subMult >= 0.5) {
+    lines.push(`Il sotto-tipo <strong>${sub}</strong> ha moltiplicatore <span class="warn">${subMult}</span> — neutro nel regime corrente.`);
+  } else {
+    lines.push(`Il sotto-tipo <strong>${sub}</strong> ha moltiplicatore <span class="neg">${subMult}</span> — penalizzato nel regime corrente.`);
+  }
+
+  // Riga 3: momentum
+  if (etf.momentum_score >= 70) {
+    lines.push(`Il <strong>momentum</strong> è <span class="pos">eccellente (${etf.momentum_score}/100)</span> — tra i migliori dell'universo nelle ultime settimane.`);
+  } else if (etf.momentum_score >= 40) {
+    lines.push(`Il <strong>momentum</strong> è <span class="warn">nella media (${etf.momentum_score}/100)</span>.`);
+  } else {
+    lines.push(`Il <strong>momentum</strong> è <span class="neg">debole (${etf.momentum_score}/100)</span> — compensato dal macro favorevole.`);
+  }
+
+  // Riga 4: risk scaling per EFF_CORE
+  if (risk > 1) {
+    lines.push(`Essendo un <strong>Efficient Core (leva ${risk}x)</strong>, lo score viene diviso per il fattore rischio — il peso effettivo in portafoglio è più conservativo dello score grezzo.`);
+  }
+
+  // Riga 5: fiscal
+  if (etf.fiscal === 'ETP') {
+    lines.push(`È un <strong>ETP WisdomTree</strong> — <span class="pos">compensa plusvalenze con minusvalenze</span> fiscalmente in Italia.`);
+  }
+
+  return lines.join(' ');
+}
+
+// ── SCENARI IN/OUT ────────────────────────────────────────────────
+function getSensitivity(etf) {
+  const cat = etf.cat;
+  const meta = UNIVERSE_META[etf.ticker_full] || {};
+  const sub  = meta.sub || '';
+  const scenariIn  = [];
+  const scenariOut = [];
+
+  for (const [code, prefs] of Object.entries(MACRO_PREF)) {
+    const catPref = prefs[cat] || 0;
+    const subMult = (SUB_PREF[code]||{})[sub] || 0.5;
+    const combined = catPref * subMult;
+    if (combined >= 50) scenariIn.push({code, score: Math.round(combined)});
+    else scenariOut.push({code, score: Math.round(combined)});
+  }
+  scenariIn.sort((a,b)=>b.score-a.score);
+  scenariOut.sort((a,b)=>a.score-b.score);
+  return {in: scenariIn.slice(0,5), out: scenariOut.slice(0,5)};
+}
+
+// ── CONFRONTO CON ESCLUSI ─────────────────────────────────────────
+function getConfrontoHTML(etf, allPortfolio) {
+  // Mostra top 3 in portafoglio + 3 con score simile ma esclusi (non disponibili nel JSON)
+  const sorted = [...allPortfolio].sort((a,b) => b.final_score - a.final_score);
+  return sorted.map(e => {
+    const isThis = e.ticker === etf.ticker;
+    const cls    = isThis ? 'confronto-item selected' : 'confronto-item';
+    return `<div class="${cls}">
+      <span style="font-family:var(--mono);font-weight:700;color:${isThis?'var(--accent)':'var(--text)'}">${e.ticker}</span>
+      <span class="c-score" style="color:${e.final_score>=60?'var(--success)':e.final_score>=40?'var(--warning)':'var(--danger)'}">${e.final_score}</span>
+      ${isThis?'<span style="font-size:9px;color:var(--accent)">← questo</span>':''}
+    </div>`;
+  }).join('');
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+async function load() {
+  try {
+    const [pfRes] = await Promise.all([
+      fetch('data/portfolio.json?t='+Date.now()),
+    ]);
+    if (!pfRes.ok) throw new Error('HTTP '+pfRes.status);
+    const pf = await pfRes.json();
+    const week = pf.history[0];
+    if (!week) throw new Error('Nessuna settimana');
+
+    const regime    = week.regime;
+    const scenarios = week.regime_probs || {};
+    const portfolio = week.portfolio || [];
+    const rm        = REGIME_META[regime] || {icon:'🔮',color:'#888',label:''};
+
+    // Aggiunge cat a UNIVERSE_META
+    portfolio.forEach(e => {
+      if (UNIVERSE_META[e.ticker_full]) UNIVERSE_META[e.ticker_full].cat = e.cat;
+    });
+
+    // Top3 scenari
+    const top3 = Object.entries(scenarios).sort((a,b)=>b[1]-a[1]).slice(0,3);
+
+    let html = `
+      <div class="regime-banner" style="border-color:${rm.color};background:${rm.color}15;">
+        <div class="regime-icon">${rm.icon}</div>
+        <div>
+          <div class="regime-name" style="color:${rm.color}">${regime}</div>
+          <div class="regime-desc">${rm.label}</div>
+        </div>
+        <div class="regime-mix">
+          ${top3.map(([c,p])=>`<span class="mix-pill" style="color:${(REGIME_META[c]||{}).color||'#888'};border-color:${(REGIME_META[c]||{}).color||'#888'}40;background:${(REGIME_META[c]||{}).color||'#888'}10">${c} ${p}%</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sec-title">Analisi ETF in portafoglio — ${portfolio.length} strumenti · ${week.date}</div>
+        <div id="etf-list"></div>
+      </div>
+    `;
+
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('main').innerHTML = html;
+
+    // Render ETF cards
+    const etfListEl = document.getElementById('etf-list');
+    portfolio.forEach((etf, idx) => {
+      const catColor  = CAT_COLORS[etf.cat] || '#888';
+      const sens      = getSensitivity(etf);
+      const comment   = generateComment(etf, regime, scenarios, [], true);
+      const confronto = getConfrontoHTML(etf, portfolio);
+      const scColor   = etf.final_score>=60?'#16a34a':etf.final_score>=40?'#d97706':'#dc2626';
+
+      const card = document.createElement('div');
+      card.className = 'etf-card';
+      card.id = 'card'+idx;
+      card.innerHTML = `
+        <div class="etf-card-header" onclick="toggleCard(${idx})">
+          <span class="etf-ticker" style="color:${catColor}">${etf.ticker}</span>
+          <span class="etf-name">${etf.name}</span>
+          <span class="cat-badge c-${etf.cat}">${CAT_LABELS[etf.cat]||etf.cat}</span>
+          <span class="fiscal-badge fiscal-${etf.fiscal}">${etf.fiscal}</span>
+          <span class="etf-weight" style="color:${catColor}">${etf.weight}%</span>
+          <span class="toggle-arrow">▼</span>
+        </div>
+        <div class="etf-card-body">
+
+          <!-- SCORE BREAKDOWN -->
+          <div class="score-grid">
+            <div class="score-box">
+              <div class="val" style="color:${scColor}">${etf.final_score}</div>
+              <div class="lbl">Score finale</div>
+              <div class="score-bar-wrap"><div class="score-bar" style="width:${etf.final_score}%;background:${scColor}"></div></div>
+            </div>
+            <div class="score-box">
+              <div class="val" style="color:var(--accent)">${etf.macro_score}</div>
+              <div class="lbl">Macro (×0.55)</div>
+              <div class="score-bar-wrap"><div class="score-bar" style="width:${etf.macro_score}%;background:var(--accent)"></div></div>
+            </div>
+            <div class="score-box">
+              <div class="val" style="color:var(--accent2)">${etf.momentum_score}</div>
+              <div class="lbl">Momentum (×0.30)</div>
+              <div class="score-bar-wrap"><div class="score-bar" style="width:${etf.momentum_score}%;background:var(--accent2)"></div></div>
+            </div>
+            <div class="score-box">
+              <div class="val" style="color:var(--muted)">${etf.quality_score}</div>
+              <div class="lbl">Quality (×0.15)</div>
+              <div class="score-bar-wrap"><div class="score-bar" style="width:${etf.quality_score}%;background:var(--muted)"></div></div>
+            </div>
+          </div>
+
+          <!-- MOTIVO -->
+          <div class="motivo-block">
+            <div class="motivo-title">Perché è in portafoglio</div>
+            <div class="motivo-text">${comment}</div>
+          </div>
+
+          <!-- CONFRONTO -->
+          <div class="motivo-block">
+            <div class="motivo-title">Confronto score — tutti gli ETF in portafoglio</div>
+            <div class="confronto-grid">${confronto}</div>
+          </div>
+
+          <!-- PERFORMANCE -->
+          <div class="motivo-block">
+            <div class="motivo-title">Performance recente</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              ${[['1W',etf.ret_1w],['4W',etf.ret_4w],['12W',etf.ret_12w]].map(([l,v])=>`
+                <div class="score-box" style="min-width:80px">
+                  <div class="val" style="font-size:16px;color:${v>0?'var(--success)':v<0?'var(--danger)':'var(--muted)'}">${v!=null?(v>0?'+':'')+v.toFixed(1)+'%':'—'}</div>
+                  <div class="lbl">${l}</div>
+                </div>`).join('')}
+              ${etf.price?`<div class="score-box" style="min-width:80px"><div class="val" style="font-size:16px">€${etf.price}</div><div class="lbl">Prezzo</div></div>`:''}
+            </div>
+          </div>
+
+          <!-- SENSITIVITÀ -->
+          <div class="motivo-block">
+            <div class="motivo-title">Sensitività agli scenari</div>
+            <div class="sens-grid">
+              <div class="sens-box in">
+                <div class="sens-title">✓ Resta in portafoglio</div>
+                ${sens.in.map(s=>`<div class="sens-item">${(REGIME_META[s.code]||{}).icon||'·'} ${s.code} <span style="float:right;color:var(--success);font-weight:700">${s.score}</span></div>`).join('')}
+              </div>
+              <div class="sens-box out">
+                <div class="sens-title">✗ Rischio uscita</div>
+                ${sens.out.map(s=>`<div class="sens-item">${(REGIME_META[s.code]||{}).icon||'·'} ${s.code} <span style="float:right;color:var(--danger);font-weight:700">${s.score}</span></div>`).join('')}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      `;
+      etfListEl.appendChild(card);
+    });
+
+    document.getElementById('main').style.display = 'block';
+
+  } catch(e) {
+    document.getElementById('loader').innerHTML =
+      `<div style="color:var(--danger)">Errore: ${e.message}</div>`;
+  }
+}
+
+function toggleCard(idx) {
+  const card = document.getElementById('card'+idx);
+  card.classList.toggle('open');
+}
+
+window.addEventListener('load', load);
+</script>
+</body>
+</html>

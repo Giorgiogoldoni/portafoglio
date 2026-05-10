@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAPTOR — Dizionario Regimi</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+:root{
+  --bg:#f5f4f0;--surface:#fff;--border:#e0ddd6;--text:#1a1816;
+  --muted:#7a766e;--muted2:#a8a49c;--tag:#eeece7;
+  --accent:#1a6fcf;--success:#16a34a;--danger:#dc2626;--warning:#d97706;
+  --mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
+  --radius:8px;--shadow:0 1px 3px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.6;}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 24px;}
+
+/* HEADER */
+header{padding:16px 0 12px;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px;}
+header h1{font-size:18px;font-weight:800;letter-spacing:-.3px;}
+header h1 span{color:var(--accent);}
+.sub{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+.hdr-right{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-family:var(--sans);font-size:11px;font-weight:600;color:var(--text);text-decoration:none;cursor:pointer;transition:all .15s;}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* REGIME CORRENTE */
+.current-banner{border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;border:2px solid;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.current-icon{font-size:36px;flex-shrink:0;}
+.current-name{font-size:22px;font-weight:800;}
+.current-desc{font-size:12px;opacity:.8;margin-top:3px;}
+.current-pct{font-size:28px;font-weight:800;margin-left:auto;}
+
+/* ALLOC OTTIMALE */
+.alloc-bar-section{margin-bottom:20px;}
+.alloc-title{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.alloc-bars{display:flex;gap:0;border-radius:var(--radius);overflow:hidden;height:32px;margin-bottom:8px;}
+.alloc-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;transition:width .6s ease;min-width:0;overflow:hidden;white-space:nowrap;}
+.alloc-legend{display:flex;gap:10px;flex-wrap:wrap;}
+.alloc-leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
+.alloc-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+
+/* REGIME GRID */
+.regimi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:20px;}
+.regime-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .1s;}
+.regime-card:hover{transform:translateY(-1px);}
+.regime-card.active{border-width:2.5px;}
+.rc-header{padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.rc-icon{font-size:26px;flex-shrink:0;}
+.rc-name{font-size:15px;font-weight:800;}
+.rc-tag{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;margin-left:auto;border:1px solid;}
+.rc-body{padding:12px 16px 14px;border-top:1px solid var(--border);}
+.rc-desc{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
+
+/* ALLOC PER REGIME */
+.regime-alloc{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.ra-box{background:var(--tag);border-radius:5px;padding:7px 8px;text-align:center;}
+.ra-val{font-size:16px;font-weight:800;line-height:1;}
+.ra-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.ra-bar-wrap{height:3px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden;}
+.ra-bar{height:100%;border-radius:2px;}
+
+/* ETF FAVORITI */
+.etf-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+.etf-tag{font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:4px;border:1px solid;font-weight:600;}
+.etf-tag.fav{color:var(--success);border-color:#bbf7d0;background:#f0fdf4;}
+.etf-tag.sfav{color:var(--danger);border-color:#fecaca;background:#fff5f5;}
+
+/* TRANSIZIONI */
+.trans-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow);}
+.sec-title{font-size:9px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+/* LOADER */
+.loader{text-align:center;padding:60px;color:var(--muted);}
+.loader-spin{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:680px){.wrap{padding:12px 14px;}.regimi-grid{grid-template-columns:1fr;}.regime-alloc{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>RAPTOR <span>REGIMI</span></h1>
+    <div class="sub">Dizionario scenari · Allocazioni ottimali · ETF favoriti</div>
+  </div>
+  <div class="hdr-right">
+    <a class="btn" href="index.html">← Portfolio</a>
+    <a class="btn" href="composizione.html">🔬 Composizione</a>
+    <a class="btn" href="macro.html">🔮 Macro</a>
+    <a class="btn" href="https://giorgiogoldoni.github.io/trader/">← Hub</a>
+  </div>
+</header>
+
+<div id="loader" class="loader"><div class="loader-spin"></div>Caricamento regimi...</div>
+<div id="main" style="display:none"></div>
+
+</div>
+<script>
+const REGIMI = [
+  {
+    code:'GOLDILOCKS', icon:'🌟', color:'#00D4FF', tag:'CICLICO',
+    name:'Goldilocks',
+    desc:'Il regime ideale: crescita economica moderata con inflazione sotto controllo. Fed in pausa o accomodante. Spread creditizi compressi. Equity e HY performano, bond lunghi stabili.',
+    azionario:65, obbligazionario:15, monetario:5, materie:15,
+    fav:['WNAS','WSPX','WWRD','WRTY','EUHA','EIMI'],
+    sfav:['XEON','PHAU','XGIU','PJS1'],
+    transizioni:['EUFORIA (se eccesso)','TIGHTENING (se inflazione sale)','DISINFLAZIONE (se crescita rallenta)'],
+  },
+  {
+    code:'REFLAZIONE', icon:'📈', color:'#7FFF00', tag:'CICLICO',
+    name:'Reflazione',
+    desc:'Crescita robusta con inflazione in salita moderata. Materie prime e EM outperform. Bond reali (TIP) meglio dei nominali. Dollar debole favorisce emergenti.',
+    azionario:55, obbligazionario:15, monetario:0, materie:30,
+    fav:['CRUD','PHAU','EIMI','VFEM','EMLI','WS5X'],
+    sfav:['TLT','XEON','PJS1','XGIU'],
+    transizioni:['STAGFLAZIONE (se inflazione accelera)','GOLDILOCKS (se inflazione si stabilizza)','EUFORIA (se equity esplode)'],
+  },
+  {
+    code:'EUFORIA', icon:'🚀', color:'#FFD700', tag:'CICLICO',
+    name:'Boom Tech / Euforia',
+    desc:'Momentum estremo su equity e asset rischiosi. Valutazioni elevate, VIX basso, HY compressi. Tecnologia e small cap outperform. Rischio di correzione brusca.',
+    azionario:80, obbligazionario:10, monetario:0, materie:10,
+    fav:['WNAS','WRTY','EUHA','STHY','EIMI'],
+    sfav:['XEON','PHAU','XGIU','PJS1'],
+    transizioni:['TIGHTENING (Fed reagisce)','RISK_OFF (correzione improvvisa)','GOLDILOCKS (normalizzazione)'],
+  },
+  {
+    code:'DISINFLAZIONE', icon:'🌊', color:'#00BFFF', tag:'CICLICO',
+    name:'Disinflazione Morbida',
+    desc:'Inflazione in calo senza recessione. Bond lunghi performano, equity tiene. Dollar stabile. Contesto favorevole per bond IG e duration.',
+    azionario:50, obbligazionario:35, monetario:5, materie:10,
+    fav:['XGIU','PJS1','NTSX','WSPX','WSPE'],
+    sfav:['CRUD','EMLI','XCHA'],
+    transizioni:['GOLDILOCKS (se crescita regge)','RECESSIONE (se troppo rapida)','ZIRP (se Fed taglia troppo)'],
+  },
+  {
+    code:'TIGHTENING', icon:'🔒', color:'#E74C3C', tag:'CICLICO',
+    name:'Tightening Aggressivo',
+    desc:'Fed hawkish con rialzi aggressivi. Bond sotto pressione, equity in calo. Dollar forte. HY in stress. Oro e TIPS come protezione.',
+    azionario:20, obbligazionario:40, monetario:15, materie:25,
+    fav:['PHAU','PJS1','XGIU','WSPE','XEON'],
+    sfav:['WNAS','EMLI','XCHA','NTSZ'],
+    transizioni:['RECESSIONE (overshooting Fed)','STAGFLAZIONE (inflazione resiste)','DISINFLAZIONE (successo Fed)'],
+  },
+  {
+    code:'STAGFLAZIONE', icon:'⚠️', color:'#FF6B35', tag:'CICLICO',
+    name:'Stagflazione',
+    desc:'Il peggior scenario: crescita bassa + inflazione alta. Equity soffre, bond nominali negativi. Oro e materie prime come unica protezione reale.',
+    azionario:15, obbligazionario:20, monetario:20, materie:45,
+    fav:['PHAU','CRUD','PJS1','XEON'],
+    sfav:['WNAS','WWRD','EMLI','NTSX'],
+    transizioni:['RECESSIONE (crescita cede)','TIGHTENING (Fed reagisce forte)','RISK_OFF (panico mercati)'],
+  },
+  {
+    code:'RECESSIONE', icon:'📉', color:'#8B0000', tag:'CICLICO',
+    name:'Recessione Conclamata',
+    desc:'Contrazione economica confermata. Equity in bear market. Bond governativi safe haven. HY in stress. Cash e oro come rifugio principale.',
+    azionario:5, obbligazionario:35, monetario:40, materie:20,
+    fav:['XEON','PHAU','PJS1','XGIU'],
+    sfav:['WNAS','CRUD','EUHA','EIMI'],
+    transizioni:['RISK_OFF (crisi finanziaria)','ZIRP (Fed taglia a zero)','DISINFLAZIONE (ripresa lenta)'],
+  },
+  {
+    code:'RISK_OFF', icon:'🔴', color:'#FF3355', tag:'CICLICO',
+    name:'Risk-Off Acuto',
+    desc:'Fuga dal rischio. VIX in spike. HY spread in allargamento. Cash, oro e bond governativi come unico rifugio. Dollar forte. Correzione rapida e violenta.',
+    azionario:10, obbligazionario:30, monetario:45, materie:15,
+    fav:['XEON','PHAU','PJS1','XGIU','WSPE'],
+    sfav:['WNAS','CRUD','EUHA','EIMI','XCHA'],
+    transizioni:['RECESSIONE (se prolungato)','FINANCIAL (se sistemico)','GOLDILOCKS (se rimbalzo)'],
+  },
+  {
+    code:'ZIRP', icon:'💧', color:'#9B59B6', tag:'CICLICO',
+    name:'ZIRP / Repressione Finanziaria',
+    desc:'Tassi a zero o negativi. Ricerca di rendimento su asset rischiosi. HY e EM bond favoriti. Oro mantiene valore. Equity sale per mancanza di alternative.',
+    azionario:45, obbligazionario:30, monetario:0, materie:25,
+    fav:['EUHA','STHY','PHAU','EMLI','WSPX'],
+    sfav:['XEON','PJS1'],
+    transizioni:['GOLDILOCKS (normalizzazione)','EUFORIA (eccesso liquidità)','TIGHTENING (Fed cambia rotta)'],
+  },
+  {
+    code:'GEO_SHOCK', icon:'🌍', color:'#F39C12', tag:'CICLICO',
+    name:'Geopolitical Shock',
+    desc:'Shock geopolitico improvviso. Energia e oro in rialzo. Equity volatile con flight-to-safety. Dollar forte. Duration difensiva.',
+    azionario:10, obbligazionario:30, monetario:35, materie:25,
+    fav:['PHAU','CRUD','XEON','PJS1','XGIU'],
+    sfav:['XCHA','EIMI','WS5X','EMLI'],
+    transizioni:['RISK_OFF (escalation)','WAR (conflitto aperto)','GOLDILOCKS (risoluzione)'],
+  },
+  {
+    code:'PANDEMIC', icon:'🦠', color:'#FF69B4', tag:'SHOCK',
+    name:'Pandemic Shock',
+    desc:'Shock sanitario globale con lockdown. Equity crolla verticalmente. Cash e bond governi unici rifugi. Energia in crollo. Fed interviene con QE massiccio.',
+    azionario:5, obbligazionario:25, monetario:60, materie:10,
+    fav:['XEON','PJS1','XGIU','PHAU'],
+    sfav:['CRUD','EIMI','WS5X','EUHA'],
+    transizioni:['ZIRP (risposta Fed)','RECESSIONE (danni economici)','REFLAZIONE (ripresa)'],
+  },
+  {
+    code:'FINANCIAL', icon:'💥', color:'#DC143C', tag:'SHOCK',
+    name:'Financial Crisis',
+    desc:'Crisi finanziaria sistemica. Correlazioni si azzerano — tutto scende tranne cash e bond governi AAA. De-risking totale e immediato.',
+    azionario:0, obbligazionario:30, monetario:60, materie:10,
+    fav:['XEON','PJS1','XGIU'],
+    sfav:['EUHA','STHY','EIMI','CRUD','WNAS'],
+    transizioni:['RECESSIONE (conseguenze reali)','ZIRP (risposta banche centrali)'],
+  },
+  {
+    code:'WAR', icon:'⚔️', color:'#8B4513', tag:'SHOCK',
+    name:'War / Geo Rupture',
+    desc:'Conflitto geopolitico aperto. Energia e oro esplodono. Equity difensivo (USA) vs crollo (mercati coinvolti). Dollar e oro come riserva di valore.',
+    azionario:10, obbligazionario:25, monetario:40, materie:25,
+    fav:['PHAU','CRUD','XEON','WSPX','WSPE'],
+    sfav:['WS5X','EIMI','XCHA','EMLI'],
+    transizioni:['GEO_SHOCK (de-escalation)','STAGFLAZIONE (inflazione energia)','RISK_OFF (panico)'],
+  },
+  {
+    code:'SOVEREIGN', icon:'🏛️', color:'#4B0082', tag:'SHOCK',
+    name:'Sovereign / Debt Crisis',
+    desc:'Crisi del debito sovrano. Spread periferici esplodono. Flight-to-quality su Bund e Treasury. Euro sotto pressione. Bond governativi core come rifugio.',
+    azionario:10, obbligazionario:35, monetario:40, materie:15,
+    fav:['XEON','PHAU','PJS1','XGIU','WSPE'],
+    sfav:['WS5X','EMLI','EUHA','EIMI'],
+    transizioni:['RISK_OFF (panico)','FINANCIAL (contagio)','TIGHTENING (BCE reagisce)'],
+  },
+];
+
+const ALLOC_COLORS = {
+  azionario:'#1a6fcf',
+  obbligazionario:'#7c3aed',
+  monetario:'#64748b',
+  materie:'#d97706',
+};
+
+async function load() {
+  try {
+    const r = await fetch('data/portfolio.json?t='+Date.now());
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    const pf = await r.json();
+    const week = pf.history[0];
+    const currentRegime = week?.regime || '';
+    const scenarios = week?.regime_probs || {};
+    const top3 = Object.entries(scenarios).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    const currentData = REGIMI.find(r=>r.code===currentRegime) || REGIMI[0];
+
+    let html = '';
+
+    // Banner regime corrente
+    html += `
+      <div class="current-banner" style="border-color:${currentData.color};background:${currentData.color}12;">
+        <div class="current-icon">${currentData.icon}</div>
+        <div>
+          <div class="current-name" style="color:${currentData.color}">${currentData.name}</div>
+          <div class="current-desc" style="color:${currentData.color}">${currentData.desc.slice(0,80)}...</div>
+        </div>
+        <div class="current-pct" style="color:${currentData.color}">${scenarios[currentRegime]||'—'}%</div>
+      </div>
+    `;
+
+    // Allocazione ottimale regime corrente
+    html += `
+      <div class="trans-section">
+        <div class="sec-title">Allocazione ottimale — ${currentData.name}</div>
+        <div class="alloc-title">Distribuzione consigliata</div>
+        <div class="alloc-bars">
+          <div class="alloc-seg" style="width:${currentData.azionario}%;background:#1a6fcf">${currentData.azionario>8?currentData.azionario+'%':''}</div>
+          <div class="alloc-seg" style="width:${currentData.obbligazionario}%;background:#7c3aed">${currentData.obbligazionario>8?currentData.obbligazionario+'%':''}</div>
+          <div class="alloc-seg" style="width:${currentData.monetario}%;background:#64748b">${currentData.monetario>8?currentData.monetario+'%':''}</div>
+          <div class="alloc-seg" style="width:${currentData.materie}%;background:#d97706">${currentData.materie>8?currentData.materie+'%':''}</div>
+        </div>
+        <div class="alloc-legend">
+          <div class="alloc-leg-item"><div class="alloc-leg-dot" style="background:#1a6fcf"></div>Azionario ${currentData.azionario}%</div>
+          <div class="alloc-leg-item"><div class="alloc-leg-dot" style="background:#7c3aed"></div>Obbligazionario ${currentData.obbligazionario}%</div>
+          <div class="alloc-leg-item"><div class="alloc-leg-dot" style="background:#64748b"></div>Monetario/Cash ${currentData.monetario}%</div>
+          <div class="alloc-leg-item"><div class="alloc-leg-dot" style="background:#d97706"></div>Materie Prime ${currentData.materie}%</div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="alloc-title">ETF favoriti nel regime corrente</div>
+          <div class="etf-tags">
+            ${currentData.fav.map(t=>`<span class="etf-tag fav">✓ ${t}</span>`).join('')}
+            ${currentData.sfav.map(t=>`<span class="etf-tag sfav">✗ ${t}</span>`).join('')}
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <div class="alloc-title">Verso dove può evolvere</div>
+          <div style="font-size:11px;color:var(--muted)">${currentData.transizioni.join(' · ')}</div>
+        </div>
+      </div>
+    `;
+
+    // Tutti i regimi
+    html += `<div class="trans-section"><div class="sec-title">Tutti i regimi — Dizionario completo</div><div class="regimi-grid">`;
+
+    REGIMI.forEach(r => {
+      const isCurrent = r.code === currentRegime;
+      const pct = scenarios[r.code] || 0;
+      html += `
+        <div class="regime-card ${isCurrent?'active':''}" style="${isCurrent?'border-color:'+r.color:''}">
+          <div class="rc-header" style="background:${r.color}10;">
+            <div class="rc-icon">${r.icon}</div>
+            <div>
+              <div class="rc-name" style="color:${r.color}">${r.name}</div>
+              ${pct>0?`<div style="font-size:10px;color:${r.color};font-weight:700">Probabilità attuale: ${pct}%</div>`:''}
+            </div>
+            <span class="rc-tag" style="color:${r.color};border-color:${r.color}40;background:${r.color}10">${r.tag}</span>
+          </div>
+          <div class="rc-body">
+            <div class="rc-desc">${r.desc}</div>
+            <div class="regime-alloc">
+              ${[['Azionario',r.azionario,'#1a6fcf'],['Obbligaz.',r.obbligazionario,'#7c3aed'],['Monetario',r.monetario,'#64748b'],['Materie',r.materie,'#d97706']].map(([l,v,c])=>`
+                <div class="ra-box">
+                  <div class="ra-val" style="color:${c}">${v}%</div>
+                  <div class="ra-lbl">${l}</div>
+                  <div class="ra-bar-wrap"><div class="ra-bar" style="width:${v}%;background:${c}"></div></div>
+                </div>`).join('')}
+            </div>
+            <div class="etf-tags">
+              ${r.fav.slice(0,4).map(t=>`<span class="etf-tag fav">✓ ${t}</span>`).join('')}
+              ${r.sfav.slice(0,3).map(t=>`<span class="etf-tag sfav">✗ ${t}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += '</div></div>';
+
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('main').innerHTML = html;
+    document.getElementById('main').style.display = 'block';
+
+  } catch(e) {
+    document.getElementById('loader').innerHTML =
+      `<div style="color:var(--danger)">Errore: ${e.message}</div>`;
+  }
+}
+
+window.addEventListener('load', load);
+</script>
+</body>
+</html>

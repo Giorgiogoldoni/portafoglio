@@ -13,7 +13,7 @@
         "WAR": 6
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -28,13 +28,13 @@
           "weight_prev": 12,
           "weight_delta": 0,
           "macro_score": 56,
-          "momentum_score": 79,
+          "momentum_score": 72,
           "quality_score": 88,
-          "final_score": 68,
-          "price": 36.16,
-          "ret_1w": 6.01,
-          "ret_4w": 15.84,
-          "ret_12w": 16.34
+          "final_score": 66,
+          "price": 36.425,
+          "ret_1w": 5.43,
+          "ret_4w": 16.19,
+          "ret_12w": 17.27
         },
         {
           "ticker": "WSPX",
@@ -49,13 +49,13 @@
           "weight_prev": 11,
           "weight_delta": 0,
           "macro_score": 57,
-          "momentum_score": 45,
+          "momentum_score": 39,
           "quality_score": 90,
-          "final_score": 58,
-          "price": 38.13,
-          "ret_1w": 2.71,
-          "ret_4w": 8.28,
-          "ret_12w": 7.41
+          "final_score": 57,
+          "price": 38.26,
+          "ret_1w": 2.3,
+          "ret_4w": 8.14,
+          "ret_12w": 7.82
         },
         {
           "ticker": "CRUD",
@@ -73,10 +73,10 @@
           "momentum_score": 100,
           "quality_score": 75,
           "final_score": 68,
-          "price": 12.794,
-          "ret_1w": -5.38,
-          "ret_4w": 7.26,
-          "ret_12w": 52.71
+          "price": 13.116,
+          "ret_1w": -6.07,
+          "ret_4w": 9.3,
+          "ret_12w": 57.34
         },
         {
           "ticker": "WWRD",
@@ -91,13 +91,13 @@
           "weight_prev": 10,
           "weight_delta": 0,
           "macro_score": 56,
-          "momentum_score": 36,
+          "momentum_score": 31,
           "quality_score": 80,
-          "final_score": 54,
-          "price": 23.75,
-          "ret_1w": 2.17,
-          "ret_4w": 6.05,
-          "ret_12w": 5.09
+          "final_score": 52,
+          "price": 23.815,
+          "ret_1w": 2.28,
+          "ret_4w": 5.82,
+          "ret_12w": 5.24
         },
         {
           "ticker": "WSPE",
@@ -112,13 +112,13 @@
           "weight_prev": 9,
           "weight_delta": 0,
           "macro_score": 45,
-          "momentum_score": 43,
+          "momentum_score": 38,
           "quality_score": 85,
-          "final_score": 50,
-          "price": 27.65,
-          "ret_1w": 3.02,
-          "ret_4w": 8.92,
-          "ret_12w": 5.39
+          "final_score": 49,
+          "price": 27.775,
+          "ret_1w": 2.97,
+          "ret_4w": 8.45,
+          "ret_12w": 6.3
         },
         {
           "ticker": "WPXJ",
@@ -142,6 +142,27 @@
           "ret_12w": 0
         },
         {
+          "ticker": "EUHA",
+          "ticker_full": "EUHA.MI",
+          "name": "PIMCO Euro HY Acc",
+          "cat": "BOND_HY",
+          "sub": "EU_HY_A",
+          "risk_factor": 1.0,
+          "currency": "EUR",
+          "fiscal": "ETF",
+          "weight": 9,
+          "weight_prev": 8,
+          "weight_delta": 1,
+          "macro_score": 40,
+          "momentum_score": 50,
+          "quality_score": 81,
+          "final_score": 49,
+          "price": null,
+          "ret_1w": 0,
+          "ret_4w": 0,
+          "ret_12w": 0
+        },
+        {
           "ticker": "EIMI",
           "ticker_full": "EIMI.MI",
           "name": "iShares MSCI EM",
@@ -154,34 +175,13 @@
           "weight_prev": 8,
           "weight_delta": 0,
           "macro_score": 37,
-          "momentum_score": 66,
+          "momentum_score": 56,
           "quality_score": 82,
-          "final_score": 52,
-          "price": 47.05,
-          "ret_1w": 6.22,
-          "ret_4w": 11.97,
-          "ret_12w": 12.64
-        },
-        {
-          "ticker": "EUHA",
-          "ticker_full": "EUHA.MI",
-          "name": "PIMCO Euro HY Acc",
-          "cat": "BOND_HY",
-          "sub": "EU_HY_A",
-          "risk_factor": 1.0,
-          "currency": "EUR",
-          "fiscal": "ETF",
-          "weight": 8,
-          "weight_prev": 8,
-          "weight_delta": 0,
-          "macro_score": 40,
-          "momentum_score": 50,
-          "quality_score": 81,
           "final_score": 49,
-          "price": null,
-          "ret_1w": 0,
-          "ret_4w": 0,
-          "ret_12w": 0
+          "price": 47.21,
+          "ret_1w": 5.05,
+          "ret_4w": 11.34,
+          "ret_12w": 12.9
         },
         {
           "ticker": "XCHA",
@@ -196,13 +196,13 @@
           "weight_prev": 7,
           "weight_delta": 0,
           "macro_score": 38,
-          "momentum_score": 40,
+          "momentum_score": 42,
           "quality_score": 72,
           "final_score": 44,
-          "price": 18.344,
-          "ret_1w": 1.1,
-          "ret_4w": 7.16,
-          "ret_12w": 7.6
+          "price": 18.738,
+          "ret_1w": 2.57,
+          "ret_4w": 8.04,
+          "ret_12w": 10.06
         },
         {
           "ticker": "NTSX",
@@ -213,13 +213,13 @@
           "risk_factor": 1.5,
           "currency": "USD",
           "fiscal": "ETP",
-          "weight": 6,
+          "weight": 5,
           "weight_prev": 6,
-          "weight_delta": 0,
+          "weight_delta": -1,
           "macro_score": 51,
-          "momentum_score": 35,
+          "momentum_score": 30,
           "quality_score": 87,
-          "final_score": 52,
+          "final_score": 50,
           "price": 35.675,
           "ret_1w": 1.02,
           "ret_4w": 6.18,
@@ -238,13 +238,13 @@
           "weight_prev": 5,
           "weight_delta": 0,
           "macro_score": 51,
-          "momentum_score": 35,
+          "momentum_score": 30,
           "quality_score": 86,
-          "final_score": 51,
-          "price": 27.435,
-          "ret_1w": 2.35,
-          "ret_4w": 5.56,
-          "ret_12w": 5.01
+          "final_score": 50,
+          "price": 27.605,
+          "ret_1w": 2.09,
+          "ret_4w": 5.52,
+          "ret_12w": 5.32
         },
         {
           "ticker": "WRTY",
@@ -259,24 +259,24 @@
           "weight_prev": 5,
           "weight_delta": 0,
           "macro_score": 44,
-          "momentum_score": 43,
+          "momentum_score": 42,
           "quality_score": 75,
           "final_score": 48,
-          "price": 34.585,
-          "ret_1w": 2.1,
-          "ret_4w": 8.42,
-          "ret_12w": 7.12
+          "price": 35.11,
+          "ret_1w": 2.35,
+          "ret_4w": 9.5,
+          "ret_12w": 8.3
         }
       ],
       "macro_breakdown": {
         "EQUITY": 42,
         "EQUITY_ASIA": 16,
         "EQUITY_EM": 8,
-        "EFF_CORE": 16,
-        "BOND_HY": 8,
+        "EFF_CORE": 15,
+        "BOND_HY": 9,
         "ENERGY": 10
       },
-      "generated_at": "2026-05-12T11:53:20.338796+00:00"
+      "generated_at": "2026-05-12T16:13:24.760726+00:00"
     },
     {
       "date": "2026-05-11",

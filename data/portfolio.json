@@ -12,8 +12,8 @@
         "EUFORIA": 26,
         "WAR": 7
       },
-      "rebalance": "PARTIAL",
-      "rebalance_reason": "Deviazione 7% (avg 1.1%)",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "CRUD",
@@ -25,8 +25,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 11,
-          "weight_prev": 10,
-          "weight_delta": 1,
+          "weight_prev": 11,
+          "weight_delta": 0,
           "macro_score": 51,
           "momentum_score": 100,
           "quality_score": 75,
@@ -214,8 +214,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 6,
-          "weight_prev": 0,
-          "weight_delta": 6,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 34,
           "momentum_score": 26,
           "quality_score": 82,
@@ -276,7 +276,7 @@
         "BOND_HY": 10,
         "ENERGY": 11
       },
-      "generated_at": "2026-05-18T16:43:47.790549+00:00"
+      "generated_at": "2026-05-18T18:19:10.030730+00:00"
     },
     {
       "date": "2026-05-15",

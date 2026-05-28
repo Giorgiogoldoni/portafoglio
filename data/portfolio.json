@@ -11,7 +11,7 @@
         "EUFORIA": 39
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -128,8 +128,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 9,
-          "weight_prev": 8,
-          "weight_delta": 1,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 51,
           "momentum_score": 45,
           "quality_score": 75,
@@ -254,8 +254,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 6,
-          "weight_delta": -1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 48,
           "momentum_score": 68,
           "quality_score": 75,
@@ -273,7 +273,7 @@
         "EFF_CORE": 17,
         "ENERGY": 7
       },
-      "generated_at": "2026-05-28T11:02:36.313229+00:00"
+      "generated_at": "2026-05-28T13:47:26.297062+00:00"
     },
     {
       "date": "2026-05-27",

@@ -11,8 +11,8 @@
         "GEO_SHOCK": 13,
         "EUFORIA": 37
       },
-      "rebalance": "PARTIAL",
-      "rebalance_reason": "Deviazione 6% (avg 1.1%)",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -66,8 +66,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 10,
-          "weight_prev": 11,
-          "weight_delta": -1,
+          "weight_prev": 10,
+          "weight_delta": 0,
           "macro_score": 63,
           "momentum_score": 55,
           "quality_score": 80,
@@ -129,8 +129,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 9,
-          "weight_prev": 8,
-          "weight_delta": 1,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 51,
           "momentum_score": 39,
           "quality_score": 75,
@@ -150,8 +150,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 8,
-          "weight_prev": 9,
-          "weight_delta": -1,
+          "weight_prev": 8,
+          "weight_delta": 0,
           "macro_score": 45,
           "momentum_score": 50,
           "quality_score": 78,
@@ -234,8 +234,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 6,
-          "weight_prev": 0,
-          "weight_delta": 6,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 40,
           "momentum_score": 49,
           "quality_score": 72,
@@ -273,7 +273,7 @@
         "EQUITY_EM": 7,
         "EFF_CORE": 17
       },
-      "generated_at": "2026-06-01T15:56:31.349989+00:00"
+      "generated_at": "2026-06-01T19:16:22.393549+00:00"
     },
     {
       "date": "2026-05-29",

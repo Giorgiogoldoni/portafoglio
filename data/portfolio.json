@@ -13,7 +13,7 @@
         "EUFORIA": 11
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -88,8 +88,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 9,
-          "weight_prev": 10,
-          "weight_delta": -1,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 52,
           "momentum_score": 87,
           "quality_score": 90,
@@ -130,8 +130,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 9,
-          "weight_prev": 8,
-          "weight_delta": 1,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 43,
           "momentum_score": 96,
           "quality_score": 82,
@@ -193,8 +193,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 6,
-          "weight_delta": -1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 57,
           "momentum_score": 82,
           "quality_score": 87,
@@ -256,8 +256,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 4,
-          "weight_delta": 1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 34,
           "momentum_score": 93,
           "quality_score": 78,
@@ -273,7 +273,7 @@
         "EFF_CORE": 20,
         "BOND_IG": 27
       },
-      "generated_at": "2026-06-10T11:03:05.657187+00:00"
+      "generated_at": "2026-06-10T12:55:42.057510+00:00"
     },
     {
       "date": "2026-06-09",

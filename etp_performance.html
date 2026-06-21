@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAPTOR ETP — Performance</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff; --surface: #f8f9fa; --border: #e9ecef;
+    --text: #212529; --text-muted: #6c757d;
+    --raptor: #14532d; --accent: #16a34a;
+    --iwmo: #2196f3; --vnga: #4caf50;
+    --up: #2e7d32; --down: #c62828;
+    --hold: #6c757d; --partial: #f57c00; --rebalance: #1565c0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+  header { background: var(--raptor); color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+  header .subtitle { font-size: 12px; opacity: 0.6; margin-top: 2px; }
+  nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; margin-left: 16px; }
+  nav a:hover { color: #fff; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .stat-card .value { font-size: 22px; font-weight: 700; }
+  .stat-card .sub   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .pos { color: var(--up); }
+  .neg { color: var(--down); }
+  .neu { color: var(--text-muted); }
+
+  .legend { display: flex; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+  .chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+  .chart-wrap h2 { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .chart-container { position: relative; height: 300px; }
+
+  .diary-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .diary-wrap h2 { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: #f1f3f5; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f8f9fa; }
+  tbody td { padding: 10px 14px; font-size: 13px; vertical-align: top; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
+  .badge-HOLD      { background: #f1f3f5; color: var(--hold); }
+  .badge-PARTIAL   { background: #fff3e0; color: var(--partial); }
+  .badge-REBALANCE { background: #e3f2fd; color: var(--rebalance); }
+  .badge-INIT      { background: #f3e5f5; color: #6a1b9a; }
+
+  .move-in  { color: var(--up);   font-weight: 600; }
+  .move-out { color: var(--down); font-weight: 600; }
+  .move-up  { color: var(--up); }
+  .move-dn  { color: var(--down); }
+  .moves-list { font-size: 12px; line-height: 1.7; }
+
+  .nav-cell { font-weight: 700; font-size: 14px; }
+  .nav-ret  { font-size: 11px; color: var(--text-muted); }
+
+  #loading { text-align: center; padding: 60px; color: var(--text-muted); }
+  .empty { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; }
+
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    tbody td { font-size: 12px; padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>RAPTOR ETP — Performance</h1>
+    <div class="subtitle">NAV dal giorno 0 - confronto IWMO vs VNGA80</div>
+  </div>
+  <nav>
+    <a href="etp.html">Portfolio ETP</a>
+    <a href="index.html">Portfolio Standard</a>
+    <a href="performance.html">Performance Standard</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div id="loading">Caricamento dati...</div>
+  <div id="content" style="display:none">
+
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="chart-wrap">
+      <h2>NAV cumulata (base 100)</h2>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div> RAPTOR ETP</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2196f3"></div> IWMO (momentum)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#4caf50"></div> VNGA80 (bilanciato)</div>
+      </div>
+      <div class="chart-container">
+        <canvas id="navChart"></canvas>
+      </div>
+    </div>
+
+    <div class="diary-wrap">
+      <h2>Diario movimenti</h2>
+      <div id="diary-body"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var DATA_URL      = 'nav_history_etp.json';
+var PORTFOLIO_URL = 'data/portfolio_etp.json';
+
+function load() {
+  var nav = [], portfolio = { history: [] };
+  Promise.all([
+    fetch(DATA_URL).then(function(r){ return r.json(); }).catch(function(e){ console.warn('nav_history_etp:', e); return []; }),
+    fetch(PORTFOLIO_URL).then(function(r){ return r.json(); }).catch(function(e){ console.warn('portfolio_etp:', e); return { history: [] }; })
+  ]).then(function(results){
+    nav = results[0] || [];
+    portfolio = results[1] || { history: [] };
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+
+    renderStats(nav);
+    renderChart(nav);
+    renderDiary(portfolio.history || [], nav);
+  });
+}
+
+function renderStats(nav) {
+  if (!nav.length) {
+    document.getElementById('stats-grid').innerHTML = '<div class="empty">Nessun dato NAV disponibile ancora.<br>Il primo punto verra registrato al prossimo aggiornamento.</div>';
+    return;
+  }
+
+  var first = nav[0];
+  var last  = nav[nav.length - 1];
+
+  var retPort = ((last.nav    / first.nav    - 1) * 100).toFixed(2);
+  var retIwmo = ((last.iwmo   / first.iwmo   - 1) * 100).toFixed(2);
+  var retVnga = ((last.vnga80 / first.vnga80 - 1) * 100).toFixed(2);
+
+  var prev     = nav.length > 1 ? nav[nav.length - 2] : null;
+  var retDay   = prev ? ((last.nav    / prev.nav    - 1) * 100).toFixed(2) : '—';
+  var retDayIw = prev ? ((last.iwmo   / prev.iwmo   - 1) * 100).toFixed(2) : '—';
+  var retDayVg = prev ? ((last.vnga80 / prev.vnga80 - 1) * 100).toFixed(2) : '—';
+
+  var peak = nav[0].nav, maxDD = 0;
+  for (var i = 0; i < nav.length; i++) {
+    var p = nav[i];
+    if (p.nav > peak) peak = p.nav;
+    var dd = (p.nav - peak) / peak * 100;
+    if (dd < maxDD) maxDD = dd;
+  }
+
+  var datesSet = {};
+  nav.forEach(function(p){ datesSet[p.date] = true; });
+  var days = Object.keys(datesSet).length;
+
+  function fmt(v, sign) {
+    if (sign === undefined) sign = true;
+    var n = parseFloat(v);
+    if (isNaN(n)) return '<span class="neu">—</span>';
+    var cls = n > 0 ? 'pos' : n < 0 ? 'neg' : 'neu';
+    return '<span class="'+cls+'">'+(sign && n > 0 ? '+' : '')+v+'%</span>';
+  }
+
+  var cards = [
+    { label: 'NAV Corrente',      value: last.nav.toFixed(2), sub: 'da ' + first.date },
+    { label: 'Rendimento totale', value: fmt(retPort),        sub: 'IWMO ' + fmt(retIwmo) + ' - VNGA80 ' + fmt(retVnga) },
+    { label: 'Ultima sessione',   value: fmt(retDay),         sub: 'IWMO ' + fmt(retDayIw) + ' - VNGA80 ' + fmt(retDayVg) },
+    { label: 'Max Drawdown',      value: '<span class="'+(maxDD < -5 ? 'neg' : maxDD < 0 ? 'partial' : 'neu')+'">'+maxDD.toFixed(2)+'%</span>', sub: 'dal picco' },
+    { label: 'Giorni tracciati',  value: days, sub: nav.length + ' aggiornamenti' },
+    { label: 'Alpha vs IWMO',     value: fmt((parseFloat(retPort) - parseFloat(retIwmo)).toFixed(2)), sub: 'rendimento differenziale' },
+  ];
+
+  document.getElementById('stats-grid').innerHTML = cards.map(function(c){
+    return '<div class="stat-card"><div class="label">'+c.label+'</div><div class="value">'+c.value+'</div><div class="sub">'+c.sub+'</div></div>';
+  }).join('');
+}
+
+function renderChart(nav) {
+  if (!nav.length) return;
+
+  var byDate = {};
+  nav.forEach(function(p){ byDate[p.date] = p; });
+  var dates = Object.keys(byDate).sort();
+  var daily = dates.map(function(d){ return byDate[d]; });
+
+  var labels = daily.map(function(p){ return p.date; });
+  var dPort  = daily.map(function(p){ return p.nav; });
+  var dIwmo  = daily.map(function(p){ return p.iwmo; });
+  var dVnga  = daily.map(function(p){ return p.vnga80; });
+
+  var ctx = document.getElementById('navChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: 'RAPTOR ETP', data: dPort, borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.06)', borderWidth: 2.5, pointRadius: daily.length > 30 ? 0 : 3, tension: 0.3, fill: true },
+        { label: 'IWMO',       data: dIwmo, borderColor: '#2196f3', backgroundColor: 'transparent', borderWidth: 1.8, pointRadius: 0, tension: 0.3, borderDash: [4,3] },
+        { label: 'VNGA80',     data: dVnga, borderColor: '#4caf50', backgroundColor: 'transparent', borderWidth: 1.8, pointRadius: 0, tension: 0.3, borderDash: [2,4] },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx){ return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2); } } }
+      },
+      scales: {
+        x: { ticks: { maxTicksLimit: 10, font: { size: 11 }, color: '#888' }, grid: { color: '#f0f0f0' } },
+        y: { ticks: { font: { size: 11 }, color: '#888', callback: function(v){ return v.toFixed(1); } }, grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+}
+
+function renderDiary(history, nav) {
+  var el = document.getElementById('diary-body');
+  if (!history.length) {
+    el.innerHTML = '<div class="empty">Nessun movimento registrato ancora.</div>';
+    return;
+  }
+
+  var navByDate = {};
+  nav.forEach(function(p){ navByDate[p.date] = p; });
+
+  var rows = history.map(function(week, idx){
+    var prev = history[idx + 1] || null;
+
+    var currTickers = {};
+    (week.portfolio || []).forEach(function(e){ currTickers[e.ticker] = true; });
+    var prevTickers = {};
+    if (prev) (prev.portfolio || []).forEach(function(e){ prevTickers[e.ticker] = true; });
+
+    var entered = Object.keys(currTickers).filter(function(t){ return !prevTickers[t]; });
+    var exited  = prev ? Object.keys(prevTickers).filter(function(t){ return !currTickers[t]; }) : [];
+
+    var deltas = (week.portfolio || [])
+      .filter(function(e){ return Math.abs(e.weight_delta || 0) >= 2 && entered.indexOf(e.ticker) === -1; })
+      .sort(function(a,b){ return Math.abs(b.weight_delta) - Math.abs(a.weight_delta); })
+      .slice(0, 4);
+
+    var navPt = navByDate[week.date];
+    var navStr = navPt
+      ? '<div class="nav-cell">'+navPt.nav.toFixed(2)+'</div><div class="nav-ret">'+(navPt.ret_port >= 0 ? '+' : '')+(navPt.ret_port || 0).toFixed(2)+'%</div>'
+      : '<div class="nav-cell">—</div>';
+
+    var movesHtml = '<div class="moves-list">';
+    if (entered.length) movesHtml += entered.map(function(t){ return '<span class="move-in">+ '+t+'</span>'; }).join(' ');
+    if (exited.length)  movesHtml += (entered.length ? ' - ' : '') + exited.map(function(t){ return '<span class="move-out">- '+t+'</span>'; }).join(' ');
+    if (deltas.length) {
+      if (entered.length || exited.length) movesHtml += '<br>';
+      movesHtml += deltas.map(function(e){
+        var d = e.weight_delta || 0;
+        var cls = d > 0 ? 'move-up' : 'move-dn';
+        return '<span class="'+cls+'">'+e.ticker+' '+(d > 0 ? '+' : '')+d+'%</span>';
+      }).join(' - ');
+    }
+    if (!entered.length && !exited.length && !deltas.length) {
+      movesHtml += '<span style="color:#aaa">nessuna variazione</span>';
+    }
+    movesHtml += '</div>';
+
+    var badgeCls = 'badge badge-' + (week.rebalance || 'HOLD');
+    var geoMax = week.geo_max_area || '';
+    var geoVal = (week.geo_breakdown && geoMax) ? (week.geo_breakdown[geoMax] || '') : '';
+    var geoLine = week.geo_status ? '<div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Geo: ' + geoMax + ' ' + geoVal + '%</div>' : '';
+
+    return '<tr>'+
+      '<td style="white-space:nowrap;color:var(--text-muted)">'+week.date+'</td>'+
+      '<td><span class="'+badgeCls+'">'+(week.rebalance || 'HOLD')+'</span></td>'+
+      '<td style="max-width:160px;font-size:12px;color:var(--text-muted)">'+(week.regime || '—')+' '+(week.regime_prob?'('+week.regime_prob+'%)':'')+geoLine+'</td>'+
+      '<td>'+movesHtml+'</td>'+
+      '<td style="white-space:nowrap;text-align:right">'+navStr+'</td>'+
+    '</tr>';
+  });
+
+  el.innerHTML = '<table><thead><tr>'+
+    '<th>Data</th><th>Segnale</th><th>Regime</th><th>Movimenti</th><th style="text-align:right">NAV</th>'+
+    '</tr></thead><tbody>'+rows.join('')+'</tbody></table>';
+}
+
+load();
+</script>
+</body>
+</html>

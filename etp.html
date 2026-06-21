@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAPTOR PORTFOLIO ETP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+  :root {
+    --bg:#ffffff; --bg2:#f8f9fb; --bg3:#f0f2f5;
+    --border:#e4e8f0; --border2:#eef0f5;
+    --accent:#1a6fcf; --accent2:#e07b00; --accent3:#16a34a;
+    --text:#1a2332; --muted:#6b7c93; --muted2:#a0aec0;
+    --danger:#dc2626; --warning:#d97706; --success:#16a34a; --gold:#b45309;
+    --cat-equity:#1a6fcf; --cat-em:#7c3aed; --cat-ec:#6366f1;
+    --cat-gold:#d97706; --cat-energy:#dc2626; --cat-cash:#64748b;
+    --etp:#16a34a; --etf:#6b7c93;
+    --hold:#16a34a; --partial:#d97706; --rebalance:#dc2626; --init:#1a6fcf;
+    --font:'Syne',system-ui,sans-serif; --mono:'Space Mono',monospace;
+    --radius:8px; --shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13px;line-height:1.5;}
+  .wrap{max-width:1440px;margin:0 auto;padding:20px 24px;}
+
+  .hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:2px solid var(--border);margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .logo{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+  .logo span{color:var(--success);}
+  .logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+  .hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .status-pill{display:flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:10px;color:var(--muted);}
+  .dot{width:7px;height:7px;border-radius:50%;}
+  .dot.ok{background:var(--success);animation:pulse 2s infinite;}
+  .dot.err{background:var(--danger);}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .btn{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:11px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;text-decoration:none;white-space:nowrap;}
+  .btn:hover{border-color:var(--success);color:var(--success);}
+
+  .info-banner{display:flex;align-items:center;gap:10px;padding:10px 16px;margin-bottom:18px;border-radius:var(--radius);background:#f0fdf4;border:1px solid #bbf7d0;font-size:11px;color:#15803d;}
+
+  .rb-banner{display:flex;align-items:center;gap:14px;padding:14px 18px;margin-bottom:18px;border-radius:var(--radius);border:1px solid;border-left:4px solid;}
+  .rb-HOLD    {border-color:#bbf7d0;border-left-color:var(--hold);background:#f0fdf4;}
+  .rb-PARTIAL {border-color:#fde68a;border-left-color:var(--partial);background:#fffbeb;}
+  .rb-REBALANCE{border-color:#fecaca;border-left-color:var(--rebalance);background:#fff5f5;}
+  .rb-INIT    {border-color:#bfdbfe;border-left-color:var(--init);background:#eff6ff;}
+  .rb-icon{font-size:24px;flex-shrink:0;}
+  .rb-label{font-size:13px;font-weight:700;letter-spacing:.5px;}
+  .rb-reason{font-size:10px;color:var(--muted);margin-top:2px;}
+  .rb-date{font-size:10px;color:var(--muted);margin-left:auto;white-space:nowrap;}
+
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .pill{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;min-width:110px;}
+  .pill-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+  .pill-val{font-size:18px;font-weight:700;color:var(--text);line-height:1.1;}
+  .pill-sub{font-size:9px;color:var(--muted2);margin-top:1px;}
+
+  .section{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .sec-title{font-size:9px;font-weight:700;color:var(--success);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border2);}
+
+  .geo-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;margin-bottom:10px;}
+  .geo-seg{height:100%;}
+  .geo-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--muted);margin-bottom:10px;}
+  .geo-legend-item{display:flex;align-items:center;gap:5px;}
+  .geo-dot{width:10px;height:10px;border-radius:2px;}
+  .geo-status{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;}
+  .geo-BILANCIATO{background:#f0fdf4;color:var(--success);}
+  .geo-SBILANCIATO{background:#fffbeb;color:var(--warning);}
+  .geo-MOLTO_SBILANCIATO{background:#fff5f5;color:var(--danger);}
+
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;}
+  .cat-box{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;border-top:3px solid;}
+  .cat-name{font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+  .cat-pct{font-size:20px;font-weight:700;line-height:1;}
+  .cat-bar-wrap{margin-top:6px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .cat-bar{height:100%;border-radius:2px;transition:width .5s ease;}
+
+  .tbl-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:11px;}
+  th{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;text-align:left;padding:6px 10px;border-bottom:1.5px solid var(--border);white-space:nowrap;background:var(--bg2);}
+  td{padding:7px 10px;border-bottom:1px solid var(--border2);vertical-align:middle;}
+  tr:hover td{background:var(--bg2);}
+  .tk{font-weight:700;font-size:12px;color:var(--text);font-family:var(--mono);}
+  .nm{font-size:10px;color:var(--muted);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .area-badge{font-size:8px;padding:2px 7px;border-radius:10px;font-weight:600;white-space:nowrap;border:1px solid;}
+  .fiscal-badge{font-size:8px;padding:1px 6px;border-radius:10px;font-weight:700;border:1px solid;}
+  .fiscal-ETP{color:var(--etp);border-color:#bbf7d0;background:#f0fdf4;}
+  .fiscal-ETF{color:var(--etf);border-color:var(--border);background:var(--bg2);}
+  .w-cell{font-size:14px;font-weight:700;}
+  .delta-new{color:var(--success);font-size:9px;font-weight:700;}
+  .delta-pos{color:var(--success);}
+  .delta-neg{color:var(--danger);}
+  .delta-zero{color:var(--muted2);}
+  .ret-pos{color:var(--success);}
+  .ret-neg{color:var(--danger);}
+  .ret-flat{color:var(--muted2);}
+
+  .loader{text-align:center;padding:80px;color:var(--muted);}
+  .loader-spin{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--success);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .c-USA{color:#1a6fcf;border-color:#bfdbfe;background:#eff6ff;}
+  .c-EUROPA{color:#16a34a;border-color:#bbf7d0;background:#f0fdf4;}
+  .c-GLOBAL{color:#6b7c93;border-color:var(--border);background:var(--bg2);}
+  .c-EM_ASIA{color:#7c3aed;border-color:#e9d5ff;background:#faf5ff;}
+  .c-COMMODITY{color:#d97706;border-color:#fde68a;background:#fffbeb;}
+  .c-CASH{color:#64748b;border-color:#e2e8f0;background:#f8fafc;}
+
+  @media(max-width:768px){.wrap{padding:12px 14px;}.cat-grid{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <div>
+      <div class="logo">RAPTOR <span>ETP</span></div>
+      <div class="logo-sub">Solo strumenti ETP &middot; Momentum dinamico &middot; Paracadute XEON</div>
+    </div>
+    <div class="hdr-right">
+      <div class="status-pill"><div class="dot" id="sDot"></div><span id="sTxt">caricamento</span></div>
+      <span id="lastUpd" style="font-size:10px;color:var(--muted)">&mdash;</span>
+      <a class="btn" href="etp_performance.html">Performance</a>
+      <a class="btn" href="index.html">Portfolio Standard</a>
+      <a class="btn" href="https://giorgiogoldoni.github.io/trader/" target="_top">Hub</a>
+    </div>
+  </div>
+
+  <div class="info-banner">Universo limitato a 14 strumenti ETP/ETF &middot; PHAU e CRUD limitati al 25% &middot; XEON entra solo nei regimi di crisi</div>
+
+  <div id="loaderMsg" class="loader"><div class="loader-spin"></div>Caricamento Portfolio ETP...</div>
+
+  <div id="main" style="display:none">
+
+    <div class="rb-banner" id="rbBanner">
+      <div class="rb-icon" id="rbIcon">&mdash;</div>
+      <div><div class="rb-label" id="rbLabel">&mdash;</div><div class="rb-reason" id="rbReason">&mdash;</div></div>
+      <div class="rb-date" id="rbDate">&mdash;</div>
+    </div>
+
+    <div class="pills" id="pills"></div>
+
+    <div class="section">
+      <div class="sec-title">Copertura geografica</div>
+      <div class="geo-bar" id="geoBar"></div>
+      <div class="geo-legend" id="geoLegend"></div>
+      <span class="geo-status" id="geoStatus"></span>
+    </div>
+
+    <div class="section">
+      <div class="sec-title">Esposizione per categoria</div>
+      <div class="cat-grid" id="catGrid"></div>
+    </div>
+
+    <div class="section">
+      <div class="sec-title">Portafoglio ETP &mdash; dettaglio</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Ticker</th><th>Nome</th><th>Area</th><th>Fiscal</th>
+            <th>Peso%</th><th>Delta</th><th>Score</th>
+            <th>Macro</th><th>Mom</th>
+            <th>1W%</th><th>4W%</th><th>12W%</th><th>CCY</th>
+          </tr></thead>
+          <tbody id="pfBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const AREA_COLORS = { USA:'#1a6fcf', EUROPA:'#16a34a', GLOBAL:'#6b7c93', EM_ASIA:'#7c3aed', COMMODITY:'#d97706', CASH:'#64748b' };
+const AREA_LABELS = { USA:'USA', EUROPA:'Europa', GLOBAL:'Global', EM_ASIA:'EM/Asia', COMMODITY:'Materie prime', CASH:'Cash' };
+const CAT_COLORS  = { EQUITY:'#1a6fcf', EQUITY_EM:'#7c3aed', EFF_CORE:'#6366f1', GOLD:'#d97706', ENERGY:'#dc2626', CASH:'#64748b' };
+const CAT_LABELS  = { EQUITY:'Equity', EQUITY_EM:'EM Equity', EFF_CORE:'Eff. Core', GOLD:'Oro', ENERGY:'Energia', CASH:'Cash' };
+const RB_META = {
+  HOLD:     {icon:'OK',label:'HOLD - Nessun ribilanciamento',    cls:'rb-HOLD'},
+  PARTIAL:  {icon:'!', label:'PARTIAL - Ribilanciamento parziale',cls:'rb-PARTIAL'},
+  REBALANCE:{icon:'R', label:'REBALANCE - Ribilanciamento completo',cls:'rb-REBALANCE'},
+  INIT:     {icon:'I', label:'INIT - Prima configurazione',       cls:'rb-INIT'},
+};
+const GEO_STATUS_LABEL = { BILANCIATO:'Bilanciato', SBILANCIATO:'Sbilanciato', MOLTO_SBILANCIATO:'Molto sbilanciato' };
+
+let PF = null;
+
+async function load() {
+  try {
+    const r = await fetch('data/portfolio_etp.json?t=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    PF = await r.json();
+    if (!PF.history || !PF.history.length) throw new Error('Nessuna settimana');
+    document.getElementById('loaderMsg').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    document.getElementById('sDot').className = 'dot ok';
+    document.getElementById('sTxt').textContent = 'online';
+    const gen = new Date(PF.history[0].generated_at);
+    document.getElementById('lastUpd').textContent = gen.toLocaleString('it-IT');
+    renderWeek();
+  } catch(e) {
+    document.getElementById('sDot').className = 'dot err';
+    document.getElementById('sTxt').textContent = 'errore';
+    document.getElementById('loaderMsg').innerHTML =
+      '<div style="color:var(--danger)">Errore: ' + e.message + '</div>';
+  }
+}
+
+function renderWeek() {
+  const week = PF.history[0];
+  if (!week) return;
+
+  const rb = RB_META[week.rebalance] || RB_META.HOLD;
+  const banner = document.getElementById('rbBanner');
+  banner.className = 'rb-banner ' + rb.cls;
+  document.getElementById('rbIcon').textContent   = rb.icon;
+  document.getElementById('rbLabel').textContent  = rb.label;
+  document.getElementById('rbReason').textContent = week.rebalance_reason || '';
+  document.getElementById('rbDate').textContent   = week.date;
+
+  const pf = week.portfolio || [];
+
+  const newPos = pf.filter(function(e){ return e.weight_prev === 0; }).length;
+  document.getElementById('pills').innerHTML = [
+    {l:'Posizioni attive', v:pf.length,            s:'su 14 strumenti'},
+    {l:'Nuovi ingressi',   v:newPos,                s:'questa rilevazione'},
+    {l:'Regime',           v:week.regime,           s:(week.regime_prob||0)+'% probabilita'},
+    {l:'Peso Momentum',    v:(week.mom_weight||0)+'%', s:'dinamico'},
+    {l:'Peso Macro',       v:(week.macro_weight||0)+'%', s:'dinamico'},
+    {l:'Segnale',          v:week.rebalance,        s:week.date},
+  ].map(function(p){
+    return '<div class="pill"><div class="pill-label">'+p.l+'</div><div class="pill-val">'+p.v+'</div><div class="pill-sub">'+p.s+'</div></div>';
+  }).join('');
+
+  const geo = week.geo_breakdown || {};
+  const geoBar = document.getElementById('geoBar');
+  const geoLegend = document.getElementById('geoLegend');
+  geoBar.innerHTML = '';
+  geoLegend.innerHTML = '';
+  Object.keys(geo).forEach(function(area){
+    const pct = geo[area];
+    if (!pct) return;
+    const seg = document.createElement('div');
+    seg.className = 'geo-seg';
+    seg.style.width = pct + '%';
+    seg.style.background = AREA_COLORS[area] || '#ccc';
+    geoBar.appendChild(seg);
+    const item = document.createElement('div');
+    item.className = 'geo-legend-item';
+    item.innerHTML = '<span class="geo-dot" style="background:'+(AREA_COLORS[area]||'#ccc')+'"></span>'+(AREA_LABELS[area]||area)+' '+pct+'%';
+    geoLegend.appendChild(item);
+  });
+  const statusEl = document.getElementById('geoStatus');
+  statusEl.className = 'geo-status geo-' + (week.geo_status || 'BILANCIATO');
+  statusEl.textContent = (GEO_STATUS_LABEL[week.geo_status] || week.geo_status || '—') +
+    (week.geo_max_area ? ' - ' + (AREA_LABELS[week.geo_max_area]||week.geo_max_area) + ' al ' + (geo[week.geo_max_area]||0) + '%' : '');
+
+  const bd = week.macro_breakdown || {};
+  document.getElementById('catGrid').innerHTML = Object.keys(CAT_LABELS).map(function(c){
+    const pct = bd[c] || 0;
+    if (!pct) return '';
+    return '<div class="cat-box" style="border-top-color:'+CAT_COLORS[c]+'">'+
+      '<div class="cat-name">'+CAT_LABELS[c]+'</div>'+
+      '<div class="cat-pct" style="color:'+CAT_COLORS[c]+'">'+pct+'%</div>'+
+      '<div class="cat-bar-wrap"><div class="cat-bar" style="width:'+pct+'%;background:'+CAT_COLORS[c]+'"></div></div>'+
+    '</div>';
+  }).join('');
+
+  document.getElementById('pfBody').innerHTML = pf.map(function(e){
+    const dc = e.weight_delta > 0.5 ? 'delta-pos' : e.weight_delta < -0.5 ? 'delta-neg' : 'delta-zero';
+    const ds = e.weight_prev === 0
+      ? '<span class="delta-new">NEW</span>'
+      : e.weight_delta === 0
+        ? '<span class="delta-zero">&mdash;</span>'
+        : '<span class="'+dc+'">'+(e.weight_delta>0?'+':'')+e.weight_delta.toFixed(0)+'%</span>';
+    const rcf = function(v){ return v > 0.3 ? 'ret-pos' : v < -0.3 ? 'ret-neg' : 'ret-flat'; };
+    const rf  = function(v){ return v == null ? '&mdash;' : (v>0?'+':'')+v.toFixed(1)+'%'; };
+    return '<tr>'+
+      '<td class="tk">'+e.ticker+'</td>'+
+      '<td class="nm" title="'+e.name+'">'+e.name+'</td>'+
+      '<td><span class="area-badge c-'+e.area+'">'+(AREA_LABELS[e.area]||e.area)+'</span></td>'+
+      '<td><span class="fiscal-badge fiscal-'+e.fiscal+'">'+e.fiscal+'</span></td>'+
+      '<td class="w-cell" style="color:'+(CAT_COLORS[e.cat]||'var(--text)')+'">'+e.weight+'%</td>'+
+      '<td>'+ds+'</td>'+
+      '<td>'+e.final_score+'</td>'+
+      '<td style="color:var(--accent)">'+e.macro_score+'</td>'+
+      '<td style="color:var(--accent2)">'+e.momentum_score+'</td>'+
+      '<td class="'+rcf(e.ret_1w)+'">'+rf(e.ret_1w)+'</td>'+
+      '<td class="'+rcf(e.ret_4w)+'">'+rf(e.ret_4w)+'</td>'+
+      '<td class="'+rcf(e.ret_12w)+'">'+rf(e.ret_12w)+'</td>'+
+      '<td style="color:var(--muted)">'+e.currency+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
+window.addEventListener('load', load);
+</script>
+</body>
+</html>

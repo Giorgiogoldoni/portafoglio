@@ -236,6 +236,7 @@ function renderWeek() {
   const geoLegend = document.getElementById('geoLegend');
   geoBar.innerHTML = '';
   geoLegend.innerHTML = '';
+  const areaMom = week.area_momentum || {};
   Object.keys(geo).forEach(function(area){
     const pct = geo[area];
     if (!pct) return;
@@ -244,9 +245,12 @@ function renderWeek() {
     seg.style.width = pct + '%';
     seg.style.background = AREA_COLORS[area] || '#ccc';
     geoBar.appendChild(seg);
+    const mom = areaMom[area];
+    const arrow = mom == null ? '' : mom >= 60 ? ' ↑' : mom <= 40 ? ' ↓' : ' →';
+    const arrowColor = mom == null ? '' : mom >= 60 ? 'color:#16a34a' : mom <= 40 ? 'color:#dc2626' : 'color:#6b7c93';
     const item = document.createElement('div');
     item.className = 'geo-legend-item';
-    item.innerHTML = '<span class="geo-dot" style="background:'+(AREA_COLORS[area]||'#ccc')+'"></span>'+(AREA_LABELS[area]||area)+' '+pct+'%';
+    item.innerHTML = '<span class="geo-dot" style="background:'+(AREA_COLORS[area]||'#ccc')+'"></span>'+(AREA_LABELS[area]||area)+' '+pct+'%<span style="font-weight:700;'+arrowColor+'">'+arrow+'</span>';
     geoLegend.appendChild(item);
   });
   const statusEl = document.getElementById('geoStatus');

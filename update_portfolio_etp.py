@@ -77,6 +77,13 @@ MACRO_PREF_DEFAULT = {"EQUITY":50,"EQUITY_EM":35,"EFF_CORE":50,"GOLD":40,"ENERGY
 
 CRISIS_REGIMES = {"RISK_OFF","RECESSIONE","PANDEMIC","FINANCIAL","WAR","SOVEREIGN","GEO_SHOCK"}
 
+# ── PROXY GEOGRAFICI (già scaricati dal macro classifier, costo zero) ──
+# USA=SPY, Europa=VGK, EM/Asia=EEM, Global=media dei tre
+GEO_PROXY = {"USA": "SPY", "EUROPA": "VGK", "EM_ASIA": "EEM"}
+GEO_MOMENTUM_K = 0.15   # intensità del moltiplicatore geografico (0=off, 0.15=leggero)
+# Aree escluse dal moltiplicatore (non hanno senso geografico)
+GEO_EXCLUDE_CATS = {"GOLD", "ENERGY", "CASH"}
+
 
 # ── MACRO SCORE ───────────────────────────────────────────────────
 def macro_scores(scenarios: dict) -> dict:
@@ -91,6 +98,44 @@ def macro_scores(scenarios: dict) -> dict:
             cp = MACRO_PREF.get(code, MACRO_PREF_DEFAULT).get(cat, 50)
             sc += w * cp
         scores[tk] = min(100, round(sc))
+    return scores
+
+
+# ── MOMENTUM GEOGRAFICO (proxy USA/Europa/EM) ──────────────────────
+def area_momentum_scores(prices_proxy: dict) -> dict:
+    """
+    Calcola il momentum relativo per area geografica usando proxy ETF.
+    Ritorna dict {area: score_0_100} normalizzato.
+    GLOBAL = media di USA + EUROPA + EM_ASIA.
+    Aree senza proxy (COMMODITY, CASH) tornano 50 = neutro.
+    """
+    raw = {}
+    for area, ticker in GEO_PROXY.items():
+        d = prices_proxy.get(ticker, {})
+        vals = [d.get("r4w"), d.get("r12w")]
+        valid = [v for v in vals if v is not None]
+        raw[area] = sum(valid) / len(valid) if valid else None
+
+    # GLOBAL = media degli altri tre se disponibili
+    global_vals = [v for v in raw.values() if v is not None]
+    raw["GLOBAL"] = sum(global_vals) / len(global_vals) if global_vals else None
+
+    known = {a: v for a, v in raw.items() if v is not None}
+    if not known or len(known) < 2:
+        return {a: 50 for a in AREAS}
+
+    vmin, vmax = min(known.values()), max(known.values())
+    scores = {}
+    for area in AREAS:
+        v = raw.get(area)
+        if v is None:
+            scores[area] = 50
+        elif vmax == vmin:
+            scores[area] = 50
+        else:
+            scores[area] = round((v - vmin) / (vmax - vmin) * 100)
+
+    print("   Area momentum: " + " | ".join(f"{a}={scores[a]}" for a in ["USA","EUROPA","GLOBAL","EM_ASIA"]))
     return scores
 
 
@@ -113,14 +158,24 @@ def dynamic_weights(regime_prob: float) -> tuple:
     return round(mom, 1), round(macro, 1)
 
 
-# ── SCORE FINALE (dinamico, no Quality) ────────────────────────────
-def final_scores(macro: dict, mom: dict, mom_weight: float, macro_weight: float) -> dict:
+# ── SCORE FINALE (dinamico, no Quality, con moltiplicatore geografico) ──
+def final_scores(macro: dict, mom: dict, mom_weight: float, macro_weight: float,
+                 area_scores: dict = None) -> dict:
     scores = {}
     for etf in UNIVERSE:
-        tk = etf["ticker"]
-        m  = macro.get(tk, 50)
-        mo = mom.get(tk, 50)
-        scores[tk] = round(m * (macro_weight/100) + mo * (mom_weight/100))
+        tk  = etf["ticker"]
+        m   = macro.get(tk, 50)
+        mo  = mom.get(tk, 50)
+        sc  = m * (macro_weight/100) + mo * (mom_weight/100)
+
+        # Moltiplicatore geografico: amplifica/smorza in base al momentum dell'area
+        if area_scores and etf["cat"] not in GEO_EXCLUDE_CATS:
+            area_sc = area_scores.get(etf["area"], 50)
+            # area_sc 0-100 → bonus da -k a +k rispetto a neutro (50)
+            bonus = GEO_MOMENTUM_K * (area_sc - 50) / 50
+            sc = sc * (1 + bonus)
+
+        scores[tk] = round(max(0, min(100, sc)))
     return scores
 
 
@@ -258,13 +313,15 @@ def run():
     tickers = [e["ticker"] for e in UNIVERSE]
     prices  = rc.fetch_prices(tickers)
 
-    print("\n📡 Download benchmark (IWMO, VNGA80)...")
+    print("\n📡 Download benchmark (IWMO, VNGA80) e proxy geografici (SPY, VGK, EEM)...")
     prices_bench = rc.fetch_benchmark_prices(["IWMO.MI", "VNGA80.MI"])
+    prices_geo   = rc.fetch_prices(list(GEO_PROXY.values()))
 
     print("\n🧮 Calcolo scores...")
-    m_sc  = macro_scores(scenarios)
-    mo_sc = rc.momentum_score(prices)
-    f_sc  = final_scores(m_sc, mo_sc, mom_w, macro_w)
+    m_sc   = macro_scores(scenarios)
+    mo_sc  = rc.momentum_score(prices)
+    ar_sc  = area_momentum_scores(prices_geo)
+    f_sc   = final_scores(m_sc, mo_sc, mom_w, macro_w, ar_sc)
 
     print("\n⚖️  Ottimizzazione pesi...")
     weights = optimize_weights(f_sc, prev_weights, scenarios)
@@ -320,6 +377,7 @@ def run():
         "geo_breakdown":    geo_bd,
         "geo_status":       geo_status,
         "geo_max_area":     geo_max_area,
+        "area_momentum":    ar_sc,
         "generated_at":     datetime.now(timezone.utc).isoformat(),
     }
 

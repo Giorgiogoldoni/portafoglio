@@ -13,8 +13,8 @@
         "GEO_SHOCK": 11,
         "EUFORIA": 9
       },
-      "rebalance": "PARTIAL",
-      "rebalance_reason": "Deviazione 7% (avg 1.1%)",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -173,8 +173,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 7,
-          "weight_prev": 0,
-          "weight_delta": 7,
+          "weight_prev": 7,
+          "weight_delta": 0,
           "macro_score": 28,
           "momentum_score": 88,
           "quality_score": 72,
@@ -276,7 +276,7 @@
         "EFF_CORE": 22,
         "BOND_IG": 16
       },
-      "generated_at": "2026-06-23T10:42:41.082976+00:00"
+      "generated_at": "2026-06-23T12:32:34.712866+00:00"
     },
     {
       "date": "2026-06-22",

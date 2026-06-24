@@ -143,8 +143,8 @@
       "NTSX.MI": 7,
       "NTSZ.MI": 7
     },
-    "ret_port": -1.6059,
-    "ret_iwmo": -2.7658,
-    "ret_vnga80": -0.8201
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

@@ -392,16 +392,16 @@
       "VNGA80.MI": 43.314998626708984
     },
     "weights": {
-      "PJS1.MI": 17,
-      "XGIU.MI": 12,
-      "WNAS.MI": 9,
+      "PJS1.MI": 16,
+      "XGIU.MI": 11,
+      "WNAS.MI": 10,
       "WSPX.MI": 9,
       "WWRD.MI": 9,
-      "WSPE.MI": 9,
+      "WSPE.MI": 8,
       "WS5X.MI": 8,
       "SMEA.MI": 7,
-      "NTSX.MI": 5,
-      "NTSG.MI": 5,
+      "NTSX.MI": 6,
+      "NTSG.MI": 6,
       "WRTY.MI": 5,
       "NTSZ.MI": 5
     },

@@ -265,10 +265,10 @@
     "vnga80": 98.9831,
     "prices": {
       "WNAS.MI": 37.715,
+      "XCHA.MI": 19.236,
       "WWRD.MI": 24.56,
       "WSPX.MI": 39.385,
       "WSPE.MI": 27.665,
-      "XCHA.MI": 19.236,
       "XMME.MI": 81.144,
       "WRTY.MI": 37.33,
       "NTSG.MI": 28.745,
@@ -281,15 +281,15 @@
     },
     "weights": {
       "WNAS.MI": 13,
+      "XCHA.MI": 12,
       "WWRD.MI": 12,
       "WSPX.MI": 12,
       "WSPE.MI": 12,
-      "XCHA.MI": 11,
       "XMME.MI": 10,
       "WRTY.MI": 9,
       "NTSG.MI": 7,
       "NTSX.MI": 7,
-      "NTSZ.MI": 7
+      "NTSZ.MI": 6
     },
     "ret_port": 0.0,
     "ret_iwmo": 0.0,

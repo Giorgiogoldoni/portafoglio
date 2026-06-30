@@ -3,19 +3,19 @@
     {
       "date": "2026-06-30",
       "regime": "DISINFLAZIONE",
-      "regime_prob": 43,
+      "regime_prob": 41,
       "regime_probs": {
-        "GOLDILOCKS": 11,
+        "GOLDILOCKS": 12,
         "REFLAZIONE": 7,
-        "DISINFLAZIONE": 43,
-        "RECESSIONE": 5,
+        "DISINFLAZIONE": 41,
+        "RECESSIONE": 6,
         "ZIRP": 7,
-        "TIGHTENING": 5,
-        "GEO_SHOCK": 12,
-        "EUFORIA": 10
+        "TIGHTENING": 3,
+        "GEO_SHOCK": 13,
+        "EUFORIA": 11
       },
-      "mom_weight": 46.2,
-      "macro_weight": 53.8,
+      "mom_weight": 43.8,
+      "macro_weight": 56.2,
       "rebalance": "HOLD",
       "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
       "portfolio": [
@@ -38,26 +38,6 @@
           "ret_1w": -2.67,
           "ret_4w": -1.8,
           "ret_12w": 24.02
-        },
-        {
-          "ticker": "XCHA",
-          "ticker_full": "XCHA.MI",
-          "name": "iShares China",
-          "cat": "EQUITY_EM",
-          "area": "EM_ASIA",
-          "risk_factor": 1.1,
-          "currency": "USD",
-          "fiscal": "ETF",
-          "weight": 12,
-          "weight_prev": 11,
-          "weight_delta": 1,
-          "macro_score": 44,
-          "momentum_score": 83,
-          "final_score": 71,
-          "price": 19.236,
-          "ret_1w": -2.95,
-          "ret_4w": 3.78,
-          "ret_12w": 13.63
         },
         {
           "ticker": "WWRD",
@@ -120,6 +100,26 @@
           "ret_12w": 11.71
         },
         {
+          "ticker": "XCHA",
+          "ticker_full": "XCHA.MI",
+          "name": "iShares China",
+          "cat": "EQUITY_EM",
+          "area": "EM_ASIA",
+          "risk_factor": 1.1,
+          "currency": "USD",
+          "fiscal": "ETF",
+          "weight": 11,
+          "weight_prev": 12,
+          "weight_delta": -1,
+          "macro_score": 44,
+          "momentum_score": 83,
+          "final_score": 70,
+          "price": 19.236,
+          "ret_1w": -2.95,
+          "ret_4w": 3.78,
+          "ret_12w": 13.63
+        },
+        {
           "ticker": "XMME",
           "ticker_full": "XMME.MI",
           "name": "Xtrackers MSCI EM",
@@ -133,7 +133,7 @@
           "weight_delta": 0,
           "macro_score": 44,
           "momentum_score": 71,
-          "final_score": 65,
+          "final_score": 64,
           "price": 81.144,
           "ret_1w": -6.16,
           "ret_4w": -2.6,
@@ -173,7 +173,7 @@
           "weight_delta": 0,
           "macro_score": 64,
           "momentum_score": 75,
-          "final_score": 69,
+          "final_score": 68,
           "price": 28.745,
           "ret_1w": -1.13,
           "ret_4w": 0.54,
@@ -193,7 +193,7 @@
           "weight_delta": 0,
           "macro_score": 64,
           "momentum_score": 74,
-          "final_score": 68,
+          "final_score": 67,
           "price": 36.93,
           "ret_1w": -0.83,
           "ret_4w": -0.81,
@@ -208,9 +208,9 @@
           "risk_factor": 1.5,
           "currency": "EUR",
           "fiscal": "ETP",
-          "weight": 6,
-          "weight_prev": 7,
-          "weight_delta": -1,
+          "weight": 7,
+          "weight_prev": 6,
+          "weight_delta": 1,
           "macro_score": 64,
           "momentum_score": 82,
           "final_score": 61,
@@ -222,14 +222,14 @@
       ],
       "macro_breakdown": {
         "EQUITY": 49,
-        "EQUITY_EM": 22,
-        "EFF_CORE": 29
+        "EQUITY_EM": 21,
+        "EFF_CORE": 30
       },
       "geo_breakdown": {
         "USA": 53,
-        "EUROPA": 6,
+        "EUROPA": 7,
         "GLOBAL": 19,
-        "EM_ASIA": 22
+        "EM_ASIA": 21
       },
       "geo_status": "SBILANCIATO",
       "geo_max_area": "USA",
@@ -241,7 +241,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-06-30T16:22:00.483022+00:00"
+      "generated_at": "2026-06-30T18:18:36.317847+00:00"
     },
     {
       "date": "2026-06-29",

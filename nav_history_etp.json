@@ -402,8 +402,8 @@
       "NTSG.MI": 7,
       "XMME.MI": 6
     },
-    "ret_port": -0.8246,
-    "ret_iwmo": -2.8242,
-    "ret_vnga80": -0.6607
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

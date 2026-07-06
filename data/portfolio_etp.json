@@ -16,7 +16,7 @@
       "mom_weight": 56.2,
       "macro_weight": 43.8,
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -68,8 +68,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 13,
-          "weight_prev": 12,
-          "weight_delta": 1,
+          "weight_prev": 13,
+          "weight_delta": 0,
           "macro_score": 53,
           "momentum_score": 95,
           "final_score": 81,
@@ -108,8 +108,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 10,
-          "weight_prev": 11,
-          "weight_delta": -1,
+          "weight_prev": 10,
+          "weight_delta": 0,
           "macro_score": 53,
           "momentum_score": 84,
           "final_score": 72,
@@ -240,7 +240,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-06T13:44:06.722418+00:00"
+      "generated_at": "2026-07-06T16:50:27.104592+00:00"
     },
     {
       "date": "2026-07-03",

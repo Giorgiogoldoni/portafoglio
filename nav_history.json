@@ -651,8 +651,8 @@
       "WRTY.MI": 5,
       "NTSZ.MI": 4
     },
-    "ret_port": -0.5336,
-    "ret_iwmo": -3.9607,
-    "ret_vnga80": -0.9784
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

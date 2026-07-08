@@ -486,8 +486,8 @@
     "iwmo": 93.6355,
     "vnga80": 99.4516,
     "prices": {
-      "WNAS.MI": 37.23,
       "WSPX.MI": 39.85,
+      "WNAS.MI": 37.23,
       "WSPE.MI": 28.155,
       "WWRD.MI": 24.835,
       "WRTY.MI": 37.2,
@@ -502,8 +502,8 @@
       "VNGA80.MI": 43.52000045776367
     },
     "weights": {
-      "WNAS.MI": 13,
       "WSPX.MI": 13,
+      "WNAS.MI": 13,
       "WSPE.MI": 13,
       "WWRD.MI": 12,
       "WRTY.MI": 10,

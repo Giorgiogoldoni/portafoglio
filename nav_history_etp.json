@@ -550,8 +550,8 @@
       "WS5X.MI": 8,
       "NTSZ.MI": 6
     },
-    "ret_port": -0.7299,
-    "ret_iwmo": -0.0696,
-    "ret_vnga80": -0.4596
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

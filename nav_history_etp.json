@@ -528,8 +528,8 @@
       "WWRD.MI": 24.66,
       "WSPE.MI": 27.745,
       "WRTY.MI": 36.91,
-      "NTSX.MI": 37.31,
       "XMME.MI": 79.612,
+      "NTSX.MI": 37.31,
       "NTSG.MI": 28.99,
       "WS5X.MI": 45.25,
       "NTSZ.MI": 28.745
@@ -542,10 +542,10 @@
       "WNAS.MI": 14,
       "WSPX.MI": 14,
       "WWRD.MI": 12,
-      "WSPE.MI": 11,
+      "WSPE.MI": 12,
       "WRTY.MI": 9,
-      "NTSX.MI": 9,
       "XMME.MI": 9,
+      "NTSX.MI": 8,
       "NTSG.MI": 8,
       "WS5X.MI": 8,
       "NTSZ.MI": 6

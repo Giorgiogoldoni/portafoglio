@@ -684,16 +684,16 @@
       "WSPX.MI": 9,
       "WNAS.MI": 9,
       "WWRD.MI": 8,
-      "WSPE.MI": 8,
+      "WSPE.MI": 7,
       "WS5X.MI": 7,
       "NTSX.MI": 6,
       "NTSG.MI": 6,
       "SMEA.MI": 6,
       "WRTY.MI": 5,
-      "NTSZ.MI": 4
+      "NTSZ.MI": 5
     },
-    "ret_port": -0.6705,
-    "ret_iwmo": -0.0696,
-    "ret_vnga80": -0.4596
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

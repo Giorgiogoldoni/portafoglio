@@ -15,8 +15,8 @@
       },
       "mom_weight": 38.8,
       "macro_weight": 61.2,
-      "rebalance": "REBALANCE",
-      "rebalance_reason": "Deviazione massima 9% su XCHA.MI · XCHA in · WS5X out",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -48,8 +48,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 13,
-          "weight_prev": 14,
-          "weight_delta": -1,
+          "weight_prev": 13,
+          "weight_delta": 0,
           "macro_score": 58,
           "momentum_score": 85,
           "final_score": 79,
@@ -108,8 +108,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 10,
-          "weight_prev": 9,
-          "weight_delta": 1,
+          "weight_prev": 10,
+          "weight_delta": 0,
           "macro_score": 40,
           "momentum_score": 84,
           "final_score": 65,
@@ -148,8 +148,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 9,
-          "weight_prev": 0,
-          "weight_delta": 9,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 40,
           "momentum_score": 84,
           "final_score": 65,
@@ -188,8 +188,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 7,
-          "weight_prev": 8,
-          "weight_delta": -1,
+          "weight_prev": 7,
+          "weight_delta": 0,
           "macro_score": 59,
           "momentum_score": 84,
           "final_score": 72,
@@ -240,7 +240,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-10T10:29:31.858183+00:00"
+      "generated_at": "2026-07-10T12:24:55.182507+00:00"
     },
     {
       "date": "2026-07-09",

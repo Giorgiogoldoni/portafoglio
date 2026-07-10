@@ -13,7 +13,7 @@
         "EUFORIA": 6
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -108,9 +108,9 @@
           "risk_factor": 1.0,
           "currency": "USD",
           "fiscal": "ETP",
-          "weight": 9,
+          "weight": 8,
           "weight_prev": 9,
-          "weight_delta": 0,
+          "weight_delta": -1,
           "macro_score": 48,
           "momentum_score": 79,
           "quality_score": 80,
@@ -150,9 +150,9 @@
           "risk_factor": 1.0,
           "currency": "EUR",
           "fiscal": "ETP",
-          "weight": 7,
+          "weight": 8,
           "weight_prev": 7,
-          "weight_delta": 0,
+          "weight_delta": 1,
           "macro_score": 41,
           "momentum_score": 70,
           "quality_score": 82,
@@ -184,27 +184,6 @@
           "ret_12w": 5.68
         },
         {
-          "ticker": "NTSX",
-          "ticker_full": "NTSX.MI",
-          "name": "WT US Efficient Core",
-          "cat": "EFF_CORE",
-          "sub": "US_EC",
-          "risk_factor": 1.5,
-          "currency": "USD",
-          "fiscal": "ETP",
-          "weight": 6,
-          "weight_prev": 6,
-          "weight_delta": 0,
-          "macro_score": 52,
-          "momentum_score": 83,
-          "quality_score": 87,
-          "final_score": 67,
-          "price": 37.555,
-          "ret_1w": 0.62,
-          "ret_4w": 4.26,
-          "ret_12w": 9.92
-        },
-        {
           "ticker": "NTSG",
           "ticker_full": "NTSG.MI",
           "name": "WT Global Eff. Core",
@@ -224,6 +203,27 @@
           "ret_1w": 0.24,
           "ret_4w": 5.17,
           "ret_12w": 9.59
+        },
+        {
+          "ticker": "NTSX",
+          "ticker_full": "NTSX.MI",
+          "name": "WT US Efficient Core",
+          "cat": "EFF_CORE",
+          "sub": "US_EC",
+          "risk_factor": 1.5,
+          "currency": "USD",
+          "fiscal": "ETP",
+          "weight": 6,
+          "weight_prev": 6,
+          "weight_delta": 0,
+          "macro_score": 52,
+          "momentum_score": 74,
+          "quality_score": 87,
+          "final_score": 64,
+          "price": 42.985,
+          "ret_1w": 0.64,
+          "ret_4w": 3.56,
+          "ret_12w": 7.2
         },
         {
           "ticker": "WRTY",
@@ -273,7 +273,7 @@
         "EFF_CORE": 22,
         "BOND_IG": 27
       },
-      "generated_at": "2026-07-10T12:24:59.924804+00:00"
+      "generated_at": "2026-07-10T16:22:21.755041+00:00"
     },
     {
       "date": "2026-07-09",

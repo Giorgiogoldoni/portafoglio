@@ -698,7 +698,7 @@
   },
   {
     "date": "2026-07-10",
-    "nav": 100.9958,
+    "nav": 101.872,
     "iwmo": 98.3986,
     "vnga80": 100.2871,
     "prices": {
@@ -710,8 +710,8 @@
       "WSPE.MI": 27.745,
       "WS5X.MI": 45.895,
       "SMEA.MI": 104.02,
-      "NTSX.MI": 37.555,
       "NTSG.MI": 29.19,
+      "NTSX.MI": 42.985,
       "WRTY.MI": 37.425,
       "NTSZ.MI": 28.745
     },
@@ -724,16 +724,16 @@
       "XGIU.MI": 11,
       "WNAS.MI": 10,
       "WSPX.MI": 10,
-      "WWRD.MI": 9,
+      "WWRD.MI": 8,
       "WSPE.MI": 8,
-      "WS5X.MI": 7,
+      "WS5X.MI": 8,
       "SMEA.MI": 7,
-      "NTSX.MI": 6,
       "NTSG.MI": 6,
+      "NTSX.MI": 6,
       "WRTY.MI": 5,
       "NTSZ.MI": 5
     },
-    "ret_port": 0.0,
+    "ret_port": 0.8675,
     "ret_iwmo": 0.0,
     "ret_vnga80": 0.0
   }

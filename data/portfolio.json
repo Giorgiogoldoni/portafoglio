@@ -11,8 +11,8 @@
         "TIGHTENING": 14,
         "GEO_SHOCK": 15
       },
-      "rebalance": "REBALANCE",
-      "rebalance_reason": "Cambio regime: DISINFLAZIONE → GOLDILOCKS",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -24,8 +24,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 16,
-          "weight_prev": 15,
-          "weight_delta": 1,
+          "weight_prev": 16,
+          "weight_delta": 0,
           "macro_score": 44,
           "momentum_score": 53,
           "quality_score": 90,
@@ -129,8 +129,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 8,
-          "weight_prev": 9,
-          "weight_delta": -1,
+          "weight_prev": 8,
+          "weight_delta": 0,
           "macro_score": 43,
           "momentum_score": 76,
           "quality_score": 85,
@@ -272,7 +272,7 @@
         "EFF_CORE": 22,
         "BOND_IG": 27
       },
-      "generated_at": "2026-07-13T16:26:59.503465+00:00"
+      "generated_at": "2026-07-13T18:16:52.539855+00:00"
     },
     {
       "date": "2026-07-10",

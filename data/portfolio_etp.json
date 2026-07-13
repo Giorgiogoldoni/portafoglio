@@ -14,8 +14,8 @@
       },
       "mom_weight": 30.0,
       "macro_weight": 70.0,
-      "rebalance": "REBALANCE",
-      "rebalance_reason": "Cambio regime: DISINFLAZIONE → GOLDILOCKS",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WNAS",
@@ -107,8 +107,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 9,
-          "weight_prev": 8,
-          "weight_delta": 1,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 39,
           "momentum_score": 77,
           "final_score": 56,
@@ -147,8 +147,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 8,
-          "weight_prev": 9,
-          "weight_delta": -1,
+          "weight_prev": 8,
+          "weight_delta": 0,
           "macro_score": 58,
           "momentum_score": 83,
           "final_score": 75,
@@ -239,7 +239,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-13T16:26:53.266146+00:00"
+      "generated_at": "2026-07-13T18:16:52.698832+00:00"
     },
     {
       "date": "2026-07-10",

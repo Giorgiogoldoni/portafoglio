@@ -745,8 +745,8 @@
     "prices": {
       "PJS1.MI": 97.643,
       "XGIU.MI": 22.61,
-      "WSPX.MI": 40.21,
       "WNAS.MI": 38.11,
+      "WSPX.MI": 40.21,
       "WWRD.MI": 25.01,
       "WSPE.MI": 28.24,
       "WS5X.MI": 45.825,
@@ -761,12 +761,12 @@
       "VNGA80.MI": 43.720001220703125
     },
     "weights": {
-      "PJS1.MI": 15,
+      "PJS1.MI": 16,
       "XGIU.MI": 11,
-      "WSPX.MI": 10,
       "WNAS.MI": 10,
+      "WSPX.MI": 10,
       "WWRD.MI": 9,
-      "WSPE.MI": 9,
+      "WSPE.MI": 8,
       "WS5X.MI": 7,
       "SMEA.MI": 7,
       "NTSG.MI": 6,

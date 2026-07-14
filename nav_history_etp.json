@@ -639,10 +639,10 @@
       "WSPE.MI": 28.24,
       "WWRD.MI": 24.995,
       "NTSX.MI": 37.785,
-      "WS5X.MI": 45.81,
       "WRTY.MI": 36.925,
-      "NTSG.MI": 29.47,
+      "WS5X.MI": 45.81,
       "CRUD.MI": 11.806,
+      "NTSG.MI": 29.47,
       "NTSZ.MI": 28.285
     },
     "bench_px": {
@@ -654,11 +654,11 @@
       "WNAS.MI": 14,
       "WSPE.MI": 13,
       "WWRD.MI": 11,
-      "NTSX.MI": 10,
-      "WS5X.MI": 10,
-      "WRTY.MI": 8,
+      "NTSX.MI": 9,
+      "WRTY.MI": 9,
+      "WS5X.MI": 9,
+      "CRUD.MI": 8,
       "NTSG.MI": 7,
-      "CRUD.MI": 7,
       "NTSZ.MI": 6
     },
     "ret_port": 0.0,

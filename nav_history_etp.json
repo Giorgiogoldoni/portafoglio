@@ -661,8 +661,8 @@
       "CRUD.MI": 7,
       "NTSZ.MI": 6
     },
-    "ret_port": -0.123,
-    "ret_iwmo": -0.7853,
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
     "ret_vnga80": 0.0
   }
 ]

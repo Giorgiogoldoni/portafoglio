@@ -12,7 +12,7 @@
         "GEO_SHOCK": 15
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -45,8 +45,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 11,
-          "weight_prev": 12,
-          "weight_delta": -1,
+          "weight_prev": 11,
+          "weight_delta": 0,
           "macro_score": 41,
           "momentum_score": 68,
           "quality_score": 88,
@@ -66,8 +66,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 10,
-          "weight_prev": 9,
-          "weight_delta": 1,
+          "weight_prev": 10,
+          "weight_delta": 0,
           "macro_score": 44,
           "momentum_score": 95,
           "quality_score": 90,
@@ -150,8 +150,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 8,
-          "weight_prev": 7,
-          "weight_delta": 1,
+          "weight_prev": 8,
+          "weight_delta": 0,
           "macro_score": 40,
           "momentum_score": 79,
           "quality_score": 82,
@@ -255,8 +255,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 6,
-          "weight_delta": -1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 32,
           "momentum_score": 87,
           "quality_score": 75,
@@ -273,7 +273,7 @@
         "BOND_IG": 27,
         "ENERGY": 5
       },
-      "generated_at": "2026-07-16T15:29:46.079304+00:00"
+      "generated_at": "2026-07-16T17:45:46.718736+00:00"
     },
     {
       "date": "2026-07-15",

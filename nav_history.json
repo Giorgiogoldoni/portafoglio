@@ -916,8 +916,8 @@
       "WNAS.MI": 37.395,
       "SMEA.MI": 104.28,
       "NTSG.MI": 29.49,
-      "CRUD.MI": 12.332,
       "NTSX.MI": 37.585,
+      "CRUD.MI": 12.332,
       "WRTY.MI": 37.345
     },
     "bench_px": {
@@ -925,7 +925,7 @@
       "VNGA80.MI": 43.66999816894531
     },
     "weights": {
-      "PJS1.MI": 18,
+      "PJS1.MI": 17,
       "XGIU.MI": 12,
       "WSPX.MI": 9,
       "WWRD.MI": 9,
@@ -934,8 +934,8 @@
       "WNAS.MI": 7,
       "SMEA.MI": 7,
       "NTSG.MI": 6,
+      "NTSX.MI": 6,
       "CRUD.MI": 6,
-      "NTSX.MI": 5,
       "WRTY.MI": 5
     },
     "ret_port": 0.0,

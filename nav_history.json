@@ -938,8 +938,8 @@
       "CRUD.MI": 6,
       "WRTY.MI": 5
     },
-    "ret_port": -0.0115,
-    "ret_iwmo": -1.2964,
-    "ret_vnga80": -0.1714
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

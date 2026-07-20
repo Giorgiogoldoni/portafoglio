@@ -13,8 +13,8 @@
         "GEO_SHOCK": 15,
         "WAR": 5
       },
-      "rebalance": "REBALANCE",
-      "rebalance_reason": "Cambio regime: DISINFLAZIONE → REFLAZIONE · STHY in · WNAS out",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -152,8 +152,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 7,
-          "weight_prev": 6,
-          "weight_delta": 1,
+          "weight_prev": 7,
+          "weight_delta": 0,
           "macro_score": 43,
           "momentum_score": 100,
           "quality_score": 75,
@@ -194,8 +194,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 7,
-          "weight_prev": 0,
-          "weight_delta": 7,
+          "weight_prev": 7,
+          "weight_delta": 0,
           "macro_score": 28,
           "momentum_score": 63,
           "quality_score": 84,
@@ -257,8 +257,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 4,
-          "weight_prev": 5,
-          "weight_delta": -1,
+          "weight_prev": 4,
+          "weight_delta": 0,
           "macro_score": 30,
           "momentum_score": 71,
           "quality_score": 75,
@@ -276,7 +276,7 @@
         "BOND_IG": 29,
         "ENERGY": 7
       },
-      "generated_at": "2026-07-20T15:47:37.633236+00:00"
+      "generated_at": "2026-07-20T18:27:59.797012+00:00"
     },
     {
       "date": "2026-07-17",

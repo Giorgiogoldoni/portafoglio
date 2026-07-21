@@ -17,7 +17,7 @@
       "mom_weight": 30.0,
       "macro_weight": 70.0,
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WSPX",
@@ -49,8 +49,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 12,
-          "weight_prev": 13,
-          "weight_delta": -1,
+          "weight_prev": 12,
+          "weight_delta": 0,
           "macro_score": 51,
           "momentum_score": 58,
           "final_score": 61,
@@ -69,8 +69,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 12,
-          "weight_prev": 11,
-          "weight_delta": 1,
+          "weight_prev": 12,
+          "weight_delta": 0,
           "macro_score": 51,
           "momentum_score": 53,
           "final_score": 59,
@@ -241,7 +241,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-21T09:37:12.697994+00:00"
+      "generated_at": "2026-07-21T11:46:42.788519+00:00"
     },
     {
       "date": "2026-07-20",

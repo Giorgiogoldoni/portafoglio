@@ -180,6 +180,26 @@
           "ret_12w": 7.32
         },
         {
+          "ticker": "NTSG",
+          "ticker_full": "NTSG.MI",
+          "name": "WT Global Eff. Core",
+          "cat": "EFF_CORE",
+          "area": "GLOBAL",
+          "risk_factor": 1.5,
+          "currency": "USD",
+          "fiscal": "ETP",
+          "weight": 7,
+          "weight_prev": 7,
+          "weight_delta": 0,
+          "macro_score": 52,
+          "momentum_score": 50,
+          "final_score": 53,
+          "price": 29.46,
+          "ret_1w": -0.27,
+          "ret_4w": 1.87,
+          "ret_12w": 10.13
+        },
+        {
           "ticker": "NTSZ",
           "ticker_full": "NTSZ.MI",
           "name": "WT Eurozone Eff. Core",
@@ -198,26 +218,6 @@
           "ret_1w": -0.25,
           "ret_4w": 0.46,
           "ret_12w": 5.27
-        },
-        {
-          "ticker": "NTSG",
-          "ticker_full": "NTSG.MI",
-          "name": "WT Global Eff. Core",
-          "cat": "EFF_CORE",
-          "area": "GLOBAL",
-          "risk_factor": 1.5,
-          "currency": "USD",
-          "fiscal": "ETP",
-          "weight": 7,
-          "weight_prev": 7,
-          "weight_delta": 0,
-          "macro_score": 52,
-          "momentum_score": 38,
-          "final_score": 50,
-          "price": 33.46,
-          "ret_1w": -0.65,
-          "ret_4w": 2.01,
-          "ret_12w": 6.48
         }
       ],
       "macro_breakdown": {
@@ -241,7 +241,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-23T15:52:02.125831+00:00"
+      "generated_at": "2026-07-23T17:54:41.590626+00:00"
     },
     {
       "date": "2026-07-22",

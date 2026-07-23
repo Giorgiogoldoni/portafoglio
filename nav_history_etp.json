@@ -889,7 +889,7 @@
   },
   {
     "date": "2026-07-23",
-    "nav": 101.4284,
+    "nav": 100.5796,
     "iwmo": 95.5709,
     "vnga80": 99.4972,
     "prices": {
@@ -901,8 +901,8 @@
       "WWRD.MI": 24.97,
       "WRTY.MI": 37.165,
       "NTSX.MI": 37.375,
-      "NTSZ.MI": 28.28,
-      "NTSG.MI": 33.46
+      "NTSG.MI": 29.46,
+      "NTSZ.MI": 28.28
     },
     "bench_px": {
       "IWMO.MI": 102.70999908447266,
@@ -917,10 +917,10 @@
       "WWRD.MI": 10,
       "WRTY.MI": 7,
       "NTSX.MI": 7,
-      "NTSZ.MI": 7,
-      "NTSG.MI": 7
+      "NTSG.MI": 7,
+      "NTSZ.MI": 7
     },
-    "ret_port": 0.9504,
+    "ret_port": -0.8368,
     "ret_iwmo": 0.0,
     "ret_vnga80": 0.0
   }

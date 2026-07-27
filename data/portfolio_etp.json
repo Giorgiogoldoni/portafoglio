@@ -18,7 +18,7 @@
       "mom_weight": 41.2,
       "macro_weight": 58.8,
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "CRUD",
@@ -70,8 +70,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 12,
-          "weight_prev": 13,
-          "weight_delta": -1,
+          "weight_prev": 12,
+          "weight_delta": 0,
           "macro_score": 52,
           "momentum_score": 47,
           "final_score": 57,
@@ -150,8 +150,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 8,
-          "weight_prev": 7,
-          "weight_delta": 1,
+          "weight_prev": 8,
+          "weight_delta": 0,
           "macro_score": 53,
           "momentum_score": 44,
           "final_score": 57,
@@ -242,7 +242,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-27T16:12:50.372478+00:00"
+      "generated_at": "2026-07-27T18:01:32.463927+00:00"
     },
     {
       "date": "2026-07-24",

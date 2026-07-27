@@ -985,11 +985,11 @@
     "weights": {
       "CRUD.MI": 13,
       "WS5X.MI": 13,
-      "WSPX.MI": 13,
+      "WSPX.MI": 12,
       "WWRD.MI": 11,
       "WSPE.MI": 11,
       "WNAS.MI": 11,
-      "WRTY.MI": 7,
+      "WRTY.MI": 8,
       "NTSX.MI": 7,
       "NTSZ.MI": 7,
       "NTSG.MI": 7

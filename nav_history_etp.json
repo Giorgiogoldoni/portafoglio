@@ -994,8 +994,8 @@
       "NTSZ.MI": 7,
       "NTSG.MI": 7
     },
-    "ret_port": 0.1484,
-    "ret_iwmo": -0.8811,
-    "ret_vnga80": 0.1389
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

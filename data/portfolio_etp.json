@@ -17,8 +17,8 @@
       },
       "mom_weight": 30.0,
       "macro_weight": 70.0,
-      "rebalance": "REBALANCE",
-      "rebalance_reason": "Deviazione massima 10% su PHAU.MI · PHAU in · WNAS out",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WS5X",
@@ -30,8 +30,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 15,
-          "weight_prev": 16,
-          "weight_delta": -1,
+          "weight_prev": 15,
+          "weight_delta": 0,
           "macro_score": 48,
           "momentum_score": 100,
           "final_score": 73,
@@ -50,8 +50,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 12,
-          "weight_prev": 13,
-          "weight_delta": -1,
+          "weight_prev": 12,
+          "weight_delta": 0,
           "macro_score": 48,
           "momentum_score": 65,
           "final_score": 58,
@@ -130,8 +130,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 10,
-          "weight_prev": 0,
-          "weight_delta": 10,
+          "weight_prev": 10,
+          "weight_delta": 0,
           "macro_score": 67,
           "momentum_score": 0,
           "final_score": 47,
@@ -190,8 +190,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 7,
-          "weight_prev": 8,
-          "weight_delta": -1,
+          "weight_prev": 7,
+          "weight_delta": 0,
           "macro_score": 49,
           "momentum_score": 68,
           "final_score": 60,
@@ -243,7 +243,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-28T16:02:35.249780+00:00"
+      "generated_at": "2026-07-28T17:51:21.848018+00:00"
     },
     {
       "date": "2026-07-27",

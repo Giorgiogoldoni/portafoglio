@@ -1083,8 +1083,8 @@
       "WSPE.MI": 27.765,
       "WSPX.MI": 39.39,
       "WWRD.MI": 24.64,
-      "PHAU.MI": 372.01,
       "NTSZ.MI": 28.37,
+      "PHAU.MI": 372.01,
       "NTSG.MI": 29.12,
       "NTSX.MI": 36.83,
       "WRTY.MI": 36.7
@@ -1098,9 +1098,9 @@
       "WS5X.MI": 13,
       "WSPE.MI": 12,
       "WSPX.MI": 12,
-      "WWRD.MI": 10,
-      "PHAU.MI": 10,
+      "WWRD.MI": 11,
       "NTSZ.MI": 9,
+      "PHAU.MI": 9,
       "NTSG.MI": 7,
       "NTSX.MI": 7,
       "WRTY.MI": 7

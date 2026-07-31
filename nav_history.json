@@ -1316,14 +1316,14 @@
     "prices": {
       "PJS1.MI": 97.525,
       "CRUD.MI": 12.562,
-      "XASX.MI": 524.85,
       "WS5X.MI": 46.31,
+      "XASX.MI": 524.85,
       "SMEA.MI": 105.44,
       "WWRD.MI": 24.515,
-      "PHAU.MI": 380.13,
       "WSPX.MI": 38.95,
-      "EMLI.MI": 57.5,
+      "PHAU.MI": 380.13,
       "NTSG.MI": 29.02,
+      "EMLI.MI": 57.5,
       "NTSZ.MI": 28.37,
       "NTSX.MI": 36.495
     },
@@ -1332,16 +1332,16 @@
       "VNGA80.MI": 42.86000061035156
     },
     "weights": {
-      "PJS1.MI": 17,
+      "PJS1.MI": 16,
       "CRUD.MI": 10,
-      "XASX.MI": 10,
       "WS5X.MI": 10,
+      "XASX.MI": 10,
       "SMEA.MI": 9,
       "WWRD.MI": 9,
-      "PHAU.MI": 7,
       "WSPX.MI": 7,
+      "PHAU.MI": 7,
+      "NTSG.MI": 6,
       "EMLI.MI": 6,
-      "NTSG.MI": 5,
       "NTSZ.MI": 5,
       "NTSX.MI": 5
     },

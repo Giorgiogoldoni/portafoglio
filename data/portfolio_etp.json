@@ -16,7 +16,7 @@
       "mom_weight": 46.2,
       "macro_weight": 53.8,
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WS5X",
@@ -48,8 +48,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 15,
-          "weight_prev": 14,
-          "weight_delta": 1,
+          "weight_prev": 15,
+          "weight_delta": 0,
           "macro_score": 68,
           "momentum_score": 100,
           "final_score": 83,
@@ -68,8 +68,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 12,
-          "weight_prev": 11,
-          "weight_delta": 1,
+          "weight_prev": 12,
+          "weight_delta": 0,
           "macro_score": 54,
           "momentum_score": 46,
           "final_score": 50,
@@ -128,8 +128,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 9,
-          "weight_prev": 10,
-          "weight_delta": -1,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 54,
           "momentum_score": 35,
           "final_score": 45,
@@ -168,8 +168,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 8,
-          "weight_prev": 9,
-          "weight_delta": -1,
+          "weight_prev": 8,
+          "weight_delta": 0,
           "macro_score": 67,
           "momentum_score": 2,
           "final_score": 37,
@@ -241,7 +241,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-07-31T15:59:37.949514+00:00"
+      "generated_at": "2026-07-31T18:01:38.772589+00:00"
     },
     {
       "date": "2026-07-30",

@@ -13,7 +13,7 @@
         "WAR": 6
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PJS1",
@@ -25,8 +25,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 16,
-          "weight_prev": 17,
-          "weight_delta": -1,
+          "weight_prev": 16,
+          "weight_delta": 0,
           "macro_score": 33,
           "momentum_score": 48,
           "quality_score": 90,
@@ -193,8 +193,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 6,
-          "weight_prev": 5,
-          "weight_delta": 1,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 42,
           "momentum_score": 60,
           "quality_score": 86,
@@ -277,7 +277,7 @@
         "GOLD": 7,
         "ENERGY": 10
       },
-      "generated_at": "2026-07-31T15:59:29.859577+00:00"
+      "generated_at": "2026-07-31T18:01:42.239879+00:00"
     },
     {
       "date": "2026-07-30",

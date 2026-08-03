@@ -1157,9 +1157,9 @@
       "WWRD.MI": 24.73,
       "WSPX.MI": 39.325,
       "WSPE.MI": 27.72,
+      "PHAU.MI": 374.79,
       "NTSZ.MI": 28.37,
       "NTSG.MI": 29.23,
-      "WNAS.MI": 35.625,
       "WRTY.MI": 36.17,
       "NTSX.MI": 36.495
     },
@@ -1168,16 +1168,16 @@
       "VNGA80.MI": 43.01499938964844
     },
     "weights": {
-      "WS5X.MI": 15,
-      "CRUD.MI": 13,
+      "WS5X.MI": 14,
+      "CRUD.MI": 12,
       "WWRD.MI": 12,
       "WSPX.MI": 12,
       "WSPE.MI": 11,
-      "NTSZ.MI": 9,
+      "PHAU.MI": 9,
+      "NTSZ.MI": 8,
       "NTSG.MI": 8,
-      "WNAS.MI": 8,
-      "WRTY.MI": 6,
-      "NTSX.MI": 6
+      "WRTY.MI": 7,
+      "NTSX.MI": 7
     },
     "ret_port": 0.0,
     "ret_iwmo": 0.0,

@@ -14,7 +14,7 @@
         "EUFORIA": 5
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "WS5X",
@@ -47,8 +47,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 10,
-          "weight_prev": 11,
-          "weight_delta": -1,
+          "weight_prev": 10,
+          "weight_delta": 0,
           "macro_score": 47,
           "momentum_score": 78,
           "quality_score": 80,
@@ -110,8 +110,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 10,
-          "weight_prev": 9,
-          "weight_delta": 1,
+          "weight_prev": 10,
+          "weight_delta": 0,
           "macro_score": 37,
           "momentum_score": 81,
           "quality_score": 75,
@@ -275,7 +275,7 @@
         "EFF_CORE": 24,
         "GOLD": 8
       },
-      "generated_at": "2026-08-07T14:49:02.391808+00:00"
+      "generated_at": "2026-08-07T17:14:53.318262+00:00"
     },
     {
       "date": "2026-08-06",

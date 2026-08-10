@@ -1339,9 +1339,9 @@
     "prices": {
       "WS5X.MI": 47.775,
       "WSPE.MI": 28.96,
+      "PHAU.MI": 403.35,
       "WSPX.MI": 40.85,
       "WWRD.MI": 25.5,
-      "PHAU.MI": 403.35,
       "WNAS.MI": 37.675,
       "NTSZ.MI": 29.0,
       "WRTY.MI": 37.505,
@@ -1353,11 +1353,11 @@
       "VNGA80.MI": 44.220001220703125
     },
     "weights": {
-      "WS5X.MI": 16,
+      "WS5X.MI": 15,
       "WSPE.MI": 12,
+      "PHAU.MI": 12,
       "WSPX.MI": 12,
-      "WWRD.MI": 11,
-      "PHAU.MI": 10,
+      "WWRD.MI": 10,
       "WNAS.MI": 10,
       "NTSZ.MI": 8,
       "WRTY.MI": 7,

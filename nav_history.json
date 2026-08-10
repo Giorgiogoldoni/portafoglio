@@ -1560,8 +1560,8 @@
     "iwmo": 94.9022,
     "vnga80": 101.5385,
     "prices": {
-      "WS5X.MI": 47.775,
       "PHAU.MI": 403.35,
+      "WS5X.MI": 47.775,
       "WWRD.MI": 25.5,
       "WSPX.MI": 40.85,
       "SMEA.MI": 107.1,
@@ -1578,16 +1578,16 @@
       "VNGA80.MI": 44.220001220703125
     },
     "weights": {
+      "PHAU.MI": 12,
       "WS5X.MI": 11,
-      "PHAU.MI": 11,
       "WWRD.MI": 10,
       "WSPX.MI": 10,
       "SMEA.MI": 10,
-      "WSPE.MI": 10,
-      "XASX.MI": 9,
+      "WSPE.MI": 9,
+      "XASX.MI": 8,
       "WNAS.MI": 8,
       "NTSG.MI": 6,
-      "NTSX.MI": 5,
+      "NTSX.MI": 6,
       "NTSZ.MI": 5,
       "WRTY.MI": 5
     },

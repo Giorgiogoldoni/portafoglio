@@ -12,8 +12,8 @@
         "EUFORIA": 6,
         "WAR": 6
       },
-      "rebalance": "PARTIAL",
-      "rebalance_reason": "Deviazione 8% (avg 1.4%)",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PHAU",
@@ -46,8 +46,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 12,
-          "weight_prev": 11,
-          "weight_delta": 1,
+          "weight_prev": 12,
+          "weight_delta": 0,
           "macro_score": 38,
           "momentum_score": 100,
           "quality_score": 82,
@@ -172,8 +172,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 7,
-          "weight_prev": 0,
-          "weight_delta": 7,
+          "weight_prev": 7,
+          "weight_delta": 0,
           "macro_score": 31,
           "momentum_score": 50,
           "quality_score": 78,
@@ -193,8 +193,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 6,
-          "weight_prev": 5,
-          "weight_delta": 1,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 36,
           "momentum_score": 78,
           "quality_score": 78,
@@ -235,8 +235,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 6,
-          "weight_delta": -1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 38,
           "momentum_score": 50,
           "quality_score": 87,
@@ -274,7 +274,7 @@
         "EFF_CORE": 22,
         "GOLD": 12
       },
-      "generated_at": "2026-08-11T08:14:51.661751+00:00"
+      "generated_at": "2026-08-11T10:49:42.819970+00:00"
     },
     {
       "date": "2026-08-10",

@@ -1753,8 +1753,8 @@
       "WRTY.MI": 5,
       "NTSX.MI": 5
     },
-    "ret_port": 0.0528,
-    "ret_iwmo": 1.9238,
-    "ret_vnga80": 0.1921
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

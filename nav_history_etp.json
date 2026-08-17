@@ -1524,30 +1524,30 @@
     "prices": {
       "WS5X.MI": 47.85,
       "PHAU.MI": 406.58,
+      "WWRD.MI": 25.525,
       "WSPX.MI": 40.9,
+      "NTSZ.MI": 29.225,
       "WSPE.MI": 29.04,
       "WNAS.MI": 37.865,
-      "WWRD.MI": 25.525,
+      "NTSG.MI": 30.06,
       "WRTY.MI": 37.82,
-      "NTSZ.MI": 29.225,
-      "NTSX.MI": 38.165,
-      "NTSG.MI": 30.06
+      "NTSX.MI": 38.165
     },
     "bench_px": {
       "IWMO.MI": 102.22000122070312,
       "VNGA80.MI": 44.31999969482422
     },
     "weights": {
-      "WS5X.MI": 13,
-      "PHAU.MI": 12,
-      "WSPX.MI": 12,
-      "WSPE.MI": 12,
-      "WNAS.MI": 11,
+      "WS5X.MI": 15,
+      "PHAU.MI": 13,
       "WWRD.MI": 11,
-      "WRTY.MI": 8,
-      "NTSZ.MI": 7,
-      "NTSX.MI": 7,
-      "NTSG.MI": 7
+      "WSPX.MI": 11,
+      "NTSZ.MI": 10,
+      "WSPE.MI": 10,
+      "WNAS.MI": 10,
+      "NTSG.MI": 7,
+      "WRTY.MI": 7,
+      "NTSX.MI": 6
     },
     "ret_port": 0.0,
     "ret_iwmo": 0.0,

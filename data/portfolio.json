@@ -12,8 +12,8 @@
         "EUFORIA": 6,
         "WAR": 6
       },
-      "rebalance": "PARTIAL",
-      "rebalance_reason": "Deviazione 8% (avg 1.2%)",
+      "rebalance": "HOLD",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PHAU",
@@ -172,8 +172,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 7,
-          "weight_prev": 0,
-          "weight_delta": 7,
+          "weight_prev": 7,
+          "weight_delta": 0,
           "macro_score": 33,
           "momentum_score": 60,
           "quality_score": 82,
@@ -256,8 +256,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 6,
-          "weight_prev": 5,
-          "weight_delta": 1,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 34,
           "momentum_score": 77,
           "quality_score": 75,
@@ -274,7 +274,7 @@
         "EFF_CORE": 24,
         "GOLD": 12
       },
-      "generated_at": "2026-08-18T07:50:22.415711+00:00"
+      "generated_at": "2026-08-18T10:26:02.084238+00:00"
     },
     {
       "date": "2026-08-17",

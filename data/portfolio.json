@@ -15,7 +15,7 @@
         "WAR": 5
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PHAU",
@@ -27,8 +27,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 13,
-          "weight_prev": 12,
-          "weight_delta": 1,
+          "weight_prev": 13,
+          "weight_delta": 0,
           "macro_score": 56,
           "momentum_score": 99,
           "quality_score": 88,
@@ -111,8 +111,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 9,
-          "weight_prev": 10,
-          "weight_delta": -1,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 38,
           "momentum_score": 59,
           "quality_score": 90,
@@ -276,7 +276,7 @@
         "EFF_CORE": 23,
         "GOLD": 13
       },
-      "generated_at": "2026-08-19T14:26:47.546395+00:00"
+      "generated_at": "2026-08-19T16:55:05.801143+00:00"
     },
     {
       "date": "2026-08-18",

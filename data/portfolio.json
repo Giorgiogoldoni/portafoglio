@@ -12,7 +12,7 @@
         "EUFORIA": 7
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 2.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "PHAU",
@@ -24,8 +24,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 12,
-          "weight_prev": 11,
-          "weight_delta": 1,
+          "weight_prev": 12,
+          "weight_delta": 0,
           "macro_score": 51,
           "momentum_score": 99,
           "quality_score": 88,
@@ -108,8 +108,8 @@
           "currency": "USD",
           "fiscal": "ETF",
           "weight": 9,
-          "weight_prev": 7,
-          "weight_delta": 2,
+          "weight_prev": 9,
+          "weight_delta": 0,
           "macro_score": 41,
           "momentum_score": 88,
           "quality_score": 82,
@@ -171,8 +171,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 8,
-          "weight_prev": 9,
-          "weight_delta": -1,
+          "weight_prev": 8,
+          "weight_delta": 0,
           "macro_score": 42,
           "momentum_score": 64,
           "quality_score": 75,
@@ -192,8 +192,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 6,
-          "weight_prev": 7,
-          "weight_delta": -1,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 51,
           "momentum_score": 84,
           "quality_score": 86,
@@ -255,8 +255,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 6,
-          "weight_delta": -1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 42,
           "momentum_score": 69,
           "quality_score": 75,
@@ -273,7 +273,7 @@
         "EFF_CORE": 23,
         "GOLD": 12
       },
-      "generated_at": "2026-08-19T07:50:56.010748+00:00"
+      "generated_at": "2026-08-19T10:26:49.545737+00:00"
     },
     {
       "date": "2026-08-18",

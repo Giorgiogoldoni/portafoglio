@@ -1638,8 +1638,8 @@
       "WSPE.MI": 28.725,
       "WWRD.MI": 25.245,
       "WSPX.MI": 40.47,
-      "NTSZ.MI": 28.97,
       "CRUD.MI": 13.258,
+      "NTSZ.MI": 28.97,
       "NTSG.MI": 29.675,
       "NTSX.MI": 38.0,
       "WRTY.MI": 37.405
@@ -1654,14 +1654,14 @@
       "WSPE.MI": 11,
       "WWRD.MI": 11,
       "WSPX.MI": 11,
+      "CRUD.MI": 10,
       "NTSZ.MI": 9,
-      "CRUD.MI": 9,
       "NTSG.MI": 7,
       "NTSX.MI": 7,
-      "WRTY.MI": 7
+      "WRTY.MI": 6
     },
-    "ret_port": -0.895,
-    "ret_iwmo": -3.1949,
-    "ret_vnga80": -0.8796
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

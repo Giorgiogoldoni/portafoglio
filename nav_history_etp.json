@@ -1635,8 +1635,8 @@
     "prices": {
       "WS5X.MI": 47.285,
       "PHAU.MI": 404.17,
-      "WSPE.MI": 28.725,
       "WWRD.MI": 25.245,
+      "WSPE.MI": 28.725,
       "WSPX.MI": 40.47,
       "CRUD.MI": 13.258,
       "NTSZ.MI": 28.97,
@@ -1651,8 +1651,8 @@
     "weights": {
       "WS5X.MI": 15,
       "PHAU.MI": 13,
-      "WSPE.MI": 11,
       "WWRD.MI": 11,
+      "WSPE.MI": 11,
       "WSPX.MI": 11,
       "CRUD.MI": 10,
       "NTSZ.MI": 9,

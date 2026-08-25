@@ -2025,12 +2025,12 @@
       "VNGA80.MI": 43.81999969482422
     },
     "weights": {
-      "XEON.MI": 29,
+      "XEON.MI": 28,
       "PJS1.MI": 15,
       "PHAU.MI": 11,
       "XGIU.MI": 9,
       "CRUD.MI": 7,
-      "WS5X.MI": 5,
+      "WS5X.MI": 6,
       "WSPE.MI": 5,
       "WPXJ.MI": 5,
       "SMEA.MI": 5,

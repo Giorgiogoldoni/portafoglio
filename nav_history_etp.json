@@ -1746,8 +1746,8 @@
     "prices": {
       "XEON.MI": 149.9881,
       "PHAU.MI": 426.84,
-      "CRUD.MI": 13.28,
       "WS5X.MI": 47.245,
+      "CRUD.MI": 13.28,
       "WSPE.MI": 28.725,
       "WWRD.MI": 25.04,
       "NTSZ.MI": 28.97,
@@ -1760,10 +1760,10 @@
       "VNGA80.MI": 43.81999969482422
     },
     "weights": {
-      "XEON.MI": 30,
+      "XEON.MI": 29,
       "PHAU.MI": 16,
+      "WS5X.MI": 11,
       "CRUD.MI": 10,
-      "WS5X.MI": 10,
       "WSPE.MI": 8,
       "WWRD.MI": 7,
       "NTSZ.MI": 6,

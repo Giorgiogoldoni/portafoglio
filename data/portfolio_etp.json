@@ -3,20 +3,21 @@
     {
       "date": "2026-08-25",
       "regime": "GEO_SHOCK",
-      "regime_prob": 31,
+      "regime_prob": 30,
       "regime_probs": {
         "REFLAZIONE": 20,
         "STAGFLAZIONE": 10,
-        "RISK_OFF": 8,
-        "DISINFLAZIONE": 18,
+        "RISK_OFF": 7,
+        "DISINFLAZIONE": 17,
         "ZIRP": 5,
-        "GEO_SHOCK": 31,
-        "WAR": 8
+        "TIGHTENING": 4,
+        "GEO_SHOCK": 30,
+        "WAR": 7
       },
-      "mom_weight": 31.2,
-      "macro_weight": 68.8,
+      "mom_weight": 30.0,
+      "macro_weight": 70.0,
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
       "portfolio": [
         {
           "ticker": "XEON",
@@ -27,12 +28,12 @@
           "risk_factor": 0.0,
           "currency": "EUR",
           "fiscal": "ETF",
-          "weight": 30,
+          "weight": 29,
           "weight_prev": 30,
-          "weight_delta": 0,
-          "macro_score": 30,
+          "weight_delta": -1,
+          "macro_score": 29,
           "momentum_score": 27,
-          "final_score": 29,
+          "final_score": 28,
           "price": 149.9881,
           "ret_1w": 0.05,
           "ret_4w": 0.17,
@@ -50,13 +51,33 @@
           "weight": 16,
           "weight_prev": 16,
           "weight_delta": 0,
-          "macro_score": 73,
+          "macro_score": 72,
           "momentum_score": 100,
-          "final_score": 81,
+          "final_score": 80,
           "price": 426.84,
           "ret_1w": 4.98,
           "ret_4w": 12.94,
           "ret_12w": 0.44
+        },
+        {
+          "ticker": "WS5X",
+          "ticker_full": "WS5X.MI",
+          "name": "WT Euro Stoxx 50",
+          "cat": "EQUITY",
+          "area": "EUROPA",
+          "risk_factor": 1.0,
+          "currency": "EUR",
+          "fiscal": "ETP",
+          "weight": 11,
+          "weight_prev": 10,
+          "weight_delta": 1,
+          "macro_score": 39,
+          "momentum_score": 56,
+          "final_score": 51,
+          "price": 47.245,
+          "ret_1w": -1.26,
+          "ret_4w": 2.85,
+          "ret_12w": 6.93
         },
         {
           "ticker": "CRUD",
@@ -77,26 +98,6 @@
           "ret_1w": 5.41,
           "ret_4w": 1.27,
           "ret_12w": 5.45
-        },
-        {
-          "ticker": "WS5X",
-          "ticker_full": "WS5X.MI",
-          "name": "WT Euro Stoxx 50",
-          "cat": "EQUITY",
-          "area": "EUROPA",
-          "risk_factor": 1.0,
-          "currency": "EUR",
-          "fiscal": "ETP",
-          "weight": 10,
-          "weight_prev": 10,
-          "weight_delta": 0,
-          "macro_score": 39,
-          "momentum_score": 56,
-          "final_score": 51,
-          "price": 47.245,
-          "ret_1w": -1.26,
-          "ret_4w": 2.85,
-          "ret_12w": 6.93
         },
         {
           "ticker": "WSPE",
@@ -152,7 +153,7 @@
           "weight_delta": 0,
           "macro_score": 42,
           "momentum_score": 54,
-          "final_score": 53,
+          "final_score": 52,
           "price": 28.97,
           "ret_1w": -0.87,
           "ret_4w": 2.42,
@@ -220,18 +221,18 @@
         }
       ],
       "macro_breakdown": {
-        "EQUITY": 25,
+        "EQUITY": 26,
         "EFF_CORE": 19,
         "GOLD": 16,
         "ENERGY": 10,
-        "CASH": 30
+        "CASH": 29
       },
       "geo_breakdown": {
         "USA": 16,
-        "EUROPA": 16,
+        "EUROPA": 17,
         "GLOBAL": 12,
         "COMMODITY": 26,
-        "CASH": 30
+        "CASH": 29
       },
       "geo_status": "BILANCIATO",
       "geo_max_area": "CASH",
@@ -243,7 +244,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-08-25T14:39:28.208045+00:00"
+      "generated_at": "2026-08-25T17:04:21.429350+00:00"
     },
     {
       "date": "2026-08-24",

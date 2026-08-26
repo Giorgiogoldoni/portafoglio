@@ -2041,5 +2041,45 @@
     "ret_port": 0.0,
     "ret_iwmo": 0.0,
     "ret_vnga80": 0.0
+  },
+  {
+    "date": "2026-08-26",
+    "nav": 103.8076,
+    "iwmo": 93.083,
+    "vnga80": 100.3101,
+    "prices": {
+      "XEON.MI": 149.9817,
+      "PJS1.MI": 97.434,
+      "PHAU.MI": 433.29,
+      "XGIU.MI": 22.313,
+      "WS5X.MI": 47.195,
+      "WSPE.MI": 28.56,
+      "CRUD.MI": 12.998,
+      "WWRD.MI": 25.0,
+      "SMEA.MI": 106.3,
+      "NTSX.MI": 37.505,
+      "NTSZ.MI": 28.78
+    },
+    "bench_px": {
+      "IWMO.MI": 98.23999786376953,
+      "VNGA80.MI": 43.685001373291016
+    },
+    "weights": {
+      "XEON.MI": 26,
+      "PJS1.MI": 15,
+      "PHAU.MI": 11,
+      "XGIU.MI": 10,
+      "WS5X.MI": 6,
+      "WSPE.MI": 6,
+      "CRUD.MI": 5,
+      "WWRD.MI": 5,
+      "SMEA.MI": 5,
+      "WPXJ.MI": 5,
+      "NTSX.MI": 3,
+      "NTSZ.MI": 3
+    },
+    "ret_port": 0.013,
+    "ret_iwmo": -1.494,
+    "ret_vnga80": -0.3081
   }
 ]

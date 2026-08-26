@@ -1808,8 +1808,8 @@
       "WRTY.MI": 4,
       "NTSX.MI": 4
     },
-    "ret_port": -0.0991,
-    "ret_iwmo": -1.494,
-    "ret_vnga80": -0.3081
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

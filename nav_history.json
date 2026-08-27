@@ -2118,8 +2118,8 @@
       "CRUD.MI": 4,
       "NTSX.MI": 3
     },
-    "ret_port": -0.1041,
-    "ret_iwmo": 1.1095,
-    "ret_vnga80": 0.2289
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

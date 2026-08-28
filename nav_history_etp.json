@@ -1861,26 +1861,26 @@
       "WSPE.MI": 28.56,
       "WSPX.MI": 40.055,
       "WWRD.MI": 25.12,
-      "WNAS.MI": 36.705,
       "NTSZ.MI": 28.78,
       "NTSX.MI": 37.665,
-      "WRTY.MI": 36.835
+      "WRTY.MI": 36.835,
+      "NTSG.MI": 29.225
     },
     "bench_px": {
       "IWMO.MI": 99.44999694824219,
       "VNGA80.MI": 43.78499984741211
     },
     "weights": {
-      "XEON.MI": 25,
+      "XEON.MI": 22,
       "PHAU.MI": 15,
-      "WS5X.MI": 11,
-      "WSPE.MI": 9,
+      "WS5X.MI": 12,
+      "WSPE.MI": 10,
       "WSPX.MI": 9,
       "WWRD.MI": 8,
-      "WNAS.MI": 7,
-      "NTSZ.MI": 6,
-      "NTSX.MI": 5,
-      "WRTY.MI": 5
+      "NTSZ.MI": 7,
+      "NTSX.MI": 6,
+      "WRTY.MI": 6,
+      "NTSG.MI": 5
     },
     "ret_port": 0.0,
     "ret_iwmo": 0.0,

@@ -1982,14 +1982,14 @@
       "VNGA80.MI": 44.150001525878906
     },
     "weights": {
-      "XEON.MI": 36,
+      "XEON.MI": 39,
       "PHAU.MI": 15,
       "WS5X.MI": 9,
-      "WWRD.MI": 8,
-      "WSPX.MI": 8,
-      "WNAS.MI": 6,
-      "WSPE.MI": 6,
-      "NTSZ.MI": 5,
+      "WWRD.MI": 7,
+      "WSPX.MI": 7,
+      "WNAS.MI": 7,
+      "WSPE.MI": 5,
+      "NTSZ.MI": 4,
       "NTSX.MI": 4,
       "WRTY.MI": 3
     },

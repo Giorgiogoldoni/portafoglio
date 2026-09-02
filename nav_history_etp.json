@@ -2006,13 +2006,13 @@
       "XEON.MI": 150.0414,
       "PHAU.MI": 422.73,
       "CRUD.MI": 13.212,
-      "XMME.MI": 80.388,
       "WS5X.MI": 46.99,
       "WWRD.MI": 25.155,
-      "XCHA.MI": 18.23,
       "WSPE.MI": 28.635,
       "WSPX.MI": 40.225,
-      "NTSZ.MI": 28.775
+      "WNAS.MI": 36.995,
+      "NTSZ.MI": 28.775,
+      "NTSX.MI": 37.555
     },
     "bench_px": {
       "IWMO.MI": 98.16999816894531,
@@ -2022,13 +2022,13 @@
       "XEON.MI": 36,
       "PHAU.MI": 16,
       "CRUD.MI": 9,
-      "XMME.MI": 7,
-      "WS5X.MI": 7,
-      "WWRD.MI": 6,
-      "XCHA.MI": 5,
-      "WSPE.MI": 5,
+      "WS5X.MI": 8,
+      "WWRD.MI": 7,
+      "WSPE.MI": 7,
       "WSPX.MI": 5,
-      "NTSZ.MI": 4
+      "WNAS.MI": 5,
+      "NTSZ.MI": 4,
+      "NTSX.MI": 3
     },
     "ret_port": 0.0,
     "ret_iwmo": 0.0,

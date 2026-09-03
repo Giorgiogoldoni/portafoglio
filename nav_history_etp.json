@@ -2067,8 +2067,8 @@
       "NTSZ.MI": 4,
       "XCHA.MI": 4
     },
-    "ret_port": -0.3539,
-    "ret_iwmo": -0.1222,
-    "ret_vnga80": -0.3067
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

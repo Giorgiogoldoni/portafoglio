@@ -2441,8 +2441,8 @@
       "EIMI.MI": 3,
       "NTSG.MI": 2
     },
-    "ret_port": 0.1256,
-    "ret_iwmo": 1.8972,
-    "ret_vnga80": 0.1703
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

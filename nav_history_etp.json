@@ -2159,8 +2159,8 @@
       "WSPE.MI": 28.75,
       "WSPX.MI": 40.405,
       "WS5X.MI": 46.77,
-      "NTSX.MI": 37.73,
-      "NTSG.MI": 28.925
+      "NTSG.MI": 28.925,
+      "NTSX.MI": 37.73
     },
     "bench_px": {
       "IWMO.MI": 99.9000015258789,
@@ -2168,15 +2168,15 @@
     },
     "weights": {
       "XEON.MI": 37,
-      "CRUD.MI": 14,
+      "CRUD.MI": 13,
       "PHAU.MI": 13,
-      "XMME.MI": 7,
+      "XMME.MI": 8,
       "WWRD.MI": 7,
-      "WSPE.MI": 6,
+      "WSPE.MI": 5,
       "WSPX.MI": 5,
       "WS5X.MI": 5,
-      "NTSX.MI": 3,
-      "NTSG.MI": 3
+      "NTSG.MI": 4,
+      "NTSX.MI": 3
     },
     "ret_port": 0.0,
     "ret_iwmo": 0.0,

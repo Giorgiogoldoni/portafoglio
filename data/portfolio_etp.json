@@ -15,7 +15,7 @@
       "mom_weight": 45.0,
       "macro_weight": 55.0,
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 1.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "XEON",
@@ -27,8 +27,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 38,
-          "weight_prev": 37,
-          "weight_delta": 1,
+          "weight_prev": 38,
+          "weight_delta": 0,
           "macro_score": 29,
           "momentum_score": 21,
           "final_score": 25,
@@ -47,8 +47,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 14,
-          "weight_prev": 13,
-          "weight_delta": 1,
+          "weight_prev": 14,
+          "weight_delta": 0,
           "macro_score": 63,
           "momentum_score": 100,
           "final_score": 80,
@@ -107,8 +107,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 6,
-          "weight_prev": 7,
-          "weight_delta": -1,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 41,
           "momentum_score": 22,
           "final_score": 31,
@@ -147,8 +147,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 6,
-          "weight_delta": -1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 41,
           "momentum_score": 20,
           "final_score": 28,
@@ -243,7 +243,7 @@
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-09-09T14:10:18.299437+00:00"
+      "generated_at": "2026-09-09T17:29:21.456104+00:00"
     },
     {
       "date": "2026-09-08",

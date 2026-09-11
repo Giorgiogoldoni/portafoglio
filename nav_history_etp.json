@@ -2278,11 +2278,11 @@
       "VNGA80.MI": 43.75
     },
     "weights": {
-      "XEON.MI": 40,
+      "XEON.MI": 42,
       "CRUD.MI": 14,
       "PHAU.MI": 11,
-      "WSPX.MI": 7,
-      "WSPE.MI": 7,
+      "WSPX.MI": 6,
+      "WSPE.MI": 6,
       "WNAS.MI": 6,
       "WWRD.MI": 5,
       "NTSX.MI": 4,

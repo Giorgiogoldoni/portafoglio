@@ -2721,8 +2721,8 @@
       "WNAS.MI": 3,
       "NTSG.MI": 2
     },
-    "ret_port": 0.0028,
-    "ret_iwmo": -1.8075,
-    "ret_vnga80": -0.4005
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

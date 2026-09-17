@@ -2748,21 +2748,21 @@
       "VNGA80.MI": 43.52000045776367
     },
     "weights": {
-      "XEON.MI": 36,
-      "PJS1.MI": 14,
-      "XGIU.MI": 9,
+      "XEON.MI": 32,
+      "PJS1.MI": 15,
+      "XGIU.MI": 10,
       "CRUD.MI": 7,
       "PHAU.MI": 7,
       "WPXJ.MI": 6,
-      "WSPE.MI": 4,
+      "WSPE.MI": 5,
       "WSPX.MI": 4,
       "WWRD.MI": 4,
       "WNAS.MI": 4,
       "NTSX.MI": 3,
-      "NTSG.MI": 2
+      "NTSG.MI": 3
     },
-    "ret_port": 0.0699,
-    "ret_iwmo": -0.2529,
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
     "ret_vnga80": 0.0
   }
 ]

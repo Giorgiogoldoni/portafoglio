@@ -2502,9 +2502,9 @@
     "weights": {
       "XEON.MI": 36,
       "CRUD.MI": 12,
-      "PHAU.MI": 10,
+      "PHAU.MI": 9,
       "WSPX.MI": 9,
-      "WNAS.MI": 8,
+      "WNAS.MI": 9,
       "WSPE.MI": 7,
       "WWRD.MI": 6,
       "NTSX.MI": 5,

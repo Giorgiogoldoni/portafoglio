@@ -2829,14 +2829,14 @@
     },
     "weights": {
       "XEON.MI": 35,
-      "PJS1.MI": 13,
-      "XGIU.MI": 9,
+      "PJS1.MI": 12,
+      "XGIU.MI": 8,
       "CRUD.MI": 7,
       "PHAU.MI": 7,
       "WSPX.MI": 6,
       "WPXJ.MI": 5,
-      "WNAS.MI": 4,
-      "WWRD.MI": 4,
+      "WNAS.MI": 5,
+      "WWRD.MI": 5,
       "WSPE.MI": 4,
       "NTSX.MI": 3,
       "NTSG.MI": 3

@@ -2538,12 +2538,12 @@
     },
     "weights": {
       "XEON.MI": 36,
-      "CRUD.MI": 12,
-      "PHAU.MI": 10,
-      "WSPX.MI": 8,
-      "WNAS.MI": 8,
-      "WSPE.MI": 8,
-      "WWRD.MI": 6,
+      "CRUD.MI": 11,
+      "PHAU.MI": 9,
+      "WSPX.MI": 9,
+      "WNAS.MI": 9,
+      "WSPE.MI": 7,
+      "WWRD.MI": 7,
       "NTSX.MI": 5,
       "NTSG.MI": 4,
       "WRTY.MI": 3

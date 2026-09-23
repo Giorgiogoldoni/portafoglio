@@ -154,7 +154,7 @@
           "weight_delta": 0,
           "macro_score": 47,
           "momentum_score": 31,
-          "final_score": 42,
+          "final_score": 41,
           "price": 25.45,
           "ret_1w": 1.7,
           "ret_4w": 1.8,
@@ -174,7 +174,7 @@
           "weight_delta": 0,
           "macro_score": 32,
           "momentum_score": 43,
-          "final_score": 38,
+          "final_score": 37,
           "price": 83.308,
           "ret_1w": 4.44,
           "ret_4w": 5.59,
@@ -241,12 +241,12 @@
       "area_momentum": {
         "USA": 100,
         "EUROPA": 0,
-        "GLOBAL": 55,
-        "EM_ASIA": 64,
+        "GLOBAL": 52,
+        "EM_ASIA": 57,
         "COMMODITY": 50,
         "CASH": 50
       },
-      "generated_at": "2026-09-23T18:10:15.303057+00:00"
+      "generated_at": "2026-09-23T19:44:39.929080+00:00"
     },
     {
       "date": "2026-09-22",

@@ -3253,13 +3253,13 @@
     "prices": {
       "XEON.MI": 150.3892,
       "PJS1.MI": 97.178,
-      "WNAS.MI": 39.965,
       "XGIU.MI": 22.321,
       "CRUD.MI": 15.022,
+      "WNAS.MI": 39.965,
       "WSPX.MI": 41.765,
       "WWRD.MI": 25.695,
       "WSPE.MI": 28.455,
-      "WS5X.MI": 45.63,
+      "PHAU.MI": 384.33,
       "NTSX.MI": 38.895,
       "NTSG.MI": 29.02
     },
@@ -3268,18 +3268,18 @@
       "VNGA80.MI": 44.619998931884766
     },
     "weights": {
-      "XEON.MI": 29,
+      "XEON.MI": 30,
       "PJS1.MI": 12,
-      "WNAS.MI": 8,
       "XGIU.MI": 8,
       "CRUD.MI": 7,
+      "WNAS.MI": 7,
       "WSPX.MI": 7,
-      "WWRD.MI": 6,
+      "WWRD.MI": 7,
       "WPXJ.MI": 5,
       "WSPE.MI": 5,
-      "WS5X.MI": 5,
+      "PHAU.MI": 5,
       "NTSX.MI": 4,
-      "NTSG.MI": 4
+      "NTSG.MI": 3
     },
     "ret_port": 0.0,
     "ret_iwmo": 0.0,

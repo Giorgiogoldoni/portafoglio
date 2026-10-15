@@ -3166,12 +3166,12 @@
       "VNGA80.MI": 45.0099983215332
     },
     "weights": {
-      "XEON.MI": 32,
+      "XEON.MI": 31,
       "CRUD.MI": 10,
       "WNAS.MI": 10,
       "WSPX.MI": 10,
       "PHAU.MI": 9,
-      "WSPE.MI": 8,
+      "WSPE.MI": 9,
       "WWRD.MI": 7,
       "NTSX.MI": 6,
       "NTSG.MI": 4,

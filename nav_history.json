@@ -3587,10 +3587,10 @@
       "VNGA80.MI": 45.07500076293945
     },
     "weights": {
-      "XEON.MI": 31,
-      "PJS1.MI": 15,
-      "XGIU.MI": 10,
-      "CRUD.MI": 7,
+      "XEON.MI": 30,
+      "PJS1.MI": 16,
+      "XGIU.MI": 11,
+      "CRUD.MI": 6,
       "PHAU.MI": 6,
       "WSPX.MI": 5,
       "WNAS.MI": 5,

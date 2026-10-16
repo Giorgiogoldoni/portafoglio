@@ -3574,9 +3574,9 @@
       "PJS1.MI": 97.294,
       "XGIU.MI": 22.644,
       "CRUD.MI": 16.312,
+      "PHAU.MI": 378.94,
       "WSPX.MI": 42.44,
       "WNAS.MI": 39.845,
-      "PHAU.MI": 378.94,
       "WWRD.MI": 26.075,
       "WSPE.MI": 28.84,
       "NTSX.MI": 39.56,
@@ -3587,21 +3587,21 @@
       "VNGA80.MI": 45.07500076293945
     },
     "weights": {
-      "XEON.MI": 33,
-      "PJS1.MI": 13,
-      "XGIU.MI": 9,
+      "XEON.MI": 31,
+      "PJS1.MI": 15,
+      "XGIU.MI": 10,
       "CRUD.MI": 7,
-      "WSPX.MI": 6,
+      "PHAU.MI": 6,
+      "WSPX.MI": 5,
       "WNAS.MI": 5,
-      "PHAU.MI": 5,
       "WWRD.MI": 5,
       "WSPE.MI": 5,
       "WPXJ.MI": 5,
-      "NTSX.MI": 4,
+      "NTSX.MI": 3,
       "NTSG.MI": 3
     },
-    "ret_port": 0.0564,
+    "ret_port": 0.0,
     "ret_iwmo": 0.0,
-    "ret_vnga80": 0.1444
+    "ret_vnga80": 0.0
   }
 ]

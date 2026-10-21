@@ -12,7 +12,7 @@
         "GEO_SHOCK": 37
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 2.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "XEON",
@@ -24,8 +24,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 34,
-          "weight_prev": 32,
-          "weight_delta": 2,
+          "weight_prev": 34,
+          "weight_delta": 0,
           "macro_score": 32,
           "momentum_score": 24,
           "quality_score": 95,
@@ -108,8 +108,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 6,
-          "weight_prev": 7,
-          "weight_delta": -1,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 31,
           "momentum_score": 100,
           "quality_score": 75,
@@ -150,8 +150,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 4,
-          "weight_delta": 1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 14,
           "momentum_score": 50,
           "quality_score": 78,
@@ -234,8 +234,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 3,
-          "weight_prev": 4,
-          "weight_delta": -1,
+          "weight_prev": 3,
+          "weight_delta": 0,
           "macro_score": 16,
           "momentum_score": 27,
           "quality_score": 88,
@@ -255,8 +255,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 2,
-          "weight_prev": 3,
-          "weight_delta": -1,
+          "weight_prev": 2,
+          "weight_delta": 0,
           "macro_score": 22,
           "momentum_score": 21,
           "quality_score": 86,
@@ -276,7 +276,7 @@
         "ENERGY": 6,
         "CASH": 34
       },
-      "generated_at": "2026-10-21T14:51:50.983187+00:00"
+      "generated_at": "2026-10-21T18:20:22.556108+00:00"
     },
     {
       "date": "2026-10-20",

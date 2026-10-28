@@ -14,7 +14,7 @@
         "WAR": 5
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 2.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "XEON",
@@ -26,8 +26,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 33,
-          "weight_prev": 31,
-          "weight_delta": 2,
+          "weight_prev": 33,
+          "weight_delta": 0,
           "macro_score": 33,
           "momentum_score": 14,
           "quality_score": 95,
@@ -47,8 +47,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 16,
-          "weight_prev": 17,
-          "weight_delta": -1,
+          "weight_prev": 16,
+          "weight_delta": 0,
           "macro_score": 71,
           "momentum_score": 13,
           "quality_score": 90,
@@ -152,8 +152,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 4,
-          "weight_prev": 5,
-          "weight_delta": -1,
+          "weight_prev": 4,
+          "weight_delta": 0,
           "macro_score": 14,
           "momentum_score": 23,
           "quality_score": 90,
@@ -173,8 +173,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 4,
-          "weight_prev": 5,
-          "weight_delta": -1,
+          "weight_prev": 4,
+          "weight_delta": 0,
           "macro_score": 20,
           "momentum_score": 15,
           "quality_score": 85,
@@ -194,8 +194,8 @@
           "currency": "USD",
           "fiscal": "ETP",
           "weight": 4,
-          "weight_prev": 3,
-          "weight_delta": 1,
+          "weight_prev": 4,
+          "weight_delta": 0,
           "macro_score": 14,
           "momentum_score": 21,
           "quality_score": 80,
@@ -278,7 +278,7 @@
         "ENERGY": 7,
         "CASH": 33
       },
-      "generated_at": "2026-10-28T16:26:34.040101+00:00"
+      "generated_at": "2026-10-28T19:15:54.700192+00:00"
     },
     {
       "date": "2026-10-27",

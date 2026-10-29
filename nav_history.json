@@ -3960,8 +3960,8 @@
       "NTSX.MI": 2,
       "NTSG.MI": 2
     },
-    "ret_port": 0.2505,
-    "ret_iwmo": 0.9219,
-    "ret_vnga80": 0.2903
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

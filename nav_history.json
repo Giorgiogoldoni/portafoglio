@@ -4175,13 +4175,13 @@
       "PJS1.MI": 97.258,
       "XGIU.MI": 22.88,
       "PHAU.MI": 380.96,
+      "CRUD.MI": 15.46,
       "SMEA.MI": 106.66,
       "XASX.MI": 512.2,
-      "CRUD.MI": 15.46,
       "WS5X.MI": 45.745,
       "STHY.MI": 80.58,
+      "STHE.MI": 68.82,
       "EUHI.MI": 9.078,
-      "NTSG.MI": 28.87,
       "NTSZ.MI": 27.705
     },
     "bench_px": {
@@ -4189,17 +4189,17 @@
       "VNGA80.MI": 43.630001068115234
     },
     "weights": {
-      "XEON.MI": 33,
+      "XEON.MI": 31,
       "PJS1.MI": 17,
       "XGIU.MI": 12,
       "PHAU.MI": 8,
+      "CRUD.MI": 5,
       "SMEA.MI": 5,
-      "XASX.MI": 5,
-      "CRUD.MI": 4,
+      "XASX.MI": 4,
       "WS5X.MI": 4,
       "STHY.MI": 4,
+      "STHE.MI": 4,
       "EUHI.MI": 4,
-      "NTSG.MI": 2,
       "NTSZ.MI": 2
     },
     "ret_port": 0.0,

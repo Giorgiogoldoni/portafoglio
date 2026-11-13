@@ -13,7 +13,7 @@
         "GEO_SHOCK": 32
       },
       "rebalance": "HOLD",
-      "rebalance_reason": "Portafoglio stabile (dev max 3.0%)",
+      "rebalance_reason": "Portafoglio stabile (dev max 0.0%)",
       "portfolio": [
         {
           "ticker": "XEON",
@@ -25,8 +25,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 30,
-          "weight_prev": 33,
-          "weight_delta": -3,
+          "weight_prev": 30,
+          "weight_delta": 0,
           "macro_score": 27,
           "momentum_score": 78,
           "quality_score": 95,
@@ -46,8 +46,8 @@
           "currency": "EUR",
           "fiscal": "ETF",
           "weight": 16,
-          "weight_prev": 15,
-          "weight_delta": 1,
+          "weight_prev": 16,
+          "weight_delta": 0,
           "macro_score": 66,
           "momentum_score": 78,
           "quality_score": 90,
@@ -130,8 +130,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 6,
-          "weight_prev": 5,
-          "weight_delta": 1,
+          "weight_prev": 6,
+          "weight_delta": 0,
           "macro_score": 22,
           "momentum_score": 96,
           "quality_score": 82,
@@ -193,8 +193,8 @@
           "currency": "EUR",
           "fiscal": "ETP",
           "weight": 5,
-          "weight_prev": 4,
-          "weight_delta": 1,
+          "weight_prev": 5,
+          "weight_delta": 0,
           "macro_score": 29,
           "momentum_score": 72,
           "quality_score": 85,
@@ -276,7 +276,7 @@
         "ENERGY": 4,
         "CASH": 30
       },
-      "generated_at": "2026-11-13T17:30:30.644035+00:00"
+      "generated_at": "2026-11-13T20:44:16.928595+00:00"
     },
     {
       "date": "2026-11-12",

@@ -4028,8 +4028,8 @@
       "NTSX.MI": 5,
       "NTSG.MI": 5
     },
-    "ret_port": -0.2132,
-    "ret_iwmo": -1.1669,
-    "ret_vnga80": -0.2474
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

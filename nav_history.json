@@ -4530,8 +4530,8 @@
       "NTSG.MI": 3,
       "NTSX.MI": 3
     },
-    "ret_port": -0.5743,
-    "ret_iwmo": -2.6189,
-    "ret_vnga80": -1.736
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

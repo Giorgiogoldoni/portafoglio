@@ -4536,18 +4536,18 @@
   },
   {
     "date": "2026-11-19",
-    "nav": 105.7972,
+    "nav": 105.7204,
     "iwmo": 85.8905,
     "vnga80": 99.8851,
     "prices": {
       "XEON.MI": 150.8244,
-      "PJS1.MI": 97.288,
+      "PJS1.MI": 96.995,
       "XGIU.MI": 22.833,
       "STHY.MI": 81.99,
       "PHAU.MI": 315.76,
       "CRUD.MI": 14.716,
       "WSPX.MI": 40.665,
-      "EUHI.MI": 9.066,
+      "EUHI.MI": 9.0243,
       "STHE.MI": 68.48,
       "NTSG.MI": 29.01,
       "NTSX.MI": 37.905,
@@ -4571,7 +4571,7 @@
       "NTSX.MI": 3,
       "NTSZ.MI": 3
     },
-    "ret_port": 0.0,
+    "ret_port": -0.0726,
     "ret_iwmo": 0.0,
     "ret_vnga80": 0.0
   }

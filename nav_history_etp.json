@@ -4114,9 +4114,9 @@
     "prices": {
       "XEON.MI": 150.86,
       "WSPX.MI": 40.595,
-      "PHAU.MI": 311.14,
       "WS5X.MI": 44.855,
       "CRUD.MI": 14.902,
+      "PHAU.MI": 311.14,
       "WWRD.MI": 25.08,
       "NTSZ.MI": 27.73,
       "NTSX.MI": 37.905,
@@ -4128,12 +4128,12 @@
       "VNGA80.MI": 43.30500030517578
     },
     "weights": {
-      "XEON.MI": 36,
+      "XEON.MI": 38,
       "WSPX.MI": 9,
-      "PHAU.MI": 9,
       "WS5X.MI": 9,
       "CRUD.MI": 8,
-      "WWRD.MI": 8,
+      "PHAU.MI": 8,
+      "WWRD.MI": 7,
       "NTSZ.MI": 6,
       "NTSX.MI": 5,
       "NTSG.MI": 5,

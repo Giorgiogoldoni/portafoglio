@@ -4694,8 +4694,8 @@
       "NTSG.MI": 3,
       "EMLI.MI": 3
     },
-    "ret_port": 0.6365,
-    "ret_iwmo": 4.7608,
-    "ret_vnga80": 2.7456
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

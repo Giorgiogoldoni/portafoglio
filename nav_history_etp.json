@@ -4213,8 +4213,8 @@
       "NTSX.MI": 6,
       "NTSG.MI": 5
     },
-    "ret_port": 1.7009,
-    "ret_iwmo": 4.7608,
-    "ret_vnga80": 2.7456
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

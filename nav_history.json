@@ -4710,9 +4710,9 @@
       "STHY.MI": 81.23,
       "EUHI.MI": 9.009,
       "EUHA.MI": 12.256,
+      "PHAU.MI": 301.13,
       "WSPX.MI": 39.835,
       "STHE.MI": 67.5,
-      "WWRD.MI": 24.655,
       "NTSX.MI": 37.285,
       "NTSG.MI": 28.25,
       "EMLI.MI": 56.98
@@ -4723,20 +4723,20 @@
     },
     "weights": {
       "XEON.MI": 31,
-      "PJS1.MI": 17,
-      "XGIU.MI": 12,
+      "PJS1.MI": 18,
+      "XGIU.MI": 13,
       "STHY.MI": 6,
       "EUHI.MI": 6,
-      "EUHA.MI": 6,
-      "WSPX.MI": 5,
+      "EUHA.MI": 5,
+      "PHAU.MI": 4,
+      "WSPX.MI": 4,
       "STHE.MI": 4,
-      "WWRD.MI": 4,
       "NTSX.MI": 3,
       "NTSG.MI": 3,
       "EMLI.MI": 3
     },
-    "ret_port": -0.2908,
-    "ret_iwmo": -3.9016,
-    "ret_vnga80": -1.1288
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]

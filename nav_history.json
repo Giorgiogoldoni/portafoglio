@@ -4776,8 +4776,8 @@
       "CRUD.MI": 3,
       "EMLI.MI": 3
     },
-    "ret_port": -0.1688,
-    "ret_iwmo": -3.1142,
-    "ret_vnga80": -1.4911
+    "ret_port": 0.0,
+    "ret_iwmo": 0.0,
+    "ret_vnga80": 0.0
   }
 ]
